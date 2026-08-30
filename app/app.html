@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Documesh App — chat with federated docs</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+  .chat-scroll { scrollbar-width: thin; }
+</style>
+</head>
+<body class="bg-white text-slate-900 h-screen flex flex-col">
+
+<header class="border-b border-slate-100 px-6 py-3 flex items-center gap-4">
+  <a href="index.html" class="font-bold text-lg tracking-tight">🕸 Documesh</a>
+  <span class="text-xs text-slate-400 hidden sm:inline">federated, version-cited docs for humans + agents</span>
+  <nav class="hidden md:flex gap-5 text-sm text-slate-600 ml-4">
+    <a href="capabilities.html" class="hover:text-slate-900">Capabilities</a>
+    <a href="webmcp.html" class="hover:text-slate-900">WebMCP Tools</a>
+    <a href="coverage.html" class="hover:text-slate-900">Coverage</a>
+  </nav>
+  <span id="snapshot-badge" class="ml-auto text-xs px-2 py-1 rounded bg-slate-100 text-slate-500"></span>
+</header>
+
+<main class="flex-1 grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+  <!-- Chat pane -->
+  <section class="flex flex-col lg:border-r border-slate-100">
+    <div id="chat" class="chat-scroll flex-1 overflow-y-auto p-6 space-y-4"></div>
+    <div class="p-4 border-t border-slate-100">
+      <div class="flex gap-2">
+        <input id="input" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:border-orange-500"
+               placeholder="Ask anything: 'how do functions use env vars?' or paste an error…" />
+        <button id="send" class="bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-medium">Send</button>
+      </div>
+      <p class="text-[11px] text-slate-400 mt-2">Demo assistant mirrors agent tool-calls (<code>search_docs_across</code> / <code>explain_error</code>). Full agent runs in ChatGPT in-app browser or Chrome with WebMCP flag.</p>
+    </div>
+  </section>
+
+  <!-- Doc viewer pane -->
+  <section class="hidden lg:flex flex-col bg-slate-50">
+    <div class="px-6 py-3 border-b border-slate-100 text-sm text-slate-400">📄 Cited source (agent co-presence)</div>
+    <div id="viewer" class="chat-scroll flex-1 overflow-y-auto p-6 text-sm">
+      <p class="text-slate-400">Search results will appear here with full attribution.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="border-t border-slate-100 py-4 text-center text-xs text-slate-400">
+  🕸 <a href="app.html" class="hover:text-slate-600">Documesh</a> — powered by WebMCP · Built with ❤️ by <a href="https://selatan.org" target="_blank" class="hover:text-orange-600">selatan.org</a>
+</footer>
+
+<script type="module">
+const API = location.hostname === "localhost" && location.port === "8788" ? "http://localhost:8787" : "";
+
+async function api(path) {
+  const r = await fetch(API + path);
+  if (!r.ok) throw new Error(`${r.status}`);
+  return r.json();
+}
+
+// ---------------------------------------------------------- WebMCP registration
+const TOOL_VENDORS = ["cloudflare","netlify","vercel","kubernetes","bun","elysia","turso","upstash","sentry","stripe","hono","nuxt","solid","opentelemetry","argocd","helm","flux","cilium","react","pytorch","tensorflow","langchain","playwright","clickhouse","ollama","electron","hugo","docusaurus","pytest","nodejs","godot-docs","neovim","terragrunt","moby","elasticsearch","svelte-core","vue-core-docs","gitea"];
+
+
+async function registerWebMCP() {
+  const ctx = document.modelContext ?? createShim();
+  try {
+    ctx.registerTool({
+      name: "search_docs_across",
+      description: "Search federated developer documentation (Cloudflare, Netlify, Vercel, Kubernetes, Bun, Stripe, Sentry and more). Returns ranked excerpts with version, license, and canonical source URL for every result.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          query: { type: "string", description: "Search query, e.g. 'edge functions environment variables'" },
+          vendors: { type: "array", items: { type: "string", enum: TOOL_VENDORS }, description: "Optional vendor filter" },
+          limit: { type: "number", description: "Max results (default 5)" }
+        },
+        required: ["query"]
+      },
+      execute: async (input) => {
+        const params = new URLSearchParams({ q: input.query, limit: String(input.limit ?? 5) });
+        if (input.vendors?.length) params.set("vendors", input.vendors.join(","));
+        const data = await api(`/search?${params}`);
+        renderResults(data, input.query);
+        return {
+          snapshot_date: data.snapshot_date,
+          results: data.results.map(r => ({
+            vendor: r.vendor, version: r.version, title: r.title,
+            section: r.heading_path, excerpt_link: r.source_url,
+            license: r.license, last_updated: r.last_updated, relevance: r.score
+          }))
+        };
+      }
+    });
+
+    ctx.registerTool({
+      name: "explain_error",
+      description: "Given a log excerpt or error message, find the closest matching documentation sections across all mesh vendors. Returns version-cited sections and a disclaimer — not a diagnosis.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          log_excerpt: { type: "string", description: "The error message or log lines" },
+          vendor: { type: "string", enum: TOOL_VENDORS, description: "Optional vendor filter" }
+        },
+        required: ["log_excerpt"]
+      },
+      execute: async (input) => {
+        const params = new URLSearchParams({ error: input.log_excerpt });
+        if (input.vendor) params.set("vendor", input.vendor);
+        const data = await api(`/explain?${params}`);
+        renderExplain(data);
+        return data;
+      }
+    });
+
+    ctx.registerTool({
+      name: "list_vendors",
+      description: "List the documentation vendors in the mesh with their license and attribution requirements.",
+      inputSchema: { type: "object", properties: {} },
+      execute: async () => await api("/vendors")
+    });
+
+    console.log("[webmcp] registered: search_docs_across, explain_error, list_vendors");
+  } catch (e) {
+    console.error("[webmcp] registration failed:", e);
+  }
+}
+
+function createShim() {
+  const tools = {};
+  return { registerTool: (t) => { tools[t.name] = t; } };
+}
+
+// ---------------------------------------------------------- UI
+const chat = document.getElementById("chat");
+const viewer = document.getElementById("viewer");
+const input = document.getElementById("input");
+const sendBtn = document.getElementById("send");
+
+function addMsg(role, html) {
+  const div = document.createElement("div");
+  div.className = role === "user"
+    ? "ml-auto max-w-[80%] bg-orange-600/90 text-white rounded-xl px-4 py-2 text-sm"
+    : "mr-auto max-w-[92%] bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm space-y-2";
+  div.innerHTML = html;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+function resultCard(r) {
+  return `
+  <a href="${r.source_url}" target="_blank"
+     class="block border border-slate-200 hover:border-orange-400 bg-white rounded-lg p-3 transition-colors">
+    <div class="flex items-center gap-2 mb-1 flex-wrap">
+      <span class="text-xs font-bold px-1.5 py-0.5 rounded bg-orange-50 text-orange-700">${r.vendor}${r.version !== "latest" ? " " + r.version : ""}</span>
+      <span class="text-xs text-slate-400">${r.heading_path}</span>
+    </div>
+    <div class="font-medium text-orange-600">${r.title}</div>
+    <div class="text-[11px] text-slate-400 mt-1">
+      license: ${r.license} · updated: ${r.last_updated} · relevance: ${r.score} · ↗ ${r.source_url}
+    </div>
+  </a>`;
+}
+
+function renderResults(data, query) {
+  addMsg("assistant", `
+    <div class="font-medium">🔍 Searched all vendors for "<em>${query}</em>"</div>
+    <div class="text-xs text-slate-400">${data.results.length} results · snapshot ${data.snapshot_date} · ${data.took_ms}ms</div>
+    ${data.results.map(resultCard).join("")}
+  `);
+  viewer.innerHTML = `
+    <h3 class="font-bold mb-3">Results for "${query}"</h3>
+    ${data.results.map(resultCard).join("<hr class='my-3 border-slate-100'/>")}
+    <p class="text-[11px] text-slate-400 mt-4">All excerpts link to canonical vendor pages. Licenses: Cloudflare CC-BY-4.0 · Kubernetes CC-BY-4.0 · Netlify, Vercel, Stripe, Sentry, Turso, Upstash — official llms.txt agent interfaces · Bun, Hono, Nuxt, SolidJS, ElysiaJS — MIT.</p>`;
+}
+
+function renderExplain(data) {
+  addMsg("assistant", `
+    <div class="font-medium">🩺 Error analysis</div>
+    ${data.extracted_signatures?.length ? `<div class="text-xs text-slate-400">signatures: ${data.extracted_signatures.map(s=>`<code class="bg-white border border-slate-200 px-1 rounded">${s}</code>`).join(" ")}</div>` : ""}
+    ${data.matches.map(resultCard).join("")}
+    <div class="text-[11px] text-amber-600 mt-2">⚠️ ${data.disclaimer}</div>
+  `);
+  viewer.innerHTML = `
+    <h3 class="font-bold mb-3">Error → documentation matches</h3>
+    ${data.matches.map(resultCard).join("<hr class='my-3 border-slate-100'/>")}
+    <p class="text-[11px] text-amber-600 mt-4">${data.disclaimer}</p>`;
+}
+
+async function handleSend() {
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = "";
+  addMsg("user", text);
+
+  const thinking = addMsg("assistant", "<span class='text-slate-400'>searching the mesh…</span>");
+  const looksLikeError = /(error|exception|failed|backoff|cannot find|econnrefused|enoent|refused|timeout|exit code|\bE[A-Z]{3,}\b|Traceback|panic:)/i.test(text);
+  try {
+    if (looksLikeError) {
+      const data = await api(`/explain?error=${encodeURIComponent(text)}`);
+      thinking.remove();
+      renderExplain(data);
+    } else {
+      const data = await api(`/search?q=${encodeURIComponent(text)}&limit=5`);
+      thinking.remove();
+      renderResults(data, text);
+    }
+  } catch (e) {
+    thinking.innerHTML = `<span class="text-red-500">API error: ${e.message}</span>`;
+  }
+}
+
+sendBtn.onclick = handleSend;
+input.addEventListener("keydown", (e) => { if (e.key === "Enter") handleSend(); });
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "/" && document.activeElement !== input) {
+    e.preventDefault();
+    input.focus();
+    input.value = "kubernetes pod restart policy backoff";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+});
+
+function runDeepLink() {
+  const q = new URLSearchParams(location.search).get("q");
+  if (q) { input.value = q; handleSend(); }
+}
+
+fetch(API + "/health").then(r => r.json()).then(h => {
+  document.getElementById("snapshot-badge").textContent = `snapshot ${h.snapshot} · 3 WebMCP tools`;
+}).catch(() => {
+  document.getElementById("snapshot-badge").textContent = "API offline";
+});
+registerWebMCP();
+runDeepLink();
+</script>
+</body>
+</html>
