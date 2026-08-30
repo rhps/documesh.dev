@@ -1,0 +1,17 @@
+{
+  "name": "documesh",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Documentation that agents can not only read, but operate. WebMCP Challenge entry.",
+  "scripts": {
+    "index:fetch": "python3 indexer/fetch_docs.py",
+    "index:build": "python3 indexer/build_index.py",
+    "index:verify": "python3 indexer/verify.py",
+    "dev:api": "node worker/dev-server.mjs",
+    "dev:app": "python3 -m http.server 8788 --directory app",
+    "eval": "node worker/eval.mjs",
+    "deploy": "npx wrangler deploy"
+  }
+}

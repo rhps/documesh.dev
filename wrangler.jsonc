@@ -1,0 +1,37 @@
+// Documesh — Cloudflare Worker config
+// Base config: local dev + ephemeral PR previews (workers.dev URLs).
+// Environments attach the custom domains:
+//   staging    → documesh-staging → https://documesh.selatan.org
+//   production → documesh-api     → https://documesh.dev
+//
+// Deploy commands:
+//   npx wrangler deploy --env staging      (or --name documesh-staging for workers.dev only)
+//   npx wrangler deploy --env production
+//
+// Prerequisite: the zones (selatan.org and documesh.dev) must exist in this
+// Cloudflare account — wrangler/CF creates the DNS records + certs automatically.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "documesh-api",
+  "main": "worker/src/index.js",
+  "compatibility_date": "2026-08-01",
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./app"
+  },
+  "env": {
+    "staging": {
+      "name": "documesh-staging",
+      "routes": [
+        { "pattern": "documesh.selatan.org", "custom_domain": true }
+      ]
+    },
+    "production": {
+      "name": "documesh-api",
+      "routes": [
+        { "pattern": "documesh.dev", "custom_domain": true },
+        { "pattern": "www.documesh.dev", "custom_domain": true }
+      ]
+    }
+  }
+}
