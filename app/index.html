@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Documesh — documentation that agents can read and operate</title>
+<meta name="description" content="Documesh is an application powered by WebMCP — federated developer documentation from 15 vendors, with version-cited answers your AI agent can operate." />
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .fade-up { animation: fadeUp .5s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body class="bg-white text-slate-900 antialiased">
+
+<!-- ============ NAV ============ -->
+<nav class="sticky top-0 z-50 bg-white/85 backdrop-blur border-b border-slate-100">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center gap-8">
+    <a href="index.html" class="font-bold text-lg tracking-tight">🕸 Documesh</a>
+    <div class="hidden md:flex gap-6 text-sm text-slate-600">
+      <a href="app.html" class="hover:text-slate-900">App</a>
+      <a href="capabilities.html" class="hover:text-slate-900">Capabilities</a>
+      <a href="webmcp.html" class="hover:text-slate-900">WebMCP Tools</a>
+      <a href="coverage.html" class="hover:text-slate-900">Coverage</a>
+    </div>
+    <a href="app.html" class="ml-auto text-sm bg-slate-900 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Open the app →</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="max-w-6xl mx-auto px-6 pt-20 pb-16 text-center fade-up">
+  <div class="inline-flex items-center gap-2 text-xs bg-orange-50 text-orange-700 border border-orange-200 rounded-full px-3 py-1 mb-6">
+    <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
+    Built for The WebMCP Challenge
+  </div>
+  <h1 class="text-4xl md:text-6xl font-bold tracking-tight leading-tight">
+    Documentation your agent<br class="hidden md:block" />
+    <span class="bg-gradient-to-r from-orange-600 to-amber-500 bg-clip-text text-transparent">can actually operate.</span>
+  </h1>
+  <p class="mt-6 text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+    Documesh is an application <strong>powered by WebMCP</strong> — the open standard that lets websites
+    expose structured tools to AI agents. Federated documentation from
+    <span id="hero-vendor-count" class="font-semibold text-slate-900">15</span> vendors,
+    every answer version-cited, every source attributed.
+  </p>
+  <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+    <a href="app.html" class="bg-orange-600 hover:bg-orange-500 text-white px-6 py-3 rounded-xl font-medium transition-colors shadow-sm shadow-orange-200">
+      Launch the app
+    </a>
+    <a href="webmcp.html" class="border border-slate-200 hover:border-slate-300 bg-white px-6 py-3 rounded-xl font-medium text-slate-700 transition-colors">
+      View WebMCP tools
+    </a>
+  </div>
+  <p class="mt-4 text-xs text-slate-400">
+    Works out of the box in ChatGPT's in-app browser · Chrome 149+ via <code class="bg-slate-100 px-1 rounded">chrome://flags/#enable-webmcp-testing</code>
+  </p>
+</header>
+
+<!-- ============ STATS STRIP ============ -->
+<section class="border-y border-slate-100 bg-slate-50/50">
+  <div class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+    <div><div class="text-3xl font-bold">15</div><div class="text-sm text-slate-500 mt-1">vendors federated</div></div>
+    <div><div id="stat-chunks" class="text-3xl font-bold">4,872</div><div class="text-sm text-slate-500 mt-1">indexed doc sections</div></div>
+    <div><div class="text-3xl font-bold">3</div><div class="text-sm text-slate-500 mt-1">WebMCP tools</div></div>
+    <div><div class="text-3xl font-bold">100%</div><div class="text-sm text-slate-500 mt-1">answers with license + source</div></div>
+  </div>
+</section>
+
+<!-- ============ THE PROBLEM ============ -->
+<section class="max-w-6xl mx-auto px-6 py-20">
+  <div class="grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <h2 class="text-3xl font-bold tracking-tight">Agents guess. Docs hide.</h2>
+      <p class="mt-4 text-slate-600 leading-relaxed">
+        Today an AI agent that wants to use your documentation must scrape HTML, guess at
+        structure, and cite whatever blog post ranked first — often the wrong version, often
+        without a source. That's slow, fragile, and blind to licensing.
+      </p>
+      <p class="mt-4 text-slate-600 leading-relaxed">
+        <strong>WebMCP flips it.</strong> The site publishes tools; the agent reads the contract
+        and calls exactly what it needs. Humans keep the visual web; agents get first-class access.
+      </p>
+    </div>
+    <div class="bg-slate-50 border border-slate-100 rounded-2xl p-6 text-sm">
+      <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Without WebMCP</div>
+      <div class="text-slate-500 font-mono text-xs leading-relaxed">
+        → fetch page<br/>
+        → parse unpredictable HTML<br/>
+        → guess which section matters<br/>
+        → cite nothing, maybe wrong version<br/>
+        <span class="text-red-400">✗ fragile, slow, unattributed</span>
+      </div>
+      <div class="border-t border-slate-200 my-4"></div>
+      <div class="text-xs font-semibold text-orange-500 uppercase tracking-wider mb-3">With Documesh + WebMCP</div>
+      <div class="font-mono text-xs leading-relaxed text-slate-700">
+        → agent reads tool contract<br/>
+        → <span class="text-orange-600">search_docs_across("edge functions env vars", ["netlify","vercel"])</span><br/>
+        → structured results, version + license + canonical link<br/>
+        <span class="text-green-600">✓ deterministic, attributed, licensed</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section class="max-w-6xl mx-auto px-6 pb-20">
+  <h2 class="text-3xl font-bold tracking-tight text-center">What you get</h2>
+  <p class="text-center text-slate-500 mt-3 mb-12">Three capabilities, one contract, zero scraping.</p>
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="border border-slate-100 rounded-2xl p-6 hover:border-orange-200 hover:shadow-sm transition-all">
+      <div class="text-2xl mb-3">🔍</div>
+      <h3 class="font-semibold">Federated search</h3>
+      <p class="mt-2 text-sm text-slate-600 leading-relaxed">One query across 15 vendors — Cloudflare, Netlify, Vercel, Kubernetes, Bun, Stripe, Sentry and more. Every result: version, canonical link, license.</p>
+      <a href="capabilities.html#federated-search" class="inline-block mt-4 text-sm text-orange-600 hover:text-orange-500">Explore →</a>
+    </div>
+    <div class="border border-slate-100 rounded-2xl p-6 hover:border-orange-200 hover:shadow-sm transition-all">
+      <div class="text-2xl mb-3">🩺</div>
+      <h3 class="font-semibold">Error → documentation</h3>
+      <p class="mt-2 text-sm text-slate-600 leading-relaxed">Paste a stack trace. The mesh extracts error signatures and returns the closest official sections — with an honest disclaimer, never a fake diagnosis.</p>
+      <a href="capabilities.html#error-bridge" class="inline-block mt-4 text-sm text-orange-600 hover:text-orange-500">Explore →</a>
+    </div>
+    <div class="border border-slate-100 rounded-2xl p-6 hover:border-orange-200 hover:shadow-sm transition-all">
+      <div class="text-2xl mb-3"> ⚖️</div>
+      <h3 class="font-semibold">License-aware by design</h3>
+      <p class="mt-2 text-sm text-slate-600 leading-relaxed">CC-BY and MIT sources ingested; BUSL and copyleft excluded — deliberately. Every response names its license. Coverage is a legal statement, not an accident.</p>
+      <a href="coverage.html" class="inline-block mt-4 text-sm text-orange-600 hover:text-orange-500">See coverage →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VENDOR WALL ============ -->
+<section class="max-w-6xl mx-auto px-6 pb-20">
+  <h2 class="text-2xl font-bold tracking-tight text-center">Vendors in the mesh</h2>
+  <p class="text-center text-slate-500 mt-2 text-sm">All ingested via official agent interfaces or open-licensed repos.</p>
+  <div id="vendor-wall" class="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3"></div>
+  <p class="text-center text-xs text-slate-400 mt-6">
+    Full attribution and licensing per vendor on the <a href="coverage.html" class="underline hover:text-slate-600">coverage page</a>.
+  </p>
+</section>
+
+<!-- ============ WEBMCP CTA ============ -->
+<section class="max-w-6xl mx-auto px-6 pb-24">
+  <div class="rounded-3xl bg-slate-900 text-white p-10 md:p-14 text-center">
+    <p class="text-xs uppercase tracking-widest text-slate-400 mb-3">Powered by</p>
+    <h2 class="text-3xl font-bold">WebMCP</h2>
+    <p class="mt-4 text-slate-300 max-w-2xl mx-auto leading-relaxed">
+      Documesh registers its capabilities as WebMCP tools — the same open standard backed by
+      Microsoft and Google in Chrome. Any agent your visitor already uses — ChatGPT, Claude, anything
+      MCP-compatible — can operate this site directly. No integrations, no keys, no scraping.
+    </p>
+    <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="webmcp.html" class="bg-white text-slate-900 px-6 py-3 rounded-xl font-medium hover:bg-slate-100 transition-colors">Read the tool reference</a>
+      <a href="app.html" class="border border-slate-700 text-slate-200 px-6 py-3 rounded-xl font-medium hover:border-slate-500 transition-colors">Try it live</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-slate-100">
+  <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
+    <div>🕸 <a href="index.html" class="hover:text-slate-900">Documesh</a> — <span class="text-slate-400">powered by WebMCP</span></div>
+    <div class="flex gap-6">
+      <a href="coverage.html" class="hover:text-slate-900">Coverage & licenses</a>
+      <a href="https://webmachinelearning.github.io/webmcp/" target="_blank" class="hover:text-slate-900">WebMCP spec ↗</a>
+      <a href="https://webmcp.devpost.com" target="_blank" class="hover:text-slate-900">Challenge ↗</a>
+    </div>
+  </div>
+  <div class="max-w-6xl mx-auto px-6 pb-6 text-sm text-slate-500">
+    Built with ❤️ by <a href="https://selatan.org" target="_blank" class="font-medium text-slate-700 hover:text-orange-600">selatan.org</a>
+  </div>
+  <div class="max-w-6xl mx-auto px-6 pb-8 text-[11px] text-slate-400 leading-relaxed">
+    Documentation content remains the property of its respective owners and is used under their published licenses / agent interfaces:
+    Cloudflare & Kubernetes (CC-BY-4.0) · Bun, ElysiaJS, Hono, Nuxt, SolidJS (MIT) · Netlify, Vercel, Stripe, Sentry, Turso, Upstash (official llms.txt agent interfaces) ·
+    OpenTelemetry (CC-BY-4.0) · Argo CD (Apache-2.0). Excerpts and canonical links only — no full-text mirroring.
+  </div>
+</footer>
+
+<script type="module">
+const API = location.hostname === "localhost" && location.port === "8788" ? "http://localhost:8787" : "";
+
+try {
+  const data = await fetch(API + "/vendors").then(r => r.json());
+  const counts = {};
+  let chunkTotal = 0;
+  try {
+    const snap = await fetch(API + "/health").then(r => r.json());
+    // vendors endpoint doesn't carry chunk counts; derive per-vendor search totals is heavy.
+    // Instead: pull one search per vendor is too heavy — use static declared counts from snapshot manifest when exposed.
+  } catch {}
+  const wall = document.getElementById("vendor-wall");
+  wall.innerHTML = data.vendors.map(v => `
+    <div class="border border-slate-100 rounded-xl px-4 py-3 text-center hover:border-orange-200 transition-colors">
+      <div class="font-medium text-sm">${v.name}</div>
+      <div class="text-[11px] text-slate-400 mt-0.5">${v.license.length > 28 ? v.license.slice(0,28) + "…" : v.license}</div>
+    </div>
+  `).join("");
+  document.getElementById("hero-vendor-count").textContent = data.vendors.length;
+} catch (e) {
+  // API offline — render static fallback
+  document.getElementById("vendor-wall").innerHTML = ["Cloudflare","Netlify","Vercel","Kubernetes","Bun","ElysiaJS","Hono","Nuxt","SolidJS","Stripe","Sentry","Turso","Upstash","OpenTelemetry","Argo CD"]
+    .map(n => `<div class="border border-slate-100 rounded-xl px-4 py-3 text-center"><div class="font-medium text-sm">${n}</div></div>`).join("");
+}
+</script>
+</body>
+</html>

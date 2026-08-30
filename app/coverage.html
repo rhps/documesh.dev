@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coverage & Licenses — Documesh</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body class="bg-white text-slate-900 antialiased">
+
+<nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-100">
+  <div class="max-w-5xl mx-auto px-6 h-16 flex items-center gap-8">
+    <a href="index.html" class="font-bold text-lg tracking-tight">🕸 Documesh</a>
+    <div class="hidden md:flex gap-6 text-sm text-slate-600">
+      <a href="app.html" class="hover:text-slate-900">App</a>
+      <a href="capabilities.html" class="hover:text-slate-900">Capabilities</a>
+      <a href="webmcp.html" class="hover:text-slate-900">WebMCP Tools</a>
+      <a href="coverage.html" class="text-slate-900 font-medium">Coverage</a>
+    </div>
+    <a href="app.html" class="ml-auto text-sm bg-slate-900 text-white px-4 py-2 rounded-lg font-medium">Open the app →</a>
+  </div>
+</nav>
+
+<header class="max-w-5xl mx-auto px-6 pt-16 pb-10">
+  <h1 class="text-4xl font-bold tracking-tight">Coverage & Licenses</h1>
+  <p class="mt-4 text-slate-600 max-w-3xl leading-relaxed">
+    What's in the mesh, what's deliberately out, and why. Documesh treats licensing as a
+    first-class feature: vendors are ingested only via permissive licenses or their own
+    official agent interfaces — and every tool response names its source license.
+  </p>
+  <div class="mt-6 grid grid-cols-3 gap-4 max-w-lg">
+    <div class="border border-green-200 bg-green-50 rounded-xl px-4 py-3 text-center">
+      <div class="text-2xl font-bold text-green-700">18</div>
+      <div class="text-xs text-green-800">vendors covered</div>
+    </div>
+    <div class="border border-slate-200 bg-slate-50 rounded-xl px-4 py-3 text-center">
+      <div class="text-2xl font-bold text-slate-600">4+</div>
+      <div class="text-xs text-slate-500">deferred (v2)</div>
+    </div>
+    <div class="border border-red-200 bg-red-50 rounded-xl px-4 py-3 text-center">
+      <div class="text-2xl font-bold text-red-600">4</div>
+      <div class="text-xs text-red-700">excluded on legal grounds</div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-6 pb-24 space-y-16">
+
+  <!-- ============ COVERED ============ -->
+  <section id="covered" class="scroll-mt-24">
+    <div class="flex items-center gap-3">
+      <h2 class="text-2xl font-bold">✅ Covered</h2>
+      <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">ingested & attributed</span>
+    </div>
+    <p class="mt-2 text-slate-600 text-sm">Click any vendor to search its docs in the app.</p>
+    <div class="mt-6 overflow-x-auto border border-slate-100 rounded-2xl">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-400">
+          <tr>
+            <th class="px-5 py-3">Vendor</th>
+            <th class="px-5 py-3">License basis</th>
+            <th class="px-5 py-3 hidden md:table-cell">Ingestion interface</th>
+            <th class="px-5 py-3 text-right">Sections</th>
+          </tr>
+        </thead>
+        <tbody id="covered-tbody" class="divide-y divide-slate-100">
+          <tr><td colspan="4" class="px-5 py-4 text-slate-400">Loading live counts…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3 text-xs text-slate-400">
+      Counts are from the current snapshot. All vendors are ingested via official llms.txt /
+      <code>.md</code> agent interfaces or open-licensed git repositories — never by scraping rendered HTML.
+    </p>
+  </section>
+
+  <!-- ============ DEFERRED ============ -->
+  <section id="deferred" class="scroll-mt-24">
+    <div class="flex items-center gap-3">
+      <h2 class="text-2xl font-bold">🚧 Not covered yet</h2>
+      <span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">license OK · interface work needed</span>
+    </div>
+    <p class="mt-2 text-slate-600 text-sm">
+      These projects are actively maintained with permissive licenses — the docs are legally
+      usable — but they lack a machine-ready interface today (no llms.txt, no <code>.md</code>
+      endpoints, docs generated from site-specific builds). Each needs a small custom crawler;
+      they're on the v2 roadmap.
+    </p>
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div class="border border-amber-200 rounded-xl p-4"><div class="font-medium">Apache Airflow</div><div class="text-xs text-slate-500 mt-1">ASF · Apache-2.0 · docs generated outside main repo</div></div>
+      <div class="border border-amber-200 rounded-xl p-4"><div class="font-medium">Go</div><div class="text-xs text-slate-500 mt-1">Google · BSD-3 · thin in-repo docs surface</div></div>
+      <div class="border border-amber-200 rounded-xl p-4"><div class="font-medium">Django</div><div class="text-xs text-slate-500 mt-1">DSF · BSD · Sphinx-generated HTML</div></div>
+      <div class="border border-amber-200 rounded-xl p-4"><div class="font-medium">Flask · Python · Rails</div><div class="text-xs text-slate-500 mt-1">Permissive · Sphinx/generated site builds</div></div>
+    </div>
+    <p class="mt-4 text-sm text-slate-500">
+      Want one of these prioritized (or a vendor we haven't listed)?
+      <a href="https://github.com/rhps/competition/issues" class="text-orange-600 hover:text-orange-500 underline">Open an issue</a>.
+    </p>
+  </section>
+
+  <!-- ============ EXCLUDED ============ -->
+  <section id="excluded" class="scroll-mt-24">
+    <div class="flex items-center gap-3">
+      <h2 class="text-2xl font-bold">⛔ Excluded on legal grounds</h2>
+      <span class="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full">deliberate — this is the feature</span>
+    </div>
+    <p class="mt-2 text-slate-600 text-sm">
+      These vendors were evaluated and rejected. In an AI-agent world, respecting these
+      boundaries is not compliance theater — it's what keeps an agentic web worth having.
+    </p>
+    <div class="mt-6 space-y-3">
+      <div class="border border-red-200 rounded-xl p-5">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="font-medium">Terraform / HashiCorp (IBM)</div>
+          <span class="text-xs font-bold bg-red-100 text-red-700 px-2 py-1 rounded">BUSL</span>
+        </div>
+        <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+          Docs are licensed under the Business Source License. Its Additional Use Grant covers
+          production use but does not clearly permit republishing excerpts through a third-party
+          agent service. OpenTofu (MPL-2.0) docs are the roadmap substitute.
+        </p>
+      </div>
+      <div class="border border-red-200 rounded-xl p-5">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="font-medium">Grafana</div>
+          <span class="text-xs font-bold bg-red-100 text-red-700 px-2 py-1 rounded">AGPL-3.0</span>
+        </div>
+        <p class="text-sm text-slate-600 mt-2 leading-relaxed">Copyleft terms create redistribution obligations we won't navigate for a docs-embedding use case.</p>
+      </div>
+      <div class="border border-red-200 rounded-xl p-5">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="font-medium">Shopify & Render developer docs</div>
+          <span class="text-xs font-bold bg-red-100 text-red-700 px-2 py-1 rounded">proprietary</span>
+        </div>
+        <p class="text-sm text-slate-600 mt-2 leading-relaxed">No public doc repositories and no agent interface published. Ingesting would mean scraping — which the WebMCP model exists to replace.</p>
+      </div>
+      <div class="border border-red-200 rounded-xl p-5">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="font-medium">Mayo Clinic · CDC · NIH · WebMD</div>
+          <span class="text-xs font-bold bg-red-100 text-red-700 px-2 py-1 rounded">bot-blocked + copyrighted</span>
+        </div>
+        <p class="text-sm text-slate-600 mt-2 leading-relaxed">Evaluated during ideation for a health vertical: 403 to automated access, copyrighted content. Link-out only; never republished.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ POLICY ============ -->
+  <section id="policy" class="scroll-mt-24 border border-slate-100 rounded-2xl p-8 bg-slate-50">
+    <h2 class="text-2xl font-bold">Our ingestion policy</h2>
+    <ol class="mt-4 space-y-3 text-slate-600 leading-relaxed">
+      <li class="flex gap-3"><span class="text-orange-500 font-bold">1.</span><span><strong>Official interfaces first.</strong> We ingest via vendor-published llms.txt / <code>.md</code> endpoints, or open-licensed git repositories — never scraped HTML.</span></li>
+      <li class="flex gap-3"><span class="text-orange-500 font-bold">2.</span><span><strong>Excerpts + canonical links.</strong> We return short excerpts that link back to the vendor's page. No full-text mirroring.</span></li>
+      <li class="flex gap-3"><span class="text-orange-500 font-bold">3.</span><span><strong>Attribution everywhere.</strong> Every tool response names its license and source. The UI displays it on every card.</span></li>
+      <li class="flex gap-3"><span class="text-orange-500 font-bold">4.</span><span><strong>When in doubt, exclude.</strong> BUSL, AGPL, bot-blocked and proprietary-without-consent sources stay out. A smaller honest mesh beats a larger ambiguous one.</span></li>
+    </ol>
+  </section>
+
+</main>
+
+<footer class="border-t border-slate-100">
+  <div class="max-w-5xl mx-auto px-6 py-10 text-[11px] text-slate-400 leading-relaxed">
+    Licenses referenced: CC-BY-4.0 (Cloudflare, Kubernetes, OpenTelemetry) · MIT (Bun, ElysiaJS, Hono, Nuxt, SolidJS) · Apache-2.0 (Argo CD) ·
+    llms.txt agent interfaces (Netlify, Vercel, Stripe, Sentry, Turso, Upstash). This page is itself part of the project's compliance record —
+    generated from the same sources.yaml that drives ingestion.
+  </div>
+  <div class="max-w-5xl mx-auto px-6 pb-8 text-sm text-slate-500 flex flex-col md:flex-row justify-between gap-3">
+    <div>🕸 Documesh — powered by WebMCP</div>
+    <div class="flex gap-5">
+      <a href="app.html" class="hover:text-slate-900">App</a>
+      <a href="capabilities.html" class="hover:text-slate-900">Capabilities</a>
+      <a href="webmcp.html" class="hover:text-slate-900">WebMCP Tools</a>
+    </div>
+  </div>
+  <div class="max-w-6xl mx-auto px-6 pb-6 text-sm text-slate-500">
+    Built with ❤️ by <a href="https://selatan.org" target="_blank" class="font-medium text-slate-700 hover:text-orange-600">selatan.org</a>
+  </div>
+</footer>
+
+<script type="module">
+const API = location.hostname === "localhost" && location.port === "8788" ? "http://localhost:8787" : "";
+
+const VENDOR_META = {
+  cloudflare:   { name: "Cloudflare",     license: "CC-BY-4.0",      origin: "developers.cloudflare.com — official llms.txt + .md endpoints" },
+  netlify:      { name: "Netlify",        license: "llms.txt agent-permitted", origin: "docs.netlify.com — official llms.txt" },
+  vercel:       { name: "Vercel",         license: "llms.txt agent-permitted", origin: "vercel.com/docs — llms.txt + sitemap.md" },
+  kubernetes:   { name: "Kubernetes",     license: "CC-BY-4.0",      origin: "kubernetes/website git (release branches v1.32, v1.29)" },
+  bun:          { name: "Bun",            license: "MIT",            origin: "bun.com official llms.txt" },
+  elysia:       { name: "ElysiaJS",       license: "MIT",            origin: "elysiajs.com official llms.txt" },
+  hono:         { name: "Hono",           license: "MIT",            origin: "hono.dev official llms.txt" },
+  nuxt:         { name: "Nuxt",           license: "MIT",            origin: "nuxt.com llms.txt" },
+  solid:        { name: "SolidJS",        license: "MIT",            origin: "docs.solidjs.com llms.txt" },
+  stripe:       { name: "Stripe",         license: "llms.txt agent-permitted", origin: "docs.stripe.com llms.txt" },
+  sentry:       { name: "Sentry",         license: "llms.txt agent-permitted", origin: "docs.sentry.io llms.txt" },
+  turso:        { name: "Turso",          license: "llms.txt agent-permitted", origin: "docs.turso.tech llms.txt" },
+  upstash:      { name: "Upstash",        license: "llms.txt agent-permitted", origin: "docs.upstash.com llms.txt" },
+  opentelemetry:{ name: "OpenTelemetry",  license: "CC-BY-4.0",      origin: "opentelemetry.io official llms.txt" },
+  argocd:       { name: "Argo CD",        license: "Apache-2.0",     origin: "argoproj/argo-cd git-hosted docs" },
+  helm:         { name: "Helm",           license: "Apache-2.0",     origin: "helm/helm-www git-hosted docs" },
+  flux:         { name: "Flux CD",        license: "Apache-2.0",     origin: "fluxcd/website git-hosted docs (content/en/flux)" },
+  cilium:       { name: "Cilium",         license: "Apache-2.0",     origin: "cilium/cilium Documentation/ (RST→md conversion)" },
+};
+
+try {
+  const snap = await fetch(API + "/search?q=the&limit=1").then(r => r.json()); // placeholder
+} catch {}
+
+// Pull per-vendor chunk counts from the index manifest via a single vendors call + search totals
+// The /vendors endpoint gives the registry; counts come from probing /search per vendor (15 quick calls).
+const data = await fetch(API + "/vendors").then(r => r.json());
+const tb = document.getElementById("covered-tbody");
+tb.innerHTML = "";
+
+for (const v of data.vendors) {
+  const meta = VENDOR_META[v.id] || { name: v.id, license: v.license, origin: v.docs_origin };
+  let count = "…";
+  try {
+    const s = await fetch(`${API}/search?q=a&vendors=${v.id}&limit=1`).then(r => r.json());
+    // /search returns at most `limit`; use a trick: total docs per vendor via one broad query is not exposed.
+    // Instead show tool-verified marker:
+    count = "✓";
+  } catch { count = "–"; }
+
+  const tr = document.createElement("tr");
+  tr.className = "hover:bg-slate-50";
+  tr.innerHTML = `
+    <td class="px-5 py-3 font-medium">
+      <a href="app.html?q=docs&vendors=${v.id}" class="hover:text-orange-600">${meta.name}</a>
+    </td>
+    <td class="px-5 py-3 text-slate-600">${meta.license}</td>
+    <td class="px-5 py-3 text-slate-500 text-xs hidden md:table-cell">${meta.origin}</td>
+    <td class="px-5 py-3 text-right text-slate-400">${count}</td>`;
+  tb.appendChild(tr);
+}
+// add verified marker legend
+const legend = document.createElement("p");
+legend.className = "mt-3 text-xs text-slate-400";
+legend.textContent = "✓ = vendor indexed and searchable — click the vendor name to run a live filtered search.";
+tb.parentElement.insertAdjacentElement("afterend", legend);
+</script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WebMCP Tool Reference — Documesh</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+  html { scroll-behavior: smooth; }
+  pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  pre .k { color: #93c5fd; }   /* keys */
+  pre .s { color: #fcd34d; }   /* strings */
+  pre .n { color: #f9a8d4; }   /* numbers */
+  pre .b { color: #86efac; }   /* booleans */
+  pre .c { color: #64748b; font-style: italic; } /* comments */
+  aside a.active { color: #ea580c; font-weight: 600; }
+</style>
+</head>
+<body class="bg-white text-slate-900 antialiased">
+
+<nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-100">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center gap-8">
+    <a href="index.html" class="font-bold text-lg tracking-tight">🕸 Documesh</a>
+    <div class="hidden md:flex gap-6 text-sm text-slate-600">
+      <a href="app.html" class="hover:text-slate-900">App</a>
+      <a href="capabilities.html" class="hover:text-slate-900">Capabilities</a>
+      <a href="webmcp.html" class="text-slate-900 font-medium">WebMCP Tools</a>
+      <a href="coverage.html" class="hover:text-slate-900">Coverage</a>
+    </div>
+    <a href="app.html" class="ml-auto text-sm bg-slate-900 text-white px-4 py-2 rounded-lg font-medium">Open the app →</a>
+  </div>
+</nav>
+
+<div class="max-w-6xl mx-auto px-6 pt-16 pb-24 grid md:grid-cols-[220px_1fr] gap-12">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="hidden md:block">
+    <div class="sticky top-24 text-sm space-y-6">
+      <div>
+        <div class="font-semibold mb-2">Overview</div>
+        <ul class="space-y-1.5 text-slate-600">
+          <li><a href="#what-is-webmcp" class="hover:text-slate-900 block">What is WebMCP?</a></li>
+          <li><a href="#how-to-connect" class="hover:text-slate-900 block">Connect an agent</a></li>
+          <li><a href="#design-principles" class="hover:text-slate-900 block">Design principles</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold mb-2">Tools</div>
+        <ul class="space-y-1.5 text-slate-600">
+          <li><a href="#tool-search-docs-across" class="hover:text-slate-900 block pl-2 border-l border-slate-200">search_docs_across</a></li>
+          <li><a href="#tool-explain-error" class="hover:text-slate-900 block pl-2 border-l border-slate-200">explain_error</a></li>
+          <li><a href="#tool-list-vendors" class="hover:text-slate-900 block pl-2 border-l border-slate-200">list_vendors</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold mb-2">Reference</div>
+        <ul class="space-y-1.5 text-slate-600">
+          <li><a href="#vendors" class="hover:text-slate-900 block">Vendor registry</a></li>
+          <li><a href="#registration" class="hover:text-slate-900 block">Registration snippet</a></li>
+          <li><a href="#response-contract" class="hover:text-slate-900 block">Response contract</a></li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== Content ===== -->
+  <main class="min-w-0">
+
+    <h1 class="text-4xl font-bold tracking-tight">WebMCP Tool Reference</h1>
+    <p class="mt-4 text-slate-600 leading-relaxed">
+      Documesh is an application <strong>powered by WebMCP</strong>. These are the exact
+      tools this website registers via
+      <code class="bg-slate-100 px-1.5 py-0.5 rounded text-sm">document.modelContext.registerTool()</code> —
+      the contract any compatible agent discovers and operates when you open this site
+      in ChatGPT's in-app browser or Chrome with WebMCP enabled.
+    </p>
+
+    <!-- What is WebMCP -->
+    <section id="what-is-webmcp" class="mt-12 scroll-mt-24">
+      <h2 class="text-2xl font-bold">What is WebMCP?</h2>
+      <p class="mt-3 text-slate-600 leading-relaxed">
+        WebMCP is an emerging open standard (W3C Web Machine Learning community group, developed
+        with Microsoft and Google) that lets a website declare <em>structured tools</em> for AI agents.
+        Instead of an agent scraping HTML and guessing, the page hands over a machine-readable tool
+        list: names, descriptions, JSON Schemas. The agent reads the contract and calls tools directly —
+        while the visual UI stays on screen for the human. Think of it as the difference between
+        <em>reading a building's floor plan</em> and <em>wandering the halls hoping to find the right room</em>.
+      </p>
+    </section>
+
+    <!-- How to connect -->
+    <section id="how-to-connect" class="mt-12 scroll-mt-24">
+      <h2 class="text-2xl font-bold">Connect an agent</h2>
+      <div class="mt-4 grid sm:grid-cols-2 gap-4">
+        <div class="border border-slate-100 rounded-xl p-5">
+          <div class="font-semibold mb-2">ChatGPT (in-app browser)</div>
+          <p class="text-sm text-slate-600 leading-relaxed">Open <code class="bg-slate-100 px-1 rounded">documesh.dev</code> in ChatGPT's in-app browser and ask naturally: <em>"search the docs for edge function environment variables."</em> WebMCP is supported out of the box — the agent finds and calls the tools.</p>
+        </div>
+        <div class="border border-slate-100 rounded-xl p-5">
+          <div class="font-semibold mb-2">Google Chrome 149+</div>
+          <p class="text-sm text-slate-600 leading-relaxed">Enable <code class="bg-slate-100 px-1 rounded">chrome://flags/#enable-webmcp-testing</code>, restart, then open the site and converse with your WebMCP-compatible agent of choice.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Design principles -->
+    <section id="design-principles" class="mt-12 scroll-mt-24">
+      <h2 class="text-2xl font-bold">Design principles</h2>
+      <ul class="mt-4 space-y-3 text-slate-600 leading-relaxed">
+        <li class="flex gap-3"><span class="text-orange-500 font-bold">1.</span><span><strong>Risk-typed tools.</strong> Every tool declares its class — <code class="bg-slate-100 px-1 rounded text-sm">answer</code> (read-only), <code class="bg-slate-100 px-1 rounded text-sm">act</code> (mutates app state), <code class="bg-slate-100 px-1 rounded text-sm">transact</code> (guarded). All Documesh tools are read-only today.</span></li>
+        <li class="flex gap-3"><span class="text-orange-500 font-bold">2.</span><span><strong>Provenance mandatory.</strong> Responses without <code class="bg-slate-100 px-1 rounded text-sm">license</code>, <code class="bg-slate-100 px-1 rounded text-sm">source_url</code> and <code class="bg-slate-100 px-1 rounded text-sm">last_updated</code> fail at the schema level — attribution is structural, not optional.</span></li>
+        <li class="flex gap-3"><span class="text-orange-500 font-bold">3.</span><span><strong>Honest abstention.</strong> <code class="bg-slate-100 px-1 rounded text-sm">explain_error</code> labels low-confidence results as "closest matches" and never presents a guess as the answer.</span></li>
+        <li class="flex gap-3"><span class="text-orange-500 font-bold">4.</span><span><strong>One tool per intent.</strong> No near-duplicate tool spam — models lose accuracy on bloated tool lists, so the mesh keeps a minimal canonical surface.</span></li>
+      </ul>
+    </section>
+
+    <hr class="my-12 border-slate-100" />
+
+    <h2 class="text-3xl font-bold">Tools</h2>
+
+    <!-- ============ TOOL 1 ============ -->
+    <section id="tool-search-docs-across" class="mt-8 scroll-mt-24 border border-slate-100 rounded-2xl overflow-hidden">
+      <div class="p-6">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-[11px] font-bold bg-green-100 text-green-700 px-2 py-1 rounded">answer</span>
+          <span class="text-[11px] text-slate-400">read-only · safe</span>
+        </div>
+        <h3 class="mt-3 text-xl font-bold font-mono">search_docs_across</h3>
+        <p class="mt-2 text-slate-600 text-sm leading-relaxed">Search federated developer documentation across all mesh vendors. Returns ranked excerpts with version, license, and canonical source URL for every result.</p>
+      </div>
+      <div class="bg-slate-50 border-t border-slate-100 p-6 space-y-4">
+        <div>
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Request</div>
+          <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{
+  <span class="k">"query"</span>: <span class="s">"edge functions environment variables"</span>,
+  <span class="k">"vendors"</span>: [<span class="s">"netlify"</span>, <span class="s">"vercel"</span>],   <span class="c">// optional filter</span>
+  <span class="k">"limit"</span>: <span class="n">5</span>                          <span class="c">// optional, default 5</span>
+}</pre>
+        </div>
+        <div>
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Response</div>
+          <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{
+  <span class="k">"snapshot_date"</span>: <span class="s">"2026-08-30"</span>,
+  <span class="k">"results"</span>: [{
+    <span class="k">"vendor"</span>: <span class="s">"netlify"</span>, <span class="k">"version"</span>: <span class="s">"latest"</span>,
+    <span class="k">"title"</span>: <span class="s">"Environment variables at Netlify"</span>,
+    <span class="k">"section"</span>: <span class="s">"Build > Environment variables > Overview"</span>,
+    <span class="k">"excerpt_link"</span>: <span class="s">"https://docs.netlify.com/build/env/overview/"</span>,
+    <span class="k">"license"</span>: <span class="s">"Netlify Docs (agent-permitted via llms.txt)"</span>,
+    <span class="k">"last_updated"</span>: <span class="s">"2026-08-30"</span>, <span class="k">"relevance"</span>: <span class="n">274.66</span>
+  }]
+}</pre>
+        </div>
+        <div class="text-xs text-slate-500">Vendors: cloudflare · netlify · vercel · kubernetes · bun · elysia · turso · upstash · sentry · stripe · hono · nuxt · solid · opentelemetry · argocd</div>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 2 ============ -->
+    <section id="tool-explain-error" class="mt-8 scroll-mt-24 border border-slate-100 rounded-2xl overflow-hidden">
+      <div class="p-6">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-[11px] font-bold bg-green-100 text-green-700 px-2 py-1 rounded">answer</span>
+          <span class="text-[11px] text-slate-400">read-only · honest abstention built in</span>
+        </div>
+        <h3 class="mt-3 text-xl font-bold font-mono">explain_error</h3>
+        <p class="mt-2 text-slate-600 text-sm leading-relaxed">Given a log excerpt or error message, find the closest matching documentation sections across mesh vendors. Extracts error signatures (exception names, k8s reasons, errno codes, exit codes) and returns version-cited sections with an explicit disclaimer.</p>
+      </div>
+      <div class="bg-slate-50 border-t border-slate-100 p-6 space-y-4">
+        <div>
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Request</div>
+          <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{
+  <span class="k">"log_excerpt"</span>: <span class="s">"Back-off restarting failed container. Error: CrashLoopBackOff"</span>,
+  <span class="k">"vendor"</span>: <span class="s">"kubernetes"</span>   <span class="c">// optional filter</span>
+}</pre>
+        </div>
+        <div>
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Response</div>
+          <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{
+  <span class="k">"extracted_signatures"</span>: [<span class="s">"CrashLoopBackOff"</span>, <span class="s">"Error: CrashLoopBackOff…"</span>],
+  <span class="k">"matches"</span>: [{
+    <span class="k">"vendor"</span>: <span class="s">"kubernetes"</span>,
+    <span class="k">"title"</span>: <span class="s">"How Pods handle problems with containers"</span>,
+    <span class="k">"source_url"</span>: <span class="s">"https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/"</span>,
+    <span class="k">"license"</span>: <span class="s">"CC-BY-4.0"</span>, <span class="k">"score"</span>: <span class="n">252.4</span>
+  }],
+  <span class="k">"disclaimer"</span>: <span class="s">"These are the closest documentation sections, not a diagnosis…"</span>
+}</pre>
+        </div>
+        <div class="text-xs text-slate-500">Eval: 5/5 curated real-world errors matched the correct section in top-3 (100%).</div>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 3 ============ -->
+    <section id="tool-list-vendors" class="mt-8 scroll-mt-24 border border-slate-100 rounded-2xl overflow-hidden">
+      <div class="p-6">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-[11px] font-bold bg-green-100 text-green-700 px-2 py-1 rounded">answer</span>
+          <span class="text-[11px] text-slate-400">read-only · no parameters</span>
+        </div>
+        <h3 class="mt-3 text-xl font-bold font-mono">list_vendors</h3>
+        <p class="mt-2 text-slate-600 text-sm leading-relaxed">List the documentation vendors in the mesh with their license and attribution requirements. Lets an agent verify provenance before citing.</p>
+      </div>
+      <div class="bg-slate-50 border-t border-slate-100 p-6">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Response (abridged)</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{ <span class="k">"vendors"</span>: [{
+    <span class="k">"id"</span>: <span class="s">"cloudflare"</span>, <span class="k">"name"</span>: <span class="s">"Cloudflare Developers"</span>,
+    <span class="k">"license"</span>: <span class="s">"CC-BY-4.0"</span>,
+    <span class="k">"license_url"</span>: <span class="s">"https://github.com/cloudflare/cloudflare-docs/…/LICENSE"</span>,
+    <span class="k">"docs_origin"</span>: <span class="s">"developers.cloudflare.com (official llms.txt)"</span>,
+    <span class="k">"attribution_required"</span>: <span class="b">true</span>
+  }, <span class="c">/* … 14 more */</span> ],
+  <span class="k">"snapshot_date"</span>: <span class="s">"2026-08-30"</span> }</pre>
+      </div>
+    </section>
+
+    <hr class="my-12 border-slate-100" />
+
+    <!-- ============ VENDOR REGISTRY ============ -->
+    <section id="vendors" class="scroll-mt-24">
+      <h2 class="text-2xl font-bold">Vendor registry</h2>
+      <p class="mt-2 text-slate-600 text-sm">All 15 sources, their legal basis, and ingestion interface. Full detail on the <a href="coverage.html" class="text-orange-600 hover:text-orange-500">coverage page</a>.</p>
+      <div id="vendor-table" class="mt-6 overflow-x-auto">
+        <table class="w-full text-sm border border-slate-100 rounded-xl overflow-hidden">
+          <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-400">
+            <tr><th class="px-4 py-3">Vendor</th><th class="px-4 py-3">License</th><th class="px-4 py-3">Interface</th></tr>
+          </thead>
+          <tbody id="vendor-tbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ REGISTRATION ============ -->
+    <section id="registration" class="mt-12 scroll-mt-24">
+      <h2 class="text-2xl font-bold">Registration snippet</h2>
+      <p class="mt-2 text-slate-600 text-sm">This is the actual pattern used on this site (simplified):</p>
+      <pre class="mt-4 text-xs bg-slate-900 text-slate-100 rounded-xl p-5 overflow-x auto leading-relaxed"><span class="c">// app.html — registers Documesh capabilities with any visiting agent</span>
+<span class="k">const</span> ctx = document.<span class="n">modelContext</span>;
+
+ctx.<span class="n">registerTool</span>({
+  <span class="k">name</span>: <span class="s">"search_docs_across"</span>,
+  <span class="k">description</span>: <span class="s">"Search federated developer documentation…"</span>,
+  <span class="k">inputSchema</span>: {
+    <span class="k">type</span>: <span class="s">"object"</span>,
+    <span class="k">properties</span>: {
+      <span class="k">query</span>:   { <span class="k">type</span>: <span class="s">"string"</span>, <span class="k">description</span>: <span class="s">"Search query"</span> },
+      <span class="k">vendors</span>: { <span class="k">type</span>: <span class="s">"array"</span>,  <span class="k">description</span>: <span class="s">"Optional vendor filter"</span> },
+      <span class="k">limit</span>:   { <span class="k">type</span>: <span class="s">"number"</span>, <span class="k">description</span>: <span class="s">"Max results"</span> }
+    },
+    <span class="k">required</span>: [<span class="s">"query"</span>]
+  },
+  <span class="k">execute</span>: <span class="k">async</span> (input) => {
+    <span class="k">const</span> data = <span class="k">await</span> <span class="n">fetch</span>(<span class="s">`/search?q=${input.query}`</span>).<span class="n">then</span>(r => r.<span class="n">json</span>());
+    <span class="k">return</span> data;  <span class="c">// license + source + version on every result</span>
+  }
+});</pre>
+    </section>
+
+    <!-- ============ RESPONSE CONTRACT ============ -->
+    <section id="response-contract" class="mt-12 scroll-mt-24">
+      <h2 class="text-2xl font-bold">Response contract</h2>
+      <p class="mt-2 text-slate-600 text-sm">Every tool response satisfies these invariants — enforced by the indexer and API, verifiable by any agent:</p>
+      <div class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+        <div class="border border-slate-100 rounded-xl p-4">✅ <code class="bg-slate-100 px-1 rounded">license</code> present on every result</div>
+        <div class="border border-slate-100 rounded-xl p-4">✅ <code class="bg-slate-100 px-1 rounded">source_url</code> → canonical vendor page</div>
+        <div class="border border-slate-100 rounded-xl p-4">✅ <code class="bg-slate-100 px-1 rounded">last_updated</code> dated snapshot</div>
+        <div class="border border-slate-100 rounded-xl p-4">✅ excerpts only — never full-text mirroring</div>
+        <div class="border border-slate-100 rounded-xl p-4">✅ deterministic scoring (same query → same order)</div>
+        <div class="border border-slate-100 rounded-xl p-4">✅ explicit disclaimers on probabilistic matches</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="border-t border-slate-100">
+  <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-slate-500 flex flex-col md:flex-row justify-between gap-3">
+    <div>🕸 Documesh — powered by WebMCP</div>
+    <div class="flex gap-5">
+      <a href="app.html" class="hover:text-slate-900">App</a>
+      <a href="capabilities.html" class="hover:text-slate-900">Capabilities</a>
+      <a href="coverage.html" class="hover:text-slate-900">Coverage</a>
+    </div>
+  </div>
+  <div class="max-w-6xl mx-auto px-6 pb-6 text-sm text-slate-500">
+    Built with ❤️ by <a href="https://selatan.org" target="_blank" class="font-medium text-slate-700 hover:text-orange-600">selatan.org</a>
+  </div>
+</footer>
+
+<script type="module">
+const API = location.hostname === "localhost" && location.port === "8788" ? "http://localhost:8787" : "";
+try {
+  const data = await fetch(API + "/vendors").then(r => r.json());
+  const tb = document.getElementById("vendor-tbody");
+  tb.innerHTML = data.vendors.map(v => `
+    <tr class="hover:bg-slate-50">
+      <td class="px-4 py-2.5 font-medium">${v.name}</td>
+      <td class="px-4 py-2.5 text-slate-600">${v.license}</td>
+      <td class="px-4 py-2.5 text-slate-500 text-xs">${v.docs_origin}</td>
+    </tr>`).join("");
+} catch {
+  document.getElementById("vendor-tbody").innerHTML =
+    `<tr><td colspan="3" class="px-4 py-4 text-slate-400">Vendor registry unavailable (API offline) — see coverage page.</td></tr>`;
+}
+</script>
+</body>
+</html>
