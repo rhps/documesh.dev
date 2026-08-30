@@ -1,0 +1,170 @@
+name: Deploy Production
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: "Git tag to promote (e.g. v0.1.0) — must exist"
+        required: true
+        type: string
+      confirm:
+        description: 'Type "PROMOTE" to confirm production deploy'
+        required: true
+        type: string
+
+# NOTE: no workflow-level `defaults.run.working-directory` — it would apply to
+# steps that run BEFORE checkout (e.g. "Resolve tag & mode") and bash fails to
+# start because the directory doesn't exist yet on a fresh runner. Steps that
+# need the repo subdir declare `working-directory` explicitly instead.
+
+env:
+  # Set repo variable AUTO_PRODUCTION=true to deploy on tag push.
+  # Leave it absent/false to require manual workflow_dispatch runs instead.
+  AUTO_PROMOTE: ${{ vars.AUTO_PRODUCTION }}
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  guard:
+    name: Verify tag + confirmation
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: . # no checkout needed — pure input/tag validation
+    steps:
+      - name: Resolve tag & mode
+        id: resolve
+        run: |
+          # Tag push event: tag is github.ref_name; workflow_dispatch: from input
+          if [ "${{ github.event_name }}" = "push" ]; then
+            TAG="${{ github.ref_name }}"
+          else
+            TAG="${{ github.event.inputs.version_tag }}"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+          # Auto-promote allowed only when repo var AUTO_PRODUCTION == 'true' AND event is a tag push.
+          # Manual dispatch always allowed (it IS the explicit confirmation).
+          if [ "${{ github.event_name }}" = "push" ]; then
+            if [ "$AUTO_PROMOTE" != "true" ]; then
+              echo "❌ Tag push detected but repo variable AUTO_PRODUCTION is not 'true'."
+              echo "   Either set AUTO_PRODUCTION=true (repo Settings → Variables and secrets → Variables)"
+              echo "   or run the workflow manually via Actions → Deploy Production → Run workflow."
+              exit 1
+            fi
+            echo "✅ tag-push auto-promote enabled (AUTO_PRODUCTION=true)"
+            echo "mode=auto" >> "$GITHUB_OUTPUT"
+          else
+            if [ "${{ github.event.inputs.confirm }}" != "PROMOTE" ]; then
+              echo "❌ Type PROMOTE in the confirm field to proceed"; exit 1
+            fi
+            echo "✅ confirmed by @${{ github.actor }}"
+            echo "mode=manual" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Tag exists
+        run: |
+          TAG="${{ steps.resolve.outputs.tag }}"
+          git clone --quiet --filter=blob:none --no-checkout "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" repo
+          cd repo
+          git fetch --tags origin
+          if ! git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "❌ tag $TAG does not exist"; exit 1
+          fi
+          echo "✅ tag resolves: $TAG -> $(git rev-parse "$TAG^{commit}")"
+
+  deploy:
+    name: Production
+    needs: guard
+    runs-on: ubuntu-latest
+    environment: production
+    # GITHUB_TOKEN defaults to read-only — creating a Release needs contents:write.
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.resolve.outputs.tag }}
+      mode: ${{ steps.resolve.outputs.mode }}
+    steps:
+      - name: Resolve tag & mode (re-declared here — step outputs don't cross jobs)
+        id: resolve
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            TAG="${{ github.ref_name }}"
+            MODE="auto"
+          else
+            TAG="${{ github.event.inputs.version_tag }}"
+            MODE="manual"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          echo "resolved: tag=$TAG mode=$MODE"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.resolve.outputs.tag }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Gates (re-run on the tagged commit)
+        working-directory: .
+        run: |
+          python3 indexer/verify.py
+          node worker/eval.mjs
+
+      - name: Deploy to production (custom domain)
+        working-directory: .
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy --env production
+
+      - name: Smoke test production
+        run: |
+          HOST="https://documesh.dev"
+          ALT="https://docs-mesh-api.${{ vars.CF_SUBDOMAIN }}.workers.dev"
+          for i in 1 2 3 4 5 6; do
+            CODE=$(curl -s -o /tmp/health.json -w "%{http_code}" "$HOST/health" || true)
+            [ "$CODE" = "200" ] && { echo "✅ production healthy ($HOST):"; cat /tmp/health.json; exit 0; }
+            CODE=$(curl -s -o /tmp/health.json -w "%{http_code}" "$ALT/health" || true)
+            [ "$CODE" = "200" ] && { echo "✅ production healthy via workers.dev (custom domain may still be certifying):"; cat /tmp/health.json; exit 0; }
+            echo "attempt $i: custom=$HOST / alt=$ALT — retrying in 10s"; sleep 10
+          done
+          echo "❌ production smoke failed"; exit 1
+
+      - name: Create GitHub Release
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.resolve.outputs.tag }}
+          MODE: ${{ steps.resolve.outputs.mode }}
+        run: |
+          gh release create "$TAG" \
+            --repo "${{ github.repository }}" \
+            --title "Docs Mesh $TAG" \
+            --notes "Production deploy ($MODE mode) by @${{ github.actor }}.
+
+          🌐 https://docs-mesh-api.${{ vars.CF_SUBDOMAIN }}.workers.dev
+          📸 Snapshot: $(python3 -c "import json; print(json.load(open('data/snapshot.json'))['built_at'])")
+
+          Judging notes: WebMCP tools available in ChatGPT in-app browser and Chrome 149+ with \`chrome://flags/#enable-webmcp-testing\`."
+
+      - name: Summary
+        run: |
+          {
+            echo "## 🏆 Production deployed (${{ steps.resolve.outputs.tag }})"
+            echo ""
+            echo "- URL: https://docs-mesh-api.${{ vars.CF_SUBDOMAIN }}.workers.dev"
+            echo "- Mode: ${{ steps.resolve.outputs.mode }}"
+            echo "- Promoted by: @${{ github.actor }}"
+          } >> "$GITHUB_STEP_SUMMARY"

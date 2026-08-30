@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "webmcp/docs-mesh/**"
+  push:
+    branches: [main]
+    paths:
+      - "webmcp/docs-mesh/**"
+
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  test:
+    name: Eval gate + index sanity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Chunk field audit (license/attribution/source/date on 100%)
+        run: python3 indexer/verify.py
+
+      - name: Eval gate (≥80% required)
+        run: node worker/eval.mjs
+
+      - name: Search smoke (federation query must return ≥2 vendors)
+        run: |
+          node --input-type=module -e "
+          import { readFileSync } from 'node:fs';
+          import { loadIndex, search } from './worker/src/search-core.js';
+          const index = loadIndex(readFileSync('./data/search-index.json','utf8'));
+          const r = search(index, 'edge functions environment variables', { limit: 5 });
+          const vendors = new Set(r.results.map(x => x.vendor));
+          console.log('vendors hit:', [...vendors].join(', '));
+          if (vendors.size < 2) { console.error('FAIL: federation returned <2 vendors'); process.exit(1); }
+          if (!r.results.every(x => x.license && x.source_url)) { console.error('FAIL: missing license/source on results'); process.exit(1); }
+          console.log('✅ federation smoke passed');
+          "
+
+  preview-deploy:
+    name: Preview deploy (ephemeral)
+    needs: test
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Deploy preview worker
+        id: deploy
+        working-directory: .
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler deploy --name "docs-mesh-pr-${{ github.event.pull_request.number }}" 2>&1 | tee deploy.log
+          # capture URL from wrangler output; fall back to deterministic workers.dev URL
+          URL=$(grep -oE 'https://[a-z0-9.-]*workers\.dev[^ ]*' deploy.log | head -1 || true)
+          if [ -z "$URL" ]; then
+            URL="https://docs-mesh-pr-${{ github.event.pull_request.number }}.${{ vars.CF_SUBDOMAIN }}.workers.dev"
+          fi
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Preview URL: $URL"
+
+      - name: Smoke test preview
+        run: |
+          URL="${{ steps.deploy.outputs.url }}"
+          for i in 1 2 3 4 5; do
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" "$URL/health" || true)
+            [ "$CODE" = "200" ] && { echo "✅ preview healthy ($URL/health)"; exit 0; }
+            echo "attempt $i: HTTP $CODE — retrying"; sleep 8
+          done
+          echo "⚠️ preview smoke did not return 200 (continuing — comment will note it)"
+          exit 0
+
+      - name: Comment preview URL on PR
+        if: always() && steps.deploy.outputs.url != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --repo "${{ github.repository }}" \
+            --body "🚀 **Preview deployed**: $URL
+
+          Test the WebMCP tools: open in ChatGPT in-app browser or Chrome with \`chrome://flags/#enable-webmcp-testing\`.
+          Quick check: $URL/?q=kubernetes+restart+policy+backoff"

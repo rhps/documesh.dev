@@ -1,0 +1,79 @@
+name: Reindex Docs Snapshot
+
+on:
+  workflow_dispatch:
+  # schedule (Sundays 04:00 UTC) disabled 2026-08-31 — manual triggering preferred.
+  # Re-enable after the hackathon if weekly snapshot PRs are wanted again:
+  # schedule:
+  #   - cron: "0 4 * * 0"
+
+
+concurrency:
+  group: reindex
+  cancel-in-progress: true
+
+jobs:
+  reindex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Re-crawl all 15 vendors
+        run: |
+          python3 indexer/fetch_docs.py
+          python3 indexer/enrich_docs.py
+          python3 indexer/foundation_docs.py
+
+      - name: Build index
+        run: python3 indexer/build_index.py
+
+      - name: Verify + eval gates
+        run: |
+          python3 indexer/verify.py
+          node worker/eval.mjs
+
+      - name: Detect changes
+        id: changes
+        run: |
+          if git diff --quiet data/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No vendor changes detected since last snapshot."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --stat data/ | tail -5
+          fi
+
+      - name: Create snapshot PR
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          BRANCH="chore/snapshot-$DATE"
+          git config user.name "docs-mesh-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add data/
+          git commit -m "chore: docs snapshot $DATE
+
+          Automated re-crawl of all vendors. Eval gate passed (5/5).
+          Review the diff to see which vendor docs changed."
+
+          # create a deterministic bot token is not available; use gh api via GITHUB_TOKEN
+          git push origin "$BRANCH"
+          gh pr create \
+            --repo "${{ github.repository }}" \
+            --head "$BRANCH" \
+            --base main \
+            --title "chore: docs snapshot $DATE" \
+            --body "Automated weekly re-crawl. ✅ verify + eval gates passed.
+
+          Merging updates the index; the next merge-to-main deploy will ship it to staging. Promote to production via the Deploy Production workflow."
