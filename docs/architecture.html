@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Documesh — Architecture</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background: #fff; color: #0f172a; padding: 40px 20px; }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  .sub { color: #64748b; margin-bottom: 40px; font-size: 14px; }
+  h2 { font-size: 18px; margin: 32px 0 16px; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; }
+
+  /* Flow diagram */
+  .flow { display: flex; flex-direction: column; gap: 0; }
+  .tier { display: flex; gap: 16px; margin-bottom: 0; align-items: stretch; }
+  .tier-label { min-width: 110px; text-align: right; padding: 16px 12px; font-weight: 600; font-size: 13px; color: #475569; display:flex; align-items:center; justify-content:flex-end; }
+  .boxes { display: flex; gap: 12px; flex-wrap: wrap; flex: 1; padding: 16px 0; }
+  .box { border: 2px solid; border-radius: 12px; padding: 14px 16px; flex: 1; min-width: 180px; }
+  .box h4 { font-size: 13px; margin-bottom: 4px; }
+  .box p { font-size: 11px; color: #64748b; line-height: 1.4; }
+  .arrow-down { text-align: center; color: #94a3b8; font-size: 20px; padding: 4px 0; margin-left: 126px; }
+
+  .src { border-color: #93c5fd; background: #eff6ff; }
+  .src h4 { color: #1d4ed8; }
+  .idx { border-color: #fdba74; background: #fff7ed; }
+  .idx h4 { color: #c2410c; }
+  .api { border-color: #86efac; background: #f0fdf4; }
+  .api h4 { color: #15803d; }
+  .ui { border-color: #d8b4fe; background: #faf5ff; }
+  .ui h4 { color: #7e22ce; }
+  .agent { border-color: #fca5a5; background: #fef2f2; }
+  .agent h4 { color: #b91c1c; }
+  .cf { border-color: #fca5a5; background: #fff1f2; }
+  .cf h4 { color: #be123c; }
+
+  /* Vendor grid */
+  .vendors { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 10px; }
+  .vcard { border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; font-size: 12px; }
+  .vcard b { display: block; margin-bottom: 2px; }
+  .vcard .lic { color: #64748b; font-size: 10px; }
+  .vcard .pat { color: #ea580c; font-size: 10px; font-weight: 600; }
+
+  /* Legend */
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; font-size: 12px; color: #475569; }
+  .legend span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 12px; height: 12px; border-radius: 3px; border: 2px solid; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Documesh — System Architecture</h1>
+<p class="sub">How documentation flows from vendor sources to AI agents via WebMCP.</p>
+
+<!-- ═══════════ FLOW ═══════════ -->
+<h2>End-to-End Flow</h2>
+
+<div class="flow">
+
+  <!-- Sources -->
+  <div class="tier">
+    <div class="tier-label">SOURCES<br/><small>18 vendors</small></div>
+    <div class="boxes">
+      <div class="box src"><h4>llms.txt / .md endpoints</h4><p>Cloudflare · Netlify · Bun · ElysiaJS · Turso · Upstash · Sentry · Stripe · Nuxt · SolidJS · OpenTelemetry · Node.js</p></div>
+      <div class="box src"><h4>Git-hosted markdown</h4><p>Kubernetes (v1.32+1.29) · Argo CD · Helm · Flux · Cilium (RST→md) · PyTorch · LangChain · Playwright · Hugo · Moby · ES · Gitea · Vue · Svelte · Godot · Neovim · Terragrunt</p></div>
+    </div>
+  </div>
+
+  <div class="arrow-down">↓ raw markdown</div>
+
+  <!-- Indexer -->
+  <div class="tier">
+    <div class="tier-label">INDEXER<br/><small>build-time</small></div>
+    <div class="boxes">
+      <div class="box idx"><h4>fetch & chunk</h4><p>Per-vendor crawlers → heading-split chunks (~1800 chars) → license + attribution stamped</p></div>
+      <div class="box idx"><h4>TF-IDF indexer</h4><p>Tokenize → inverted postings (token → [doc, weight]) → per-vendor gz shards</p></div>
+      <div class="box idx"><h4>quality gates</h4><p>verify.py (100% fields) · eval.mjs (5/5 real errors) · build_index.py</p></div>
+    </div>
+  </div>
+
+  <div class="arrow-down">↓ gzipped shards (data/shards/*.gz)</div>
+
+  <!-- Runtime -->
+  <div class="tier">
+    <div class="tier-label">RUNTIME<br/><small>Cloudflare</small></div>
+    <div class="boxes">
+      <div class="box cf"><h4>CF Worker — API</h4><p><b>/search</b> fan-out per vendor shard → merge → rank → return w/ license<br/><b>/explain</b> error sigs → closest sections<br/><b>/vendors</b> registry + licenses</p></div>
+      <div class="box cf"><h4>CF Pages — Static Assets</h4><p>app/*.html · app/shards/*.gz<br/>(lazy-loaded per vendor query)</p></div>
+    </div>
+  </div>
+
+  <div class="arrow-down">↓ JSON API (CORS: *)</div>
+
+  <!-- Consumers -->
+  <div class="tier">
+    <div class="tier-label">CONSUMERS</div>
+    <div class="boxes">
+      <div class="box agent"><h4>🤖 AI Agent (WebMCP)</h4><p>ChatGPT in-app browser · Chrome 149+ with WebMCP flag.<br/>Discovers 3 tools via document.modelContext.registerTool() and calls them directly.</p></div>
+      <div class="box ui"><h4>👨‍💻 Human (browser)</h4><p>Chat UI sends same queries. Cited source viewer shows what the agent sees — co-presence, not automation.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ WEBMCP TOOLS ═══════════ -->
+<h2>WebMCP Tools (the judged surface)</h2>
+<table style="width:100%;border-collapse:collapse;font-size:13px">
+  <tr style="background:#f8fafc">
+    <th style="text-align:left;padding:8px 12px;border:1px solid #e2e8f0">Tool</th>
+    <th style="text-align:left;padding:8px 12px;border:1px solid #e2e8f0">Kind</th>
+    <th style="text-align:left;padding:8px 12px;border:1px solid #e2e8f0">Input</th>
+    <th style="text-align:left;padding:8px 12px;border:1px solid #e2e8f0">Key guarantee</th>
+  </tr>
+  <tr><td style="padding:8px 12px;border:1px solid #e2e8f0"><code>search_docs_across</code></td><td style="padding:8px 12px;border:1px solid #e2e8f0">answer</td><td style="padding:8px 12px;border:1px solid #e2e8f0">query, vendors?, limit?</td><td style="padding:8px 12px;border:1px solid #e2e8f0">every result has license + source_url + last_updated</td></tr>
+  <tr><td style="padding:8px 12px;border:1px solid #e2e8f0"><code>explain_error</code></td><td style="padding:8px 12px;border:1px solid #e2e8f0">answer</td><td style="padding:8px 12px;border:1px solid #e2e8f0">log_excerpt, vendor?</td><td style="padding:8px 12px;border:1px solid #e2e8f0">disclaimer + honest abstention</td></tr>
+  <tr><td style="padding:8px 12px;border:1px solid #e2e8f0"><code>list_vendors</code></td><td style="padding:8px 12px;border:1px solid #e2e8f0">answer</td><td style="padding:8px 12px;border:1px solid #e2e8f0">—</td><td style="padding:8px 12px;border:1px solid #e2e8f0">full license + attribution registry</td></tr>
+</table>
+
+<!-- ═══════════ INGESTION PATTERNS ═══════════ -->
+<h2>Ingestion Patterns</h2>
+<div class="vendors">
+  <div class="vcard" style="border-color:#22c55e"><b>P1 — llms.txt → .md</b><span class="pat">10 vendors</span><div class="lic">Cloudflare, Netlify, Bun, ElysiaJS, Turso, Upstash, Sentry, Stripe, Nuxt, SolidJS, Node.js, OpenTelemetry</div></div>
+  <div class="vcard" style="border-color:#22c55e"><b>P2 — llms-full.txt</b><span class="pat">1 vendor</span><div class="lic">Hono (single file, split + URL re-map)</div></div>
+  <div class="vcard" style="border-color:#22c55e"><b>P3 — sitemap.md</b><span class="pat">1 vendor</span><div class="lic">Vercel (per-page Lastmod = real freshness)</div></div>
+  <div class="vcard" style="border-color:#22c55e"><b>P4 — git repo</b><span class="pat">6 vendors</span><div class="lic">K8s (branch=version), Argo CD, Helm, Flux, Cilium (RST), React (react.dev)</div></div>
+</div>
+
+<!-- ═══════════ LEGAL BOUNDARY ═══════════ -->
+<h2>Legal Boundary</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <div style="border:2px solid #22c55e;border-radius:12px;padding:16px;background:#f0fdf4">
+    <b style="color:#15803d">✅ In the mesh</b>
+    <p style="font-size:12px;color:#374151;margin-top:8px">CC-BY-4.0 (Cloudflare, K8s, OTel) · MIT (Bun, Hono, Nuxt, Solid, React, Vue, Svelte, Playwright, Hugo, Docusaurus, pytest, Neovim, Terragrunt, Gitea) · Apache-2.0 (Argo CD, Cilium, TensorFlow) · llms.txt agent-consented (Netlify, Vercel, Stripe, Sentry, Turso, Upstash)</p>
+  </div>
+  <div style="border:2px solid #fca5a5;border-radius:12px;padding:16px;background:#fef2f2">
+    <b style="color:#b91c1c">⛔ Deliberately excluded</b>
+    <p style="font-size:12px;color:#374151;margin-top:8px">Terraform (BUSL — no 3rd-party republication) · Grafana (AGPL) · Ansible, FFmpeg, MediaWiki, OBS, Nagios (GPL) · MinIO (AGPL) · Shopify, Render (no public docs) · Mayo, CDC, NIH (bot-blocked + copyrighted)</p>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
