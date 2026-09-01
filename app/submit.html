@@ -54,29 +54,9 @@
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-slate-700 mb-1">GitHub repository <span class="text-red-500">*</span></label>
-      <input id="vendor-repo" type="text" placeholder="e.g. helm/helm-www"
+      <label class="block text-sm font-medium text-slate-700 mb-1">GitHub URL <span class="text-red-500">*</span></label>
+      <input id="vendor-repo" type="text" placeholder="e.g. helm/helm-www or https://github.com/helm/helm-www"
              class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-mono outline-none focus:border-[#4b5320]" />
-      <p class="text-xs text-slate-400 mt-1">The repo that contains the documentation source (markdown preferred)</p>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-4">
-      <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">Branch</label>
-        <input id="vendor-branch" type="text" placeholder="main" value="main"
-               class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-mono outline-none focus:border-[#4b5320]" />
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">llms.txt URL (if available)</label>
-        <input id="vendor-llms" type="url" placeholder="https://example.com/llms.txt"
-               class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-mono outline-none focus:border-[#4b5320]" />
-      </div>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium text-slate-700 mb-1">Why should this vendor be in the mesh?</label>
-      <textarea id="vendor-reason" rows="3" placeholder="Who uses this? What docs does it have? Why is it useful for agents?"
-                class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[#4b5320] resize-none"></textarea>
     </div>
 
     <div class="bg-[#a9af8b]/10 border border-[#929a68]/30 rounded-xl p-4 text-xs text-slate-600 leading-relaxed">
@@ -88,7 +68,7 @@
 
     <button id="submit-btn" onclick="checkVendor()"
             class="w-full bg-[#4b5320] hover:bg-[#6a7337] text-white px-6 py-3 rounded-xl font-medium transition-colors">
-      🔍 Check Legality & Ingestion Pattern
+      Request
     </button>
   </div>
 </section>
@@ -214,9 +194,9 @@ function setStep(id, icon, detail, cls) {
 async function checkVendor() {
   const name = document.getElementById("vendor-name").value.trim();
   const repoInput = document.getElementById("vendor-repo").value.trim().replace(/^https?:\/\/github\.com\//, "").replace(/\/$/, "");
-  const branch = document.getElementById("vendor-branch").value.trim() || "main";
-  const llms = document.getElementById("vendor-llms").value.trim();
-  const reason = document.getElementById("vendor-reason").value.trim();
+  const branch = "main";
+  const llms = "";
+  
 
   if (!name || !repoInput) {
     alert("Please fill in vendor name and GitHub repo");
