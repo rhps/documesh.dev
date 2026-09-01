@@ -55,14 +55,18 @@ jobs:
 
       - name: WebMCP evals (smoke)
         run: |
+          # install Chromium for Puppeteer (smoke mode drives a browser page)
+          npx puppeteer browsers install chrome
           npx webmcp-evals smoke \
             -u "https://documesh.selatan.org" \
             -e evals/documesh-smoke.json \
-            --timeout 30000 || \
+            --timeout 30000 \
+            --chrome-channel chrome || \
           npx webmcp-evals smoke \
             -u "$ALT" \
             -e evals/documesh-smoke.json \
-            --timeout 30000
+            --timeout 30000 \
+            --chrome-channel chrome
 
       - name: Summary
         run: |
