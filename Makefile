@@ -36,7 +36,7 @@ eval:
 
 eval-smoke:
 	npx webmcp-evals smoke \
-		-u "https://documesh.selatan.org" \
+		-u "https://documesh.selatan.org/app.html" \
 		-e evals/documesh-smoke.json \
 		--timeout 30000 \
 		--chrome-channel chrome

@@ -202,9 +202,61 @@ export default {
       const vendor = url.searchParams.get("vendor") || undefined;
       if (!err.trim()) return json({ error: "missing error" }, 400);
 
-      await ensureShards(vendor ? [vendor] : VENDOR_IDS);
-      const result = explainErrorFromShards(loaded, err, { vendor, limit: 3 });
-      return json(result);
+      // Load only a subset of vendors to stay within CPU limits on free tier.
+      // Use cached shards first, then load up to 5 more.
+      const priority = vendor ? [vendor] : ["cloudflare", "netlify", "vercel", "kubernetes", "nodejs"];
+      const loaded = await loadVendors(env, priority);
+      const sigs = extractSignatures(err);
+      const searchText = [err.slice(0, 400), ...sigs].join(" ");
+
+      // search across loaded shards
+      const toks = tokenize(searchText);
+      const scores = new Map();
+      for (const [v, index] of Object.entries(loaded)) {
+        for (const tok of toks) {
+          const pl = index.postings.get(tok);
+          if (!pl) continue;
+          for (const [docIdx, w] of pl) {
+            const key = `${v}:${docIdx}`;
+            scores.set(key, (scores.get(key) || 0) + w);
+          }
+        }
+      }
+
+      // rank + diversify
+      const ranked = [];
+      for (const [key, score] of scores) {
+        const [v, docIdxStr] = key.split(":");
+        const shard = loaded[v];
+        if (!shard) continue;
+        const d = shard.docs[parseInt(docIdxStr)];
+        if (!d) continue;
+        const docToks = new Set(tokenize(d.title + " " + d.heading_path));
+        let covered = 0;
+        for (const t of toks) if (docToks.has(t)) covered++;
+        ranked.push({
+          chunk_id: d.chunk_id, vendor: v, version: d.version,
+          title: d.title, heading_path: d.heading_path, path: d.path,
+          source_url: d.source_url, license: d.license, attribution: d.attribution,
+          last_updated: d.last_updated, score: +(score * (1 + covered / toks.length)).toFixed(4),
+        });
+      }
+      ranked.sort((a, b) => b.score - a.score);
+
+      const vendorCount = {};
+      const matches = [];
+      for (const m of ranked) {
+        vendorCount[m.vendor] = (vendorCount[m.vendor] || 0) + 1;
+        if (vendorCount[m.vendor] <= 2) { matches.push(m); }
+        if (matches.length >= 3) break;
+      }
+
+      return json({
+        extracted_signatures: sigs.slice(0, 6),
+        matches,
+        disclaimer: "These are the closest documentation sections, not a diagnosis. Verify against the linked official docs.",
+        snapshot_date: "2026-08-30",
+      });
     }
 
     return json({ error: "not found", routes: ["/health", "/vendors", "/search", "/explain"] }, 404);
