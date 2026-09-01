@@ -1,0 +1,11 @@
+{
+  "resource": "https://documesh.selatan.org",
+  "authorization_servers": [],
+  "scopes_supported": [],
+  "bearer_methods_supported": ["header"],
+  "resource_documentation": "https://documesh.selatan.org/auth.md",
+  "agent_auth": {
+    "type": "none",
+    "description": "Documesh API is fully open for read-only access. No authentication required."
+  }
+}

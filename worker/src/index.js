@@ -3,7 +3,8 @@
  * Batch 2: agent-readiness features (rate limits, .md endpoints, agent mode,
  *          NLWeb /ask, typed errors, versioning, HTTP Link headers)
  */
-import { VENDOR_META, tokenize, extractSignatures } from "./search-core-lite.js";
+import { VENDOR_META, tokenize } from "./search-core-lite.js";
+import { handleMCPServer } from "./mcp-server.js";
 
 const VENDOR_IDS = Object.keys(VENDOR_META);
 const API_VERSION = "v1";
@@ -167,6 +168,24 @@ export default {
         authentication: "none (open API)",
         vendors: VENDOR_IDS,
         webmcp_tools: ["search_docs_across", "explain_error", "list_vendors"],
+      });
+    }
+
+    if (path === "/mcp" && request.method === "POST") {
+      return handleMCPServer(request, env, async (toolName, args, env2) => {
+        // Load relevant shards and execute tool
+        const loaded = await loadVendors(env2, VENDOR_IDS);
+        if (toolName === "search_docs_across") {
+          const results = searchAcross(loaded, args.query, { limit: args.limit || 5 });
+          return { results };
+        }
+        if (toolName === "explain_error") {
+          return explainFromShards(loaded, args.log_excerpt, args.vendor, 3);
+        }
+        if (toolName === "list_vendors") {
+          return { vendors: VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id] })) };
+        }
+        return { error: `unknown tool: ${toolName}` };
       });
     }
 
