@@ -130,7 +130,24 @@ async function registerWebMCP() {
 
 function createShim() {
   const tools = {};
-  return { registerTool: (t) => { tools[t.name] = t; } };
+  const shim = {
+    registerTool: (t) => {
+      tools[t.name] = t;
+      // Expose shim tools globally for webmcp-evals smoke (Puppeteer can detect them)
+      if (typeof window !== "undefined") {
+        window.__documeshTools = window.__documeshTools || {};
+        window.__documeshTools[t.name] = t;
+      }
+    }
+  };
+  // Polyfill document.modelContext so webmcp-evals smoke can discover tools
+  if (!("modelContext" in document)) {
+    Object.defineProperty(document, "modelContext", {
+      get() { return shim; },
+      configurable: true,
+    });
+  }
+  return shim;
 }
 
 // ---------------------------------------------------------- UI
