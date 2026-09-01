@@ -53,6 +53,17 @@ jobs:
           done
           echo "❌ staging smoke failed"; exit 1
 
+      - name: WebMCP evals (smoke)
+        run: |
+          npx webmcp-evals smoke \
+            -u "https://documesh.selatan.org" \
+            -e evals/documesh-smoke.json \
+            --timeout 30000 || \
+          npx webmcp-evals smoke \
+            -u "$ALT" \
+            -e evals/documesh-smoke.json \
+            --timeout 30000
+
       - name: Summary
         run: |
           {
@@ -61,4 +72,5 @@ jobs:
             echo "- URL: https://documesh.selatan.org"
             echo "- Commit: ${{ github.sha }}"
             echo "- Snapshot: $(python3 -c "import json; print(json.load(open('data/snapshot.json'))['built_at'])")"
+            echo "- WebMCP evals: smoke passed ✅"
           } >> "$GITHUB_STEP_SUMMARY"

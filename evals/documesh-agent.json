@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Agent handles cross-vendor question",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Can I run Postgres on Cloudflare Workers with Terraform managing DNS?"
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "search_docs_across",
+        "arguments": {
+          "query": { "$contains": "postgres" }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Agent routes OOMKilled error to explain_error",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "My pod keeps getting OOMKilled, what do I do?"
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "explain_error",
+        "arguments": {
+          "log_excerpt": { "$contains": "OOMKilled" }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Agent checks vendor license via list_vendors",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "What license does the Cloudflare documentation use?"
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "list_vendors",
+        "arguments": {}
+      }
+    ]
+  }
+]

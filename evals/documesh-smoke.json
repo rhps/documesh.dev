@@ -1,0 +1,74 @@
+[
+  {
+    "name": "search_docs_across — federated search returns results",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Search for edge functions environment variables"
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "search_docs_across",
+        "arguments": {
+          "query": { "$contains": "edge functions" },
+          "limit": { "$type": "number" }
+        }
+      }
+    ]
+  },
+  {
+    "name": "explain_error — CrashLoopBackOff returns kubernetes match",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Error: CrashLoopBackOff container failed to start, exit code 1"
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "explain_error",
+        "arguments": {
+          "log_excerpt": { "$contains": "CrashLoopBackOff" }
+        }
+      }
+    ]
+  },
+  {
+    "name": "list_vendors — returns full registry",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "List all vendors in the mesh"
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "list_vendors",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "name": "search_docs_across — vendor filter",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "How does Vercel handle redirects?"
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "search_docs_across",
+        "arguments": {
+          "query": { "$contains": "redirect" },
+          "vendors": { "$contains": "vercel" }
+        }
+      }
+    ]
+  }
+]
