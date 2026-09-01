@@ -87,7 +87,23 @@ export function explainError(index, logExcerpt, opts = {}) {
   const sigs = errorSignature(logExcerpt);
   // search with the raw excerpt + extracted signatures combined
   const searchText = [logExcerpt.slice(0, 400), ...sigs].join(" ");
-  const res = search(index, searchText, { vendors: vendor ? [vendor] : undefined, limit: limit * 2 });
+  const res = search(index, searchText, { vendors: vendor ? [vendor] : undefined, limit: limit * 4 });
+
+  // Boost results whose title/heading contains a distinctive signature keyword
+  // (skip generic words that appear in most error contexts)
+  const GENERIC = new Set(["error", "cannot", "find", "stack", "trace", "failed", "module", "require", "server", "code", "exit", "listen"]);
+  const sigTerms = (sigs.join(" ").toLowerCase().match(/[a-z]{3,}/g) || [])
+    .filter(t => !GENERIC.has(t));
+  for (const r of res.results) {
+    const hay = `${r.title} ${r.heading_path}`.toLowerCase();
+    let boost = 1;
+    for (const term of sigTerms) {
+      if (hay.includes(term)) { boost = 2.5; break; }
+    }
+    r.score = +(r.score * boost).toFixed(4);
+  }
+  res.results.sort((a, b) => b.score - a.score);
+
   // diversify across vendors for the top-N
   const seenVendors = new Map();
   const diversified = [];
