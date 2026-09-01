@@ -1,0 +1,79 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Documesh API",
+    "description": "Federated developer documentation search across 18 vendors. Every result carries vendor, version, license, and canonical source URL.",
+    "version": "0.2.0"
+  },
+  "servers": [{ "url": "https://documesh.selatan.org" }],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Service health check",
+        "responses": { "200": { "description": "Service status and snapshot date" } }
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "Federated documentation search",
+        "description": "Search across Cloudflare, Netlify, Vercel, Kubernetes, Bun, Stripe, Sentry, OpenTelemetry, Argo CD, Helm, Flux, Cilium, React, PyTorch, TensorFlow, LangChain, Playwright, ClickHouse, Ollama, Electron, Hugo, Docusaurus, pytest, Node.js, Godot, Neovim, Terragrunt, Moby, Svelte, Vue, Gitea and more. Every result carries vendor, version, license, and canonical source URL.",
+        "parameters": [
+          { "name": "q", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Search query" },
+          { "name": "vendors", "in": "query", "schema": { "type": "string" }, "description": "Comma-separated vendor filter" },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 5, "max": 20 }, "description": "Max results" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ranked search results with provenance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": { "type": "array", "items": { "$ref": "#/components/schemas/SearchResult" } },
+                    "snapshot_date": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/explain": {
+      "get": {
+        "summary": "Error-to-documentation matching",
+        "parameters": [
+          { "name": "error", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Error message or log excerpt" },
+          { "name": "vendor", "in": "query", "schema": { "type": "string" }, "description": "Optional vendor filter" }
+        ],
+        "responses": { "200": { "description": "Closest matching doc sections with disclaimer" } }
+      }
+    },
+    "/vendors": {
+      "get": {
+        "summary": "Vendor registry with licenses",
+        "responses": { "200": { "description": "List of vendors with license details" } }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SearchResult": {
+        "type": "object",
+        "properties": {
+          "vendor": { "type": "string" },
+          "version": { "type": "string" },
+          "title": { "type": "string" },
+          "heading_path": { "type": "string" },
+          "source_url": { "type": "string", "format": "uri" },
+          "license": { "type": "string" },
+          "attribution": { "type": "string" },
+          "last_updated": { "type": "string", "format": "date" },
+          "score": { "type": "number" }
+        },
+        "required": ["vendor", "title", "source_url", "license", "last_updated"]
+      }
+    }
+  }
+}

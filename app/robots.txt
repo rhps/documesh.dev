@@ -1,0 +1,8 @@
+# Allow all AI agents and crawlers to access Documesh
+# Documentation that agents can not only read, but operate.
+# Powered by WebMCP
+
+User-agent: *
+Allow: /
+
+Sitemap: https://documesh.selatan.org/sitemap.xml

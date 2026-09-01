@@ -1,0 +1,41 @@
+# Documesh — federated developer documentation for humans and AI agents
+
+> Documentation that agents can not only read, but operate.
+> Federated developer documentation from 18 vendors, version-cited, license-attributed.
+> Powered by WebMCP.
+
+## Agent interface
+
+This site exposes WebMCP tools via `document.modelContext.registerTool()`.
+
+| Tool | Description |
+|------|-------------|
+| `search_docs_across` | Federated search across 18 vendors; results carry vendor, version, license, canonical URL |
+| `explain_error` | Log excerpt → closest matching documentation sections across vendors |
+| `list_vendors` | Vendor registry with license and attribution requirements |
+
+## Pages
+
+- [Home](https://documesh.selatan.org/index.html): Overview and stats
+- [App](https://documesh.selatan.org/app.html): Chat interface with WebMCP tools
+- [Capabilities](https://documesh.selatan.org/capabilities.html): Tool documentation with schemas
+- [WebMCP Tools](https://documesh.selatan.org/webmcp.html): Tool reference with inputSchema
+- [Coverage](https://documesh.selatan.org/coverage.html): Vendors, licenses, legal exclusions
+- [Submit Vendor](https://documesh.selatan.org/submit.html): Request documentation ingestion
+
+## API
+
+- GET /health: Service health and snapshot date
+- GET /search?q=&vendors=&limit=: Federated documentation search
+- GET /explain?error=&vendor=: Error-to-docs matching with extracted signatures
+- GET /vendors: Vendor registry with license details
+
+## Sources
+
+Documentation ingested from official vendor-published machine interfaces
+(llms.txt, .md endpoints) or open-licensed git repositories. No scraping.
+Full attribution on every response. See /coverage for the complete list.
+
+## License
+
+MIT — see LICENSE in the repository.
