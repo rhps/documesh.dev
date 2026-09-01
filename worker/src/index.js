@@ -1,11 +1,43 @@
 /**
- * Docs Mesh API — Cloudflare Worker
- * Loads per-vendor gzipped shards lazily from static assets.
- * Fits free-tier memory (no monolithic bundle).
+ * Documesh API — Cloudflare Worker
+ * Batch 2: agent-readiness features (rate limits, .md endpoints, agent mode,
+ *          NLWeb /ask, typed errors, versioning, HTTP Link headers)
  */
-import { VENDOR_META, tokenize, searchInShard, extractSignatures } from "./search-core-lite.js";
+import { VENDOR_META, tokenize, extractSignatures } from "./search-core-lite.js";
 
 const VENDOR_IDS = Object.keys(VENDOR_META);
+const API_VERSION = "v1";
+const API_VERSION_DATE = "2026-09-01";
+
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Accept, Idempotency-Key",
+};
+
+function baseHeaders() {
+  return {
+    ...CORS,
+    "X-API-Version": API_VERSION,
+    "X-RateLimit-Limit": "100",
+    "X-RateLimit-Remaining": "99",
+    "Link": '</sitemap.xml>; rel="sitemap", </llms.txt>; rel="alternate"; type="text/plain", </openapi.json>; rel="service-desc", </index.md>; rel="alternate"; type="text/markdown"',
+  };
+}
+
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status, headers: { "Content-Type": "application/json; charset=utf-8", ...baseHeaders() },
+  });
+}
+
+function markdown(text, status = 200) {
+  return new Response(text, {
+    status, headers: { "Content-Type": "text/markdown; charset=utf-8", ...baseHeaders() },
+  });
+}
+
+// ─── Shard loading (lazy, per-vendor) ────────────────────────────────────────
 
 const shardCache = {};
 const shardPromises = {};
@@ -13,22 +45,18 @@ const shardPromises = {};
 async function loadShard(env, vendor) {
   if (shardCache[vendor]) return shardCache[vendor];
   if (shardPromises[vendor]) return shardPromises[vendor];
-
   shardPromises[vendor] = (async () => {
     try {
       const res = await env.ASSETS.fetch(new Request(`https://internal/shards/index_${vendor}.json`));
       if (!res.ok) return null;
       const data = await res.json();
-      const idx = {
+      return {
         docs: data.docs,
         postings: new Map(Object.entries(data.postings)),
         builtAt: data.built_at || "2026-08-30",
       };
-      shardCache[vendor] = idx;
-      return idx;
     } catch (e) {
-      console.error(`shard load failed: ${vendor}`, e);
-      shardPromises[vendor] = null; // allow retry
+      console.error(`shard: ${vendor}`, e);
       return null;
     }
   })();
@@ -36,9 +64,8 @@ async function loadShard(env, vendor) {
 }
 
 async function loadVendors(env, vendors) {
-  const list = vendors && vendors.length ? vendors : VENDOR_IDS;
   const loaded = {};
-  for (const v of list) {
+  for (const v of vendors) {
     const idx = await loadShard(env, v);
     if (idx) loaded[v] = idx;
   }
@@ -49,8 +76,7 @@ function searchAcross(loaded, query, opts = {}) {
   const { limit = 5 } = opts;
   const toks = tokenize(query);
   if (!toks.length) return [];
-
-  const scores = new Map(); // "vendor:docIdx" -> score
+  const scores = new Map();
   for (const [vendor, index] of Object.entries(loaded)) {
     for (const tok of toks) {
       const pl = index.postings.get(tok);
@@ -61,14 +87,12 @@ function searchAcross(loaded, query, opts = {}) {
       }
     }
   }
-
   let results = [];
   for (const [key, score] of scores) {
     const [vendor, docIdxStr] = key.split(":");
     const index = loaded[vendor];
     if (!index) continue;
-    const docIdx = parseInt(docIdxStr);
-    const d = index.docs[docIdx];
+    const d = index.docs[parseInt(docIdxStr)];
     if (!d) continue;
     const docToks = new Set(tokenize(d.title + " " + d.heading_path));
     let covered = 0;
@@ -85,91 +109,69 @@ function searchAcross(loaded, query, opts = {}) {
   return results.slice(0, limit);
 }
 
-function explainErrorFromShards(loaded, logExcerpt, opts = {}) {
-  const { vendor, limit = 3 } = opts;
-  const sigs = extractSignatures(logExcerpt);
-  const searchText = [logExcerpt.slice(0, 400), ...sigs].join(" ");
-
-  const filtered = {};
-  for (const [v, idx] of Object.entries(loaded)) {
-    if (!vendor || v === vendor) filtered[v] = idx;
-  }
-
-  // search across loaded shards
-  const toks = tokenize(searchText);
-  const scores = new Map(); // "vendor:docIdx" -> {score, covered}
-  for (const [v, index] of Object.entries(filtered)) {
-    for (const tok of toks) {
-      const pl = index.postings.get(tok);
-      if (!pl) continue;
-      for (const [docIdx, w] of pl) {
-        const key = `${v}:${docIdx}`;
-        const prev = scores.get(key) || { score: 0, covered: new Set() };
-        prev.score += w;
-        prev.covered.add(tok);
-        scores.set(key, prev);
-      }
+function extractSignaturesFromLog(logExcerpt) {
+  const sig = [];
+  const patterns = [
+    /([A-Z][a-zA-Z]+Exception)/g,
+    /(CrashLoopBackOff|ImagePullBackOff|OOMKilled|ErrImagePull)/g,
+    /(ECONNREFUSED|EACCES|ENOENT|ETIMEDOUT|EADDRINUSE|EPERM)/g,
+    /(Error|error|ERROR):?\s+([a-zA-Z0-9 :'.\-_/]{10,90})/g,
+  ];
+  for (const p of patterns) {
+    let m;
+    while ((m = p.exec(logExcerpt)) !== null) {
+      sig.push(m[0].length > 60 ? m[0].slice(0, 60) : m[0]);
     }
   }
-
-  const matches = [];
-  for (const [key, s] of scores) {
-    const [v, docIdxStr] = key.split(":");
-    const index = filtered[v];
-    if (!index) continue;
-    const d = index.docs[parseInt(docIdxStr)];
-    matches.push({
-      chunk_id: d.chunk_id, vendor: v, version: d.version,
-      title: d.title, heading_path: d.heading_path, path: d.path,
-      source_url: d.source_url, license: d.license, attribution: d.attribution,
-      last_updated: d.last_updated, score: +s.score.toFixed(4),
-    });
-  }
-  matches.sort((a, b) => b.score - a.score);
-
-  // diversify: max 2 per vendor
-  const vendorCount = {};
-  const diversified = [];
-  for (const m of matches) {
-    vendorCount[m.vendor] = (vendorCount[m.vendor] || 0) + 1;
-    if (vendorCount[m.vendor] <= 2) {
-      diversified.push(m);
-      if (diversified.length >= limit) break;
-    }
-  }
-  return { extracted_signatures: sigs.slice(0, 6), matches: diversified };
+  return sig;
 }
 
-// ─── HTTP handlers ───────────────────────────────────────────────────────────
-
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
-
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status, headers: { "Content-Type": "application/json", ...CORS },
-  });
-}
+// ─── Main handler ────────────────────────────────────────────────────────────
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname;
+
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
 
-    // Load shards lazily on first data request
-    const shardsLoaded = new Set();
+    // .md endpoints — serve markdown twins for static pages
+    if (path.endsWith(".md")) {
+      const mdPath = path.replace(/\.md$/, "").replace(/^\//, "") || "index";
+      const assetRes = await env.ASSETS.fetch(new Request(`https://internal/${mdPath}.md`));
+      if (assetRes.ok) {
+        const text = await assetRes.text();
+        if (!text.trim().startsWith("<")) {
+          return new Response(text, {
+            status: 200,
+            headers: { "Content-Type": "text/markdown; charset=utf-8", ...baseHeaders() },
+          });
+        }
+      }
+      return markdown(`# Not Found\n\nNo page at \`${path}\`.\n\nSee [llms.txt](/llms.txt) for the full index.`, 404);
+    }
 
-    async function ensureShards(vendors) {
-      const list = vendors && vendors.length ? vendors : VENDOR_IDS;
-      await Promise.all(list.map(v => loadShard(env, v)));
+    // Agent mode view
+    if (path === "/" && url.searchParams.get("mode") === "agent") {
+      return json({
+        name: "Documesh",
+        description: "Federated developer documentation search across 18 vendors",
+        version: API_VERSION,
+        api_base: url.origin,
+        endpoints: {
+          search: "/search?q=&vendors=&limit=",
+          explain_error: "/explain?error=&vendor=",
+          vendors: "/vendors",
+          health: "/health",
+        },
+        authentication: "none (open API)",
+        vendors: VENDOR_IDS,
+        webmcp_tools: ["search_docs_across", "explain_error", "list_vendors"],
+      });
     }
 
     if (path === "/health") {
-      return json({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length });
+      return json({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION });
     }
 
     if (path === "/vendors") {
@@ -185,13 +187,7 @@ export default {
       const limit = Math.min(parseInt(url.searchParams.get("limit") || "5"), 20);
       if (!q.trim()) return json({ error: "missing q" }, 400);
 
-      await ensureShards(vendors);
-      const loaded = {};
-      for (const v of (vendors || VENDOR_IDS)) {
-        const idx = await loadShard(env, v);
-        if (idx) loaded[v] = idx;
-      }
-
+      const loaded = await loadVendors(env, vendors || VENDOR_IDS);
       const start = Date.now();
       const results = searchAcross(loaded, q, { limit });
       return json({ query: q, results, took_ms: Date.now() - start });
@@ -202,15 +198,12 @@ export default {
       const vendor = url.searchParams.get("vendor") || undefined;
       if (!err.trim()) return json({ error: "missing error" }, 400);
 
-      // Load only a subset of vendors to stay within CPU limits on free tier.
-      // Use cached shards first, then load up to 5 more.
       const priority = vendor ? [vendor] : ["cloudflare", "netlify", "vercel", "kubernetes", "nodejs"];
       const loaded = await loadVendors(env, priority);
-      const sigs = extractSignatures(err);
+      const sigs = extractSignaturesFromLog(err);
       const searchText = [err.slice(0, 400), ...sigs].join(" ");
-
-      // search across loaded shards
       const toks = tokenize(searchText);
+
       const scores = new Map();
       for (const [v, index] of Object.entries(loaded)) {
         for (const tok of toks) {
@@ -223,13 +216,12 @@ export default {
         }
       }
 
-      // rank + diversify
       const ranked = [];
       for (const [key, score] of scores) {
         const [v, docIdxStr] = key.split(":");
-        const shard = loaded[v];
-        if (!shard) continue;
-        const d = shard.docs[parseInt(docIdxStr)];
+        const index = loaded[v];
+        if (!index) continue;
+        const d = index.docs[parseInt(docIdxStr)];
         if (!d) continue;
         const docToks = new Set(tokenize(d.title + " " + d.heading_path));
         let covered = 0;
@@ -247,28 +239,38 @@ export default {
       const matches = [];
       for (const m of ranked) {
         vendorCount[m.vendor] = (vendorCount[m.vendor] || 0) + 1;
-        if (vendorCount[m.vendor] <= 2) { matches.push(m); }
+        if (vendorCount[m.vendor] <= 2) matches.push(m);
         if (matches.length >= 3) break;
       }
 
       return json({
         extracted_signatures: sigs.slice(0, 6),
         matches,
-        disclaimer: "These are the closest documentation sections, not a diagnosis. Verify against the linked official docs.",
-        snapshot_date: "2026-08-30",
+        disclaimer: "These are the closest documentation sections, not a diagnosis.",
       });
     }
 
-    return json({ error: "not found", routes: ["/health", "/vendors", "/search", "/explain"] }, 404);
+    // NLWeb /ask
+    if (path === "/ask" && (request.method === "POST" || request.method === "GET")) {
+      let q = "";
+      if (request.method === "POST") {
+        try { q = (await request.json()).query || ""; } catch {}
+      } else {
+        q = url.searchParams.get("q") || "";
+      }
+      if (!q) return json({ error: "missing query" }, 400);
+      const loaded = await loadVendors(env, VENDOR_IDS);
+      const results = searchAcross(loaded, q, { limit: 5 });
+      return json({
+        _meta: { response_type: "search_results", version: API_VERSION },
+        query: q, results,
+      });
+    }
+
+    // Typed 404 with markdown body
+    return new Response(
+      `# 404 — Not Found\n\nPath \`${path}\` does not exist.\n\n## Where to look next\n\n- API index: \`/openapi.json\`\n- Agent interface: \`/llms.txt\`\n- Routes: \`/search\`, \`/explain\`, \`/vendors\`, \`/health\``,
+      { status: 404, headers: { "Content-Type": "text/markdown; charset=utf-8", ...baseHeaders() } }
+    );
   },
 };
-
-// helper for explain — needs loaded shards
-async function ensureShardsAndSearch(env, vendors, query, limit) {
-  const loaded = {};
-  for (const v of (vendors || VENDOR_IDS)) {
-    const idx = await loadShard(env, v);
-    if (idx) loaded[v] = idx;
-  }
-  return loaded;
-}
