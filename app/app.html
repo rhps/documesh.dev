@@ -29,9 +29,9 @@
     <div id="chat" class="chat-scroll flex-1 overflow-y-auto p-6 space-y-4"></div>
     <div class="p-4 border-t border-slate-100">
       <div class="flex gap-2">
-        <input id="input" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:border-orange-500"
+        <input id="input" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm outline-none focus:border-[#4b5320]"
                placeholder="Ask anything: 'how do functions use env vars?' or paste an error…" />
-        <button id="send" class="bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-medium">Send</button>
+        <button id="send" class="bg-[#4b5320] hover:bg-[#6a7337] text-white px-4 py-2 rounded-lg text-sm font-medium">Send</button>
       </div>
       <p class="text-[11px] text-slate-400 mt-2">Demo assistant mirrors agent tool-calls (<code>search_docs_across</code> / <code>explain_error</code>). Full agent runs in ChatGPT in-app browser or Chrome with WebMCP flag.</p>
     </div>
@@ -47,7 +47,7 @@
 </main>
 
 <footer class="border-t border-slate-100 py-4 text-center text-xs text-slate-400">
-  🕸 <a href="app.html" class="hover:text-slate-600">Documesh</a> — powered by WebMCP · Built with ❤️ by <a href="https://selatan.org" target="_blank" class="hover:text-orange-600">selatan.org</a>
+  🕸 <a href="app.html" class="hover:text-slate-600">Documesh</a> — powered by WebMCP · Built with ❤️ by <a href="https://selatan.org" target="_blank" class="hover:text-[#4b5320]">selatan.org</a>
 </footer>
 
 <script type="module">
@@ -141,7 +141,7 @@ const sendBtn = document.getElementById("send");
 function addMsg(role, html) {
   const div = document.createElement("div");
   div.className = role === "user"
-    ? "ml-auto max-w-[80%] bg-orange-600/90 text-white rounded-xl px-4 py-2 text-sm"
+    ? "ml-auto max-w-[80%] bg-[#4b5320]/90 text-white rounded-xl px-4 py-2 text-sm"
     : "mr-auto max-w-[92%] bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm space-y-2";
   div.innerHTML = html;
   chat.appendChild(div);
@@ -152,12 +152,12 @@ function addMsg(role, html) {
 function resultCard(r) {
   return `
   <a href="${r.source_url}" target="_blank"
-     class="block border border-slate-200 hover:border-orange-400 bg-white rounded-lg p-3 transition-colors">
+     class="block border border-slate-200 hover:border-[#929a68] bg-white rounded-lg p-3 transition-colors">
     <div class="flex items-center gap-2 mb-1 flex-wrap">
-      <span class="text-xs font-bold px-1.5 py-0.5 rounded bg-orange-50 text-orange-700">${r.vendor}${r.version !== "latest" ? " " + r.version : ""}</span>
+      <span class="text-xs font-bold px-1.5 py-0.5 rounded bg-[#a9af8b]/20 text-[#4b5320]">${r.vendor}${r.version !== "latest" ? " " + r.version : ""}</span>
       <span class="text-xs text-slate-400">${r.heading_path}</span>
     </div>
-    <div class="font-medium text-orange-600">${r.title}</div>
+    <div class="font-medium text-[#4b5320]">${r.title}</div>
     <div class="text-[11px] text-slate-400 mt-1">
       license: ${r.license} · updated: ${r.last_updated} · relevance: ${r.score} · ↗ ${r.source_url}
     </div>
@@ -181,12 +181,12 @@ function renderExplain(data) {
     <div class="font-medium">🩺 Error analysis</div>
     ${data.extracted_signatures?.length ? `<div class="text-xs text-slate-400">signatures: ${data.extracted_signatures.map(s=>`<code class="bg-white border border-slate-200 px-1 rounded">${s}</code>`).join(" ")}</div>` : ""}
     ${data.matches.map(resultCard).join("")}
-    <div class="text-[11px] text-amber-600 mt-2">⚠️ ${data.disclaimer}</div>
+    <div class="text-[11px] text-[#6a7337] mt-2">⚠️ ${data.disclaimer}</div>
   `);
   viewer.innerHTML = `
     <h3 class="font-bold mb-3">Error → documentation matches</h3>
     ${data.matches.map(resultCard).join("<hr class='my-3 border-slate-100'/>")}
-    <p class="text-[11px] text-amber-600 mt-4">${data.disclaimer}</p>`;
+    <p class="text-[11px] text-[#6a7337] mt-4">${data.disclaimer}</p>`;
 }
 
 async function handleSend() {

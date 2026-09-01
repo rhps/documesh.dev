@@ -82,7 +82,7 @@
   <section id="deferred" class="scroll-mt-24">
     <div class="flex items-center gap-3">
       <h2 class="text-2xl font-bold">🚧 Not covered yet</h2>
-      <span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">license OK · interface work needed</span>
+      <span class="text-xs bg-[#a9af8b]/30 text-[#4b5320] px-2 py-1 rounded-full">license OK · interface work needed</span>
     </div>
     <p class="mt-2 text-slate-600 text-sm">
       These projects are actively maintained with permissive licenses — the docs are legally
@@ -91,14 +91,14 @@
       they're on the v2 roadmap.
     </p>
     <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-      <div class="border border-amber-200 rounded-xl p-4"><div class="font-medium">Apache Airflow</div><div class="text-xs text-slate-500 mt-1">ASF · Apache-2.0 · docs generated outside main repo</div></div>
-      <div class="border border-amber-200 rounded-xl p-4"><div class="font-medium">Go</div><div class="text-xs text-slate-500 mt-1">Google · BSD-3 · thin in-repo docs surface</div></div>
-      <div class="border border-amber-200 rounded-xl p-4"><div class="font-medium">Django</div><div class="text-xs text-slate-500 mt-1">DSF · BSD · Sphinx-generated HTML</div></div>
-      <div class="border border-amber-200 rounded-xl p-4"><div class="font-medium">Flask · Python · Rails</div><div class="text-xs text-slate-500 mt-1">Permissive · Sphinx/generated site builds</div></div>
+      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Apache Airflow</div><div class="text-xs text-slate-500 mt-1">ASF · Apache-2.0 · docs generated outside main repo</div></div>
+      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Go</div><div class="text-xs text-slate-500 mt-1">Google · BSD-3 · thin in-repo docs surface</div></div>
+      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Django</div><div class="text-xs text-slate-500 mt-1">DSF · BSD · Sphinx-generated HTML</div></div>
+      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Flask · Python · Rails</div><div class="text-xs text-slate-500 mt-1">Permissive · Sphinx/generated site builds</div></div>
     </div>
     <p class="mt-4 text-sm text-slate-500">
       Want one of these prioritized (or a vendor we haven't listed)?
-      <a href="https://github.com/rhps/competition/issues" class="text-orange-600 hover:text-orange-500 underline">Open an issue</a>.
+      <a href="https://github.com/rhps/competition/issues" class="text-[#4b5320] hover:text-[#6a7337] underline">Open an issue</a>.
     </p>
   </section>
 
@@ -152,10 +152,10 @@
   <section id="policy" class="scroll-mt-24 border border-slate-100 rounded-2xl p-8 bg-slate-50">
     <h2 class="text-2xl font-bold">Our ingestion policy</h2>
     <ol class="mt-4 space-y-3 text-slate-600 leading-relaxed">
-      <li class="flex gap-3"><span class="text-orange-500 font-bold">1.</span><span><strong>Official interfaces first.</strong> We ingest via vendor-published llms.txt / <code>.md</code> endpoints, or open-licensed git repositories — never scraped HTML.</span></li>
-      <li class="flex gap-3"><span class="text-orange-500 font-bold">2.</span><span><strong>Excerpts + canonical links.</strong> We return short excerpts that link back to the vendor's page. No full-text mirroring.</span></li>
-      <li class="flex gap-3"><span class="text-orange-500 font-bold">3.</span><span><strong>Attribution everywhere.</strong> Every tool response names its license and source. The UI displays it on every card.</span></li>
-      <li class="flex gap-3"><span class="text-orange-500 font-bold">4.</span><span><strong>When in doubt, exclude.</strong> BUSL, AGPL, bot-blocked and proprietary-without-consent sources stay out. A smaller honest mesh beats a larger ambiguous one.</span></li>
+      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">1.</span><span><strong>Official interfaces first.</strong> We ingest via vendor-published llms.txt / <code>.md</code> endpoints, or open-licensed git repositories — never scraped HTML.</span></li>
+      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">2.</span><span><strong>Excerpts + canonical links.</strong> We return short excerpts that link back to the vendor's page. No full-text mirroring.</span></li>
+      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">3.</span><span><strong>Attribution everywhere.</strong> Every tool response names its license and source. The UI displays it on every card.</span></li>
+      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">4.</span><span><strong>When in doubt, exclude.</strong> BUSL, AGPL, bot-blocked and proprietary-without-consent sources stay out. A smaller honest mesh beats a larger ambiguous one.</span></li>
     </ol>
   </section>
 
@@ -176,7 +176,7 @@
     </div>
   </div>
   <div class="max-w-6xl mx-auto px-6 pb-6 text-sm text-slate-500">
-    Built with ❤️ by <a href="https://selatan.org" target="_blank" class="font-medium text-slate-700 hover:text-orange-600">selatan.org</a>
+    Built with ❤️ by <a href="https://selatan.org" target="_blank" class="font-medium text-slate-700 hover:text-[#4b5320]">selatan.org</a>
   </div>
 </footer>
 
@@ -228,7 +228,7 @@ for (const v of data.vendors) {
   tr.className = "hover:bg-slate-50";
   tr.innerHTML = `
     <td class="px-5 py-3 font-medium">
-      <a href="app.html?q=docs&vendors=${v.id}" class="hover:text-orange-600">${meta.name}</a>
+      <a href="app.html?q=docs&vendors=${v.id}" class="hover:text-[#4b5320]">${meta.name}</a>
     </td>
     <td class="px-5 py-3 text-slate-600">${meta.license}</td>
     <td class="px-5 py-3 text-slate-500 text-xs hidden md:table-cell">${meta.origin}</td>
