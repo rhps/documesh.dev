@@ -1,0 +1,26 @@
+{
+  "built_at": "2026-08-30",
+  "vendors": {
+    "cloudflare": {
+      "version": "latest",
+      "chunks": 825,
+      "file": "chunks/cloudflare_latest.jsonl"
+    },
+    "netlify": {
+      "version": "latest",
+      "chunks": 1528,
+      "file": "chunks/netlify_latest.jsonl"
+    },
+    "vercel": {
+      "version": "latest",
+      "chunks": 719,
+      "file": "chunks/vercel_latest.jsonl"
+    },
+    "kubernetes": {
+      "version": "multi",
+      "chunks": 128,
+      "file": "chunks/kubernetes_multi.jsonl"
+    }
+  },
+  "total_chunks": 3200
+}
