@@ -1,0 +1,15 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Documesh",
+    "version": "0.2.0",
+    "description": "Federated developer documentation search across 18 vendors"
+  },
+  "servers": [{ "url": "https://documesh.selatan.org" }],
+  "paths": {
+    "/search": { "get": { "summary": "Federated documentation search" } },
+    "/explain": { "get": { "summary": "Error-to-documentation matching" } },
+    "/vendors": { "get": { "summary": "Vendor registry" } },
+    "/health": { "get": { "summary": "Health check" } }
+  }
+}

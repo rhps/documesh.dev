@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/skills.json",
+  "name": "documesh",
+  "description": "Federated developer documentation search across 18 vendors with version-cited, license-attributed results.",
+  "skills": [
+    {
+      "name": "search-docs",
+      "description": "Search developer documentation across Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, and 13 more vendors",
+      "when_to_use": "When the user asks about any developer documentation topic, API usage, configuration, or best practices"
+    },
+    {
+      "name": "explain-error",
+      "description": "Match an error message or stack trace to the closest documentation sections",
+      "when_to_use": "When the user pastes an error, exception, or log output and needs help"
+    },
+    {
+      "name": "list-vendors",
+      "description": "List all vendors in the mesh with their license and attribution requirements",
+      "when_to_use": "When the user asks what documentation sources are available or needs license info"
+    }
+  ]
+}

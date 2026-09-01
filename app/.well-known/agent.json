@@ -1,0 +1,28 @@
+{
+  "name": "Documesh",
+  "description": "Federated developer documentation from 18 vendors — Cloudflare, Netlify, Vercel, Kubernetes, and more. Search, error matching, and vendor lookup with version-cited, license-attributed results. Powered by WebMCP.",
+  "url": "https://documesh.selatan.org",
+  "version": "0.2.0",
+  "capabilities": {
+    "search": {
+      "description": "Federated documentation search across 18 vendors",
+      "endpoint": "/search"
+    },
+    "explain_error": {
+      "description": "Error-to-documentation matching",
+      "endpoint": "/explain"
+    },
+    "list_vendors": {
+      "description": "Vendor registry with licenses",
+      "endpoint": "/vendors"
+    }
+  },
+  "webmcp": {
+    "supported": true,
+    "tools": ["search_docs_across", "explain_error", "list_vendors"],
+    "registration": "document.modelContext.registerTool()"
+  },
+  "when_to_use": "Use Documesh when you need to search developer documentation across multiple vendors (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, etc.), match an error message to relevant documentation sections, or look up vendor license information.",
+  "vendors": 38,
+  "license": "MIT"
+}
