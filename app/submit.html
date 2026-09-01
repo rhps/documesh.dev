@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Submit a Vendor — Documesh</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+  html { scroll-behavior: smooth; }
+  .step-active { border-color: #4b5320 !important; background: #f8fafc; }
+  .step-done { border-color: #22c55e !important; background: #f0fdf4; }
+  .step-error { border-color: #ef4444 !important; background: #fef2f2; }
+  pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .spinner { animation: spin 1s linear infinite; display: inline-block; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-100">
+  <div class="max-w-4xl mx-auto px-6 h-14 flex items-center gap-6">
+    <a href="index.html" class="font-bold text-lg tracking-tight">🕸 Documesh</a>
+    <div class="hidden md:flex gap-5 text-sm text-slate-600 ml-auto">
+      <a href="app.html" class="hover:text-slate-900">App</a>
+      <a href="capabilities.html" class="hover:text-slate-900">Capabilities</a>
+      <a href="webmcp.html" class="hover:text-slate-900">Tools</a>
+      <a href="coverage.html" class="hover:text-slate-900">Coverage</a>
+      <a href="submit.html" class="hover:text-slate-900">Submit</a>
+      <a href="submit.html" class="text-[#4b5320] font-medium">Submit Vendor</a>
+    </div>
+  </div>
+</nav>
+
+<main class="max-w-4xl mx-auto px-6 py-12">
+
+<header class="mb-10">
+  <h1 class="text-3xl font-bold tracking-tight">Submit a Vendor</h1>
+  <p class="mt-3 text-slate-600 leading-relaxed max-w-2xl">
+    Request documentation ingestion for an open-source project or vendor.
+    We check legality, detect the best ingestion pattern (P1–P4), and — if it passes —
+    queue it for the next batch. No scraping, ever.
+  </p>
+</header>
+
+<!-- ═══════════ FORM ═══════════ -->
+<section id="form-section">
+  <div class="bg-white border border-slate-200 rounded-2xl p-8 space-y-6">
+
+    <div>
+      <label class="block text-sm font-medium text-slate-700 mb-1">Vendor / Project name <span class="text-red-500">*</span></label>
+      <input id="vendor-name" type="text" placeholder="e.g. Kubernetes, Helm, Grafana"
+             class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[#4b5320]" />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-slate-700 mb-1">GitHub repository <span class="text-red-500">*</span></label>
+      <input id="vendor-repo" type="text" placeholder="e.g. helm/helm-www"
+             class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-mono outline-none focus:border-[#4b5320]" />
+      <p class="text-xs text-slate-400 mt-1">The repo that contains the documentation source (markdown preferred)</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Branch</label>
+        <input id="vendor-branch" type="text" placeholder="main" value="main"
+               class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-mono outline-none focus:border-[#4b5320]" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">llms.txt URL (if available)</label>
+        <input id="vendor-llms" type="url" placeholder="https://example.com/llms.txt"
+               class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-mono outline-none focus:border-[#4b5320]" />
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-slate-700 mb-1">Why should this vendor be in the mesh?</label>
+      <textarea id="vendor-reason" rows="3" placeholder="Who uses this? What docs does it have? Why is it useful for agents?"
+                class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[#4b5320] resize-none"></textarea>
+    </div>
+
+    <div class="bg-[#a9af8b]/10 border border-[#929a68]/30 rounded-xl p-4 text-xs text-slate-600 leading-relaxed">
+      <strong class="text-[#4b5320]">Legal check:</strong>
+      We will verify the license allows documentation redistribution (Apache-2.0, MIT, BSD, CC-BY accepted;
+      GPL/AGPL/BUSL/proprietary excluded). If a llms.txt or .md endpoint exists, we use that — never scraping.
+      Every response in the mesh attributes the source.
+    </div>
+
+    <button id="submit-btn" onclick="checkVendor()"
+            class="w-full bg-[#4b5320] hover:bg-[#6a7337] text-white px-6 py-3 rounded-xl font-medium transition-colors">
+      🔍 Check Legality & Ingestion Pattern
+    </button>
+  </div>
+</section>
+
+<!-- ═══════════ CHECK RESULTS ═══════════ -->
+<section id="results-section" class="hidden mt-10">
+
+  <h2 class="text-2xl font-bold mb-6">📋 Check Results</h2>
+
+  <!-- Step 1: repo exists -->
+  <div id="step-repo" class="border border-slate-200 rounded-xl p-5 mb-4">
+    <div class="flex items-center gap-3">
+      <span id="repo-icon" class="text-lg">⏳</span>
+      <div>
+        <div class="font-semibold text-sm">Repository exists</div>
+        <div id="repo-detail" class="text-xs text-slate-400">checking…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: license -->
+  <div id="step-license" class="border border-slate-200 rounded-xl p-5 mb-4 opacity-40">
+    <div class="flex items-center gap-3">
+      <span id="license-icon" class="text-lg">⏳</span>
+      <div>
+        <div class="font-semibold text-sm">License allows docs redistribution</div>
+        <div id="license-detail" class="text-xs text-slate-400">waiting…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: ingestion pattern -->
+  <div id="step-pattern" class="border border-slate-200 rounded-xl p-5 mb-4 opacity-40">
+    <div class="flex items-center gap-3">
+      <span id="pattern-icon" class="text-lg">⏳</span>
+      <div>
+        <div class="font-semibold text-sm">Ingestion pattern detected</div>
+        <div id="pattern-detail" class="text-xs text-slate-400">waiting…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: verdict -->
+  <div id="step-verdict" class="border border-slate-200 rounded-xl p-6 mt-8 hidden">
+    <div id="verdict-content"></div>
+  </div>
+
+  <!-- Actions -->
+  <div id="actions-section" class="hidden mt-6 flex gap-3">
+    <button id="queue-btn"
+            class="bg-[#4b5320] hover:bg-[#6a7337] text-white px-6 py-3 rounded-xl font-medium transition-colors">
+      ✅ Queue for next batch
+    </button>
+    <a href="coverage.html" class="border border-slate-200 hover:border-slate-300 px-6 py-3 rounded-xl font-medium text-slate-600 transition-colors">
+      View current coverage
+    </a>
+  </div>
+
+</section>
+
+<!-- ═══════════ QUEUED CONFIRMATION ═══════════ -->
+<section id="queued-section" class="hidden mt-10">
+  <div class="bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
+    <div class="text-4xl mb-4">🎉</div>
+    <h2 class="text-2xl font-bold text-green-800">Queued for next batch!</h2>
+    <p id="queued-detail" class="mt-3 text-slate-600 max-w-md mx-auto"></p>
+    <p class="mt-4 text-xs text-slate-400">The ingestion pipeline will process this vendor in the next scheduled batch. You'll see it appear on the coverage page once ingested.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="border-t border-slate-100 mt-16">
+  <div class="max-w-4xl mx-auto px-6 py-8 text-sm text-slate-500 flex flex-col md:flex-row justify-between gap-3">
+    <div>🕸 Documesh — powered by WebMCP · Built with ❤️ by <a href="https://selatan.org" target="_blank" class="hover:text-orange-600">selatan.org</a></div>
+  </div>
+</footer>
+
+<script type="module">
+const API = location.hostname === "localhost" && location.port === "8788" ? "http://localhost:8787" : "";
+
+// ─── license classification ──────────────────────────────────────────────────
+const LICENSE_OK = new Set([
+  "Apache-2.0", "MIT", "BSD-2-Clause", "BSD-3-Clause", "BSD-2/3-Clause",
+  "MPL-2.0", "CC-BY-4.0", "CC0-1.0", "ISC", "Unlicense", "0BSD",
+]);
+const LICENSE_EXCLUDED = new Set([
+  "GPL-2.0", "GPL-3.0", "AGPL-3.0", "LGPL-2.1", "LGPL-3.0",
+  "BUSL-1.1", "SSPL-1.0", "EUPL-1.2", "RSAL-2.0",
+  "GPL-2.0-or-later", "GPL-3.0-or-later", "AGPL-3.0-or-later",
+]);
+const LICENSE_CUSTOM = new Set(["NOASSERTION", "Other", "NONE", null, undefined]);
+
+function licenseVerdict(spdx) {
+  if (!spdx || spdx === "NONE" || spdx === "NOASSERTION") return { ok: false, label: "No license found", detail: "Without a license, docs cannot be legally redistributed." };
+  if (LICENSE_OK.has(spdx)) return { ok: true, label: `${spdx} — permissive ✅`, detail: "License allows documentation redistribution with attribution." };
+  if (spdx.startsWith("CC-BY") && !spdx.includes("NC") && !spdx.includes("ND")) return { ok: true, label: `${spdx} — permissive ✅`, detail: "Creative Commons Attribution allows redistribution." };
+  if (LICENSE_EXCLUDED.has(spdx)) return { ok: false, label: `${spdx} — excluded ⛔`, detail: "License restricts redistribution or requires copyleft. This vendor cannot be ingested." };
+  if (spdx.includes("GPL") || spdx.includes("AGPL")) return { ok: false, label: `${spdx} — excluded ⛔`, detail: "Copyleft license restricts redistribution." };
+  if (spdx.includes("BUSL") || spdx.includes("SSPL")) return { ok: false, label: `${spdx} — source-available ⛔`, detail: "Non-open-source license with commercial or use restrictions." };
+  return { ok: null, label: `${spdx} — needs manual review ⚠️`, detail: "License exists but needs human review before ingestion." };
+}
+
+// ─── GitHub API helpers ──────────────────────────────────────────────────────
+async function gh(path) {
+  const req = await fetch(`https://api.github.com/${path}`, {
+    headers: { "User-Agent": "documesh-submit", "Accept": "application/vnd.github+json" }
+  });
+  return { data: await req.json(), status: req.status };
+}
+
+// ─── step UI helpers ─────────────────────────────────────────────────────────
+function setStep(id, icon, detail, cls) {
+  const el = document.getElementById(id);
+  el.classList.remove("opacity-40");
+  el.classList.add(cls);
+  document.querySelector(`#${id} span`).textContent = icon;
+  const detailEl = document.getElementById(id.replace("step-", "") + "-detail");
+  if (detailEl) detailEl.textContent = detail;
+}
+
+// ─── main check ──────────────────────────────────────────────────────────────
+async function checkVendor() {
+  const name = document.getElementById("vendor-name").value.trim();
+  const repoInput = document.getElementById("vendor-repo").value.trim().replace(/^https?:\/\/github\.com\//, "").replace(/\/$/, "");
+  const branch = document.getElementById("vendor-branch").value.trim() || "main";
+  const llms = document.getElementById("vendor-llms").value.trim();
+  const reason = document.getElementById("vendor-reason").value.trim();
+
+  if (!name || !repoInput) {
+    alert("Please fill in vendor name and GitHub repo");
+    return;
+  }
+
+  // reset
+  const results = document.getElementById("results-section");
+  results.classList.remove("hidden");
+  results.scrollIntoView({ behavior: "smooth" });
+  for (const id of ["step-repo", "step-license", "step-pattern", "step-verdict"]) {
+    document.getElementById(id).className = "border border-slate-200 rounded-xl p-5 mb-4 opacity-40";
+  }
+  document.getElementById("actions-section").classList.add("hidden");
+  document.getElementById("queued-section").classList.add("hidden");
+
+  // Step 1: repo exists
+  document.getElementById("repo-icon").textContent = "⏳";
+  document.getElementById("repo-detail").textContent = "checking GitHub…";
+  const repo = await gh(`repos/${repoInput}`);
+  if (repo.status !== 200 || !repo.data.full_name) {
+    setStep("step-repo", "❌", `Repository "${repoInput}" not found on GitHub`, "step-error");
+    return;
+  }
+  const repoBranch = repo.data.default_branch;
+  setStep("step-repo", "✅", `${repo.data.full_name} — ${repo.data.stargazers_count} ⭐, branch: ${repoBranch}`, "step-done");
+
+  // Step 2: license
+  document.getElementById("step-license").classList.remove("opacity-40");
+  document.getElementById("license-icon").textContent = "⏳";
+  document.getElementById("license-detail").textContent = "checking license…";
+  await new Promise(r => setTimeout(r, 500));
+  const lic = await gh(`repos/${repoInput}/license`);
+  const spdx = lic.status === 200 ? (lic.data.license?.spdx_id || "UNKNOWN") : "NONE";
+  const verdict = licenseVerdict(spdx);
+  if (verdict.ok === true) {
+    setStep("step-license", "✅", `${verdict.label} — ${verdict.detail}`, "step-done");
+  } else if (verdict.ok === false) {
+    setStep("step-license", "⛔", `${verdict.label} — ${verdict.detail}`, "step-error");
+    showVerdict(false, name, repoInput, spdx, verdict.detail);
+    return;
+  } else {
+    setStep("step-license", "⚠️", `${verdict.label} — ${verdict.detail}`, "step-active");
+  }
+
+  // Step 3: ingestion pattern detection
+  document.getElementById("step-pattern").classList.remove("opacity-40");
+  document.getElementById("pattern-icon").textContent = "⏳";
+  document.getElementById("pattern-detail").textContent = "probing llms.txt, .md endpoints, git markdown…";
+
+  const patterns = [];
+
+  // Probe llms.txt if user provided one
+  if (llms) {
+    try {
+      const res = await fetch(llms);
+      if (res.ok) {
+        const txt = await res.text();
+        const links = [...txt.matchAll(/- \[([^\]]+)\]\(([^)]+\.md)\)/g)];
+        if (links.length) {
+          patterns.push({ pattern: "P1", label: `llms.txt → ${links.length} .md pages`, ok: true });
+        }
+        const full = txt.match(/llms-full\.txt/);
+        if (full) patterns.push({ pattern: "P2", label: "llms-full.txt (single file)", ok: true });
+      }
+    } catch {}
+  }
+
+  // Probe git tree for .md files
+  try {
+    const treeRes = await gh(`repos/${repoInput}/git/trees/${repoBranch}?recursive=1`);
+    if (treeRes.status === 200 && treeRes.data.tree) {
+      const mdFiles = treeRes.data.tree.filter(t => t.path.endsWith(".md") || t.path.endsWith(".mdx"));
+      const docMd = mdFiles.filter(t => {
+        const lower = t.path.toLowerCase();
+        return lower.includes("doc") || lower.includes("content") || lower.includes("guide") || lower.includes("wiki");
+      });
+      if (docMd.length > 5) {
+        patterns.push({ pattern: "P4", label: `git-hosted markdown — ${docMd.length} .md files in docs`, ok: true });
+      }
+    }
+  } catch {}
+
+  // Probe common .md endpoint patterns
+  if (!patterns.length) {
+    const probes = [
+      `https://${name.toLowerCase().replace(/\s+/g, "")}.com/llms.txt`,
+      `https://docs.${name.toLowerCase().replace(/\s+/g, "")}.com/llms.txt`,
+    ];
+    for (const probe of probes) {
+      try {
+        const res = await fetch(probe);
+        if (res.ok) patterns.push({ pattern: "P1", label: `llms.txt found at ${probe}`, ok: true });
+      } catch {}
+    }
+  }
+
+  if (patterns.length) {
+    const best = patterns[0];
+    setStep("step-pattern", "✅", `${best.label} — ${patterns.length > 1 ? `(+${patterns.length - 1} more)` : "ingestible"}`, "step-done");
+    showVerdict(true, name, repoInput, spdx, verdict.detail, patterns);
+  } else {
+    setStep("step-pattern", "⚠️", "No machine-readable docs interface found (llms.txt, .md endpoints, or in-repo markdown). Docs may be HTML-only — would need P5 (HTML extraction) which is deferred.", "step-active");
+    showVerdict(false, name, repoInput, spdx, "No machine-readable ingestion interface detected. HTML-only docs sites are deferred to v2.");
+  }
+}
+
+function showVerdict(ok, name, repo, spdx, detail, patterns) {
+  const verdictEl = document.getElementById("step-verdict");
+  verdictEl.classList.remove("hidden");
+  verdictEl.className = ok
+    ? "border-2 border-green-300 bg-green-50 rounded-2xl p-6"
+    : "border-2 border-red-300 bg-red-50 rounded-2xl p-6";
+
+  if (ok) {
+    verdictEl.innerHTML = `
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-3xl">✅</span>
+        <div>
+          <div class="text-xl font-bold text-green-800">Ingestible!</div>
+          <div class="text-sm text-green-700">${name} can be added to the mesh.</div>
+        </div>
+      </div>
+      <div class="text-sm text-slate-600 space-y-1 mt-3">
+        <div>📦 License: <strong>${spdx}</strong></div>
+        <div>🔗 Repo: <a href="https://github.com/${repo}" target="_blank" class="underline">${repo}</a></div>
+        <div>🔌 Patterns: ${patterns.map(p => `<strong>${p.pattern}</strong> (${p.label})`).join(", ")}</div>
+      </div>
+      <p class="text-xs text-slate-500 mt-3">Queue this vendor for the next ingestion batch. The pipeline will crawl, chunk, and add it to the search index.</p>
+    `;
+    document.getElementById("actions-section").classList.remove("hidden");
+    document.getElementById("queue-btn").onclick = () => queueVendor(name, repo, spdx, patterns);
+  } else {
+    verdictEl.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">⛔</span>
+        <div>
+          <div class="text-xl font-bold text-red-700">Cannot ingest</div>
+          <div class="text-sm text-red-600">${detail}</div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function queueVendor(name, repo, spdx, patterns) {
+  const queued = JSON.parse(localStorage.getItem("documesh_queue") || "[]");
+  queued.push({ name, repo, spdx, patterns: patterns.map(p => p.pattern), queued_at: new Date().toISOString() });
+  localStorage.setItem("documesh_queue", JSON.stringify(queued));
+  showQueued();
+}
+
+function showQueued() {
+  document.getElementById("results-section").classList.add("hidden");
+  const q = document.getElementById("queued-section");
+  q.classList.remove("hidden");
+  q.scrollIntoView({ behavior: "smooth" });
+  const queued = JSON.parse(localStorage.getItem("documesh_queue") || "[]");
+  document.getElementById("queued-detail").textContent =
+    `${queued.length} vendor${queued.length > 1 ? "s" : ""} queued locally. Export the queue and run the ingestion pipeline to add them.`;
+}
+
+// export queue button
+const exportBtn = document.createElement("button");
+exportBtn.className = "mt-4 text-sm bg-white border border-green-300 text-green-700 px-4 py-2 rounded-lg hover:bg-green-100";
+exportBtn.textContent = "📄 Export queue as JSON";
+exportBtn.onclick = () => {
+  const queued = JSON.parse(localStorage.getItem("documesh_queue") || "[]");
+  const blob = new Blob([JSON.stringify(queued, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "documesh_queue.json";
+  a.click();
+};
+document.getElementById("queued-section").querySelector(".text-xs.text-slate-400").appendChild(document.createElement("br"));
+document.getElementById("queued-section").querySelector(".text-xs.text-slate-400").appendChild(exportBtn);
+</script>
+</body>
+</html>
