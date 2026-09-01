@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schema/plugin.json",
+  "name": "documesh",
+  "version": "0.2.0",
+  "description": "Federated developer documentation search across 18 vendors. Powered by WebMCP.",
+  "author": { "name": "selatan.org", "url": "https://selatan.org" },
+  "repository": "https://github.com/rhps/documesh.dev",
+  "homepage": "https://documesh.selatan.org",
+  "license": "MIT",
+  "skills": [
+    { "name": "search-docs", "path": "skills/search-docs/SKILL.md" },
+    { "name": "explain-error", "path": "skills/explain-error/SKILL.md" },
+    { "name": "list-vendors", "path": "skills/list-vendors/SKILL.md" }
+  ],
+  "mcpServers": [
+    {
+      "name": "documesh-api",
+      "transport": "http",
+      "url": "https://documesh.selatan.org"
+    }
+  ]
+}

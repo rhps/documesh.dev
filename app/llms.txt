@@ -1,41 +1,59 @@
-# Documesh — federated developer documentation for humans and AI agents
+# Documesh
 
-> Documentation that agents can not only read, but operate.
-> Federated developer documentation from 18 vendors, version-cited, license-attributed.
-> Powered by WebMCP.
+> Federated developer documentation from 18 vendors. Powered by WebMCP.
 
-## Agent interface
+## When to use Documesh
 
-This site exposes WebMCP tools via `document.modelContext.registerTool()`.
+Use Documesh when you need to:
+- Search developer documentation across multiple vendors simultaneously (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, Bun, Hono, OpenTelemetry, Argo CD, Helm, Flux, Cilium, and more)
+- Match an error message or stack trace to the closest relevant documentation sections
+- Look up vendor license and attribution information before citing documentation
+- Find version-specific documentation (e.g. Kubernetes v1.32 vs v1.29)
 
-| Tool | Description |
+## When NOT to use Documesh
+
+- For vendor-specific advanced configuration (use the vendor's own docs directly)
+- For non-developer documentation (general knowledge, non-technical topics)
+- For vendors not in the mesh (check /vendors for the current list)
+
+## How to integrate
+
+Documesh exposes WebMCP tools via `document.modelContext.registerTool()`.
+Any WebMCP-compatible agent can discover and call these tools when the page is open.
+
+| Tool | When to call |
 |------|-------------|
-| `search_docs_across` | Federated search across 18 vendors; results carry vendor, version, license, canonical URL |
-| `explain_error` | Log excerpt → closest matching documentation sections across vendors |
-| `list_vendors` | Vendor registry with license and attribution requirements |
+| `search_docs_across` | When the user asks about any developer documentation topic |
+| `explain_error` | When the user pastes an error message or stack trace |
+| `list_vendors` | When the user asks what vendors are covered or needs license info |
+
+## API
+
+- GET /health — Service health and snapshot date
+- GET /search?q=&vendors=&limit= — Federated search
+- GET /explain?error=&vendor= — Error-to-docs matching
+- GET /vendors — Vendor registry
+- GET /openapi.json — OpenAPI 3.0 specification
 
 ## Pages
 
-- [Home](https://documesh.selatan.org/index.html): Overview and stats
+- [Home](https://documesh.selatan.org/): Overview and stats
 - [App](https://documesh.selatan.org/app.html): Chat interface with WebMCP tools
 - [Capabilities](https://documesh.selatan.org/capabilities.html): Tool documentation with schemas
 - [WebMCP Tools](https://documesh.selatan.org/webmcp.html): Tool reference with inputSchema
 - [Coverage](https://documesh.selatan.org/coverage.html): Vendors, licenses, legal exclusions
 - [Submit Vendor](https://documesh.selatan.org/submit.html): Request documentation ingestion
-
-## API
-
-- GET /health: Service health and snapshot date
-- GET /search?q=&vendors=&limit=: Federated documentation search
-- GET /explain?error=&vendor=: Error-to-docs matching with extracted signatures
-- GET /vendors: Vendor registry with license details
+- [About](https://documesh.selatan.org/about.html): About Documesh
+- [Contact](https://documesh.selatan.org/contact.html): Contact information
+- [Privacy](https://documesh.selatan.org/privacy.html): Privacy policy
 
 ## Sources
 
 Documentation ingested from official vendor-published machine interfaces
 (llms.txt, .md endpoints) or open-licensed git repositories. No scraping.
-Full attribution on every response. See /coverage for the complete list.
+Full attribution on every response.
 
 ## License
 
 MIT — see LICENSE in the repository.
+Documentation content remains the property of respective owners.

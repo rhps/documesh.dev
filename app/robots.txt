@@ -1,8 +1,49 @@
-# Allow all AI agents and crawlers to access Documesh
-# Documentation that agents can not only read, but operate.
+# Documesh — federated developer documentation for humans and AI agents
 # Powered by WebMCP
 
+# ── AI answer & search crawlers (allowed — they cite and refer) ──
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: ora-agent
+Allow: /
+
+User-agent: DeepSeekBot
+Allow: /
+
+# ── Training-only crawlers (restricted — we share docs via llms.txt instead) ──
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+# ── General ──
 User-agent: *
 Allow: /
 
 Sitemap: https://documesh.selatan.org/sitemap.xml
+
+# Content Signals
+# search=yes, ai-train=no
