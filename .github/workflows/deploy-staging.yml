@@ -55,17 +55,24 @@ jobs:
 
       - name: WebMCP evals (smoke)
         run: |
-          # install Chromium for Puppeteer (smoke mode drives a browser page)
+          # Wait for staging to be fully up (503 during deploy propagation)
+          for i in 1 2 3 4 5 6; do
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://documesh.selatan.org/health" || true)
+            [ "$CODE" = "200" ] && break
+            echo "waiting for staging ($CODE)…"; sleep 10
+          done
+          # Install Chromium for Puppeteer
           npx puppeteer browsers install chrome
+          # Run evals — custom domain, retry with workers.dev on failure
           npx webmcp-evals smoke \
             -u "https://documesh.selatan.org" \
             -e evals/documesh-smoke.json \
             --timeout 30000 \
-            --chrome-channel chrome || \
-          npx webmcp-evals smoke \
-            -u "$ALT" \
+            --chrome-channel chrome \
+            || npx webmcp-evals smoke \
+            -u "https://documesh.selatan.org" \
             -e evals/documesh-smoke.json \
-            --timeout 30000 \
+            --timeout 60000 \
             --chrome-channel chrome
 
       - name: Summary
