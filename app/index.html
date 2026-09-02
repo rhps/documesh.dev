@@ -152,7 +152,7 @@
     <span class="bg-gradient-to-r from-[#4b5320] to-[#6a7337] bg-clip-text text-transparent">can actually operate.</span>
   </h1>
   <p class="mt-6 text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-    Documesh is an application <strong>powered by WebMCP</strong> — the open standard that lets websites
+    Documesh is an application <strong>powered by WebMCP</strong>, the open standard that lets websites
     expose structured tools to AI agents. Federated documentation from
     <span id="hero-source-count" class="font-semibold text-slate-900">47</span> sources,
     every answer version-cited, every source attributed.
@@ -174,7 +174,7 @@
 <section class="border-y border-slate-100 bg-slate-50/50">
   <div class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
     <div><div class="text-3xl font-bold">47</div><div class="text-sm text-slate-500 mt-1">sources federated</div></div>
-    <div><div id="stat-chunks" class="text-3xl font-bold">29,217</div><div class="text-sm text-slate-500 mt-1">indexed doc sections</div></div>
+    <div><div id="stat-chunks" class="text-3xl font-bold">36,290</div><div class="text-sm text-slate-500 mt-1">indexed doc sections</div></div>
     <div><div class="text-3xl font-bold">3</div><div class="text-sm text-slate-500 mt-1">WebMCP tools</div></div>
     <div><div class="text-3xl font-bold">100%</div><div class="text-sm text-slate-500 mt-1">answers with license + source</div></div>
   </div>
@@ -187,7 +187,7 @@
       <h2 class="text-3xl font-bold tracking-tight">Agents guess. Docs hide.</h2>
       <p class="mt-4 text-slate-600 leading-relaxed">
         Today an AI agent that wants to use your documentation must scrape HTML, guess at
-        structure, and cite whatever blog post ranked first — often the wrong version, often
+        structure, and cite whatever blog post ranked first, often the wrong version and often
         without a source. That's slow, fragile, and blind to licensing.
       </p>
       <p class="mt-4 text-slate-600 leading-relaxed">
@@ -224,19 +224,19 @@
     <div class="border border-slate-100 rounded-2xl p-6 hover:border-[#929a68] hover:shadow-sm transition-all">
       <div class="text-2xl mb-3">🔍</div>
       <h3 class="font-semibold">Federated search</h3>
-      <p class="mt-2 text-sm text-slate-600 leading-relaxed">One query across 47 sources — Cloudflare, Netlify, Vercel, Kubernetes, Bun, Stripe, Sentry and more. Every result: version, canonical link, license.</p>
+      <p class="mt-2 text-sm text-slate-600 leading-relaxed">One query across 47 sources, including Cloudflare, Netlify, Vercel, Kubernetes, Bun, Stripe, Sentry and more. Every result comes with its version, canonical link, and license.</p>
       <a href="capabilities.html#federated-search" class="inline-block mt-4 text-sm text-[#4b5320] hover:text-[#6a7337]">Explore →</a>
     </div>
     <div class="border border-slate-100 rounded-2xl p-6 hover:border-[#929a68] hover:shadow-sm transition-all">
       <div class="text-2xl mb-3">🩺</div>
       <h3 class="font-semibold">Error → documentation</h3>
-      <p class="mt-2 text-sm text-slate-600 leading-relaxed">Paste a stack trace. The mesh extracts error signatures and returns the closest official sections — with an honest disclaimer, never a fake diagnosis.</p>
+      <p class="mt-2 text-sm text-slate-600 leading-relaxed">Paste a stack trace. The mesh extracts error signatures and returns the closest official sections, with an honest disclaimer instead of a fake diagnosis.</p>
       <a href="capabilities.html#error-bridge" class="inline-block mt-4 text-sm text-[#4b5320] hover:text-[#6a7337]">Explore →</a>
     </div>
     <div class="border border-slate-100 rounded-2xl p-6 hover:border-[#929a68] hover:shadow-sm transition-all">
       <div class="text-2xl mb-3"> ⚖️</div>
       <h3 class="font-semibold">License-aware by design</h3>
-      <p class="mt-2 text-sm text-slate-600 leading-relaxed">CC-BY and MIT sources ingested; BUSL and copyleft excluded — deliberately. Every response names its license. Coverage is a legal statement, not an accident.</p>
+      <p class="mt-2 text-sm text-slate-600 leading-relaxed">CC-BY and MIT sources are synced in; BUSL and copyleft are deliberately left out. Every response names its license. Coverage is a legal statement, not an accident.</p>
       <a href="coverage.html" class="inline-block mt-4 text-sm text-[#4b5320] hover:text-[#6a7337]">See coverage →</a>
     </div>
   </div>
@@ -258,9 +258,9 @@
     <p class="text-xs uppercase tracking-widest text-slate-400 mb-3">Powered by</p>
     <h2 class="text-3xl font-bold">WebMCP</h2>
     <p class="mt-4 text-slate-300 max-w-2xl mx-auto leading-relaxed">
-      Documesh registers its capabilities as WebMCP tools — the same open standard backed by
-      Microsoft and Google in Chrome. Any agent your visitor already uses — ChatGPT, Claude, anything
-      MCP-compatible — can operate this site directly. No integrations, no keys, no scraping.
+      Documesh registers its capabilities as WebMCP tools, using the same open standard backed by
+      Microsoft and Google in Chrome. Any agent your visitor already uses, whether ChatGPT, Claude,
+      or anything MCP-compatible, can operate this site directly. No integrations, no keys, no scraping.
     </p>
     <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
       <a href="webmcp.html" class="bg-white text-slate-900 px-6 py-3 rounded-xl font-medium hover:bg-slate-100 transition-colors">Read the tool reference</a>
@@ -285,7 +285,7 @@
   <div class="max-w-6xl mx-auto px-6 pb-8 text-[11px] text-slate-400 leading-relaxed">
     Documentation content remains the property of its respective owners and is used under their published licenses / agent interfaces:
     Cloudflare & Kubernetes (CC-BY-4.0) · Bun, ElysiaJS, Hono, Nuxt, SolidJS (MIT) · Netlify, Vercel, Stripe, Sentry, Turso, Upstash (official llms.txt agent interfaces) ·
-    OpenTelemetry (CC-BY-4.0) · Argo CD (Apache-2.0). Excerpts and canonical links only — no full-text mirroring.
+    OpenTelemetry (CC-BY-4.0) · Argo CD (Apache-2.0). Excerpts and canonical links only, with no full-text mirroring.
   </div>
 </footer>
 
