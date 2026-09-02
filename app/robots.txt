@@ -18,7 +18,7 @@
 # RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN UNION DIRECTIVE 2019/790.
 
 # ── NLWeb Schema Map ──
-Schemamap: https://documesh.selatan.org/schemamap.json
+Schemamap: https://documesh.selatan.org/schemamap.xml
 
 # ── Allow search + AI input (agents can use our docs) but not AI training ──
 User-agent: *

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemamap>
+  <schema type="application/ld+json" url="https://documesh.selatan.org/"/>
+  <schema type="application/json" url="https://documesh.selatan.org/openapi.json"/>
+  <schema type="application/ld+json" url="https://documesh.selatan.org/about.html"/>
+  <schema type="application/ld+json" url="https://documesh.selatan.org/contact.html"/>
+  <schema type="application/ld+json" url="https://documesh.selatan.org/privacy.html"/>
+  <schema type="application/ld+json" url="https://documesh.selatan.org/developers.html"/>
+  <schema type="application/ld+json" url="https://documesh.selatan.org/capabilities.html"/>
+  <schema type="application/ld+json" url="https://documesh.selatan.org/coverage.html"/>
+  <schema type="application/ld+json" url="https://documesh.selatan.org/webmcp.html"/>
+  <schema type="application/ld+json" url="https://documesh.selatan.org/app.html"/>
+  <schema type="application/ld+json" url="https://documesh.selatan.org/submit.html"/>
+</schemamap>

@@ -301,6 +301,39 @@ export default {
     // API probes (spec permits it); probes expecting a 401 can still read it.
     const apiEntry = ["/api", "/api/v1", "/v1", "/v1/search", "/v1/explain", "/v1/vendors", "/search", "/explain", "/vendors", "/webmcp.html", "/openapi.json"].includes(url.pathname);
 
+    // Section-style llms.txt — scanners derive top-level sections from the
+    // homepage nav and probe /<section>/llms.txt. Serve the scoped content.
+    if (path === "/api/llms.txt" || path === "/v1/llms.txt") {
+      const assetRes = await env.ASSETS.fetch(new Request("https://internal/llms.api.txt"));
+      if (assetRes.ok) {
+        return new Response(await assetRes.text(), {
+          status: 200,
+          headers: { "Content-Type": "text/plain; charset=utf-8", ...CORS },
+        });
+      }
+    }
+    if (path === "/developers/llms.txt" || path === "/docs/llms.txt") {
+      const assetRes = await env.ASSETS.fetch(new Request("https://internal/llms.developers.txt"));
+      if (assetRes.ok) {
+        return new Response(await assetRes.text(), {
+          status: 200,
+          headers: { "Content-Type": "text/plain; charset=utf-8", ...CORS },
+        });
+      }
+    }
+
+    // Developer portal aliases — scanners probe /docs, /api-reference,
+    // /developers as the canonical "API documentation" URLs.
+    if (path === "/docs" || path === "/api-reference") {
+      const assetRes = await env.ASSETS.fetch(new Request("https://internal/developers.html"));
+      if (assetRes.ok) {
+        return new Response(await assetRes.text(), {
+          status: 200,
+          headers: { "Content-Type": "text/html; charset=utf-8", "Vary": "Accept, Accept-Encoding", ...baseHeaders(url.origin) },
+        });
+      }
+    }
+
     // API version info at /api and /api/v1
     if (path === "/api" || path === "/api/v1" || url.pathname === "/v1") {
       return json({
