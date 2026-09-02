@@ -32,7 +32,46 @@
     "/v1/search": { "$ref": "#/paths/~1search" },
     "/v1/explain": { "$ref": "#/paths/~1explain" },
     "/v1/vendors": { "$ref": "#/paths/~1vendors" },
+    "/v1/stats": { "$ref": "#/paths/~1stats" },
     "/v1/health": { "$ref": "#/paths/~1health" },
+    "/stats": {
+      "get": {
+        "operationId": "getStats",
+        "tags": ["registry"],
+        "summary": "Per-source coverage statistics",
+        "description": "Live chunk counts per documentation source plus coverage vs. each source's own published catalog (llms.txt / docs index). coverage = ingested pages / catalog pages; null when the source has no measurable published catalog.",
+        "responses": {
+          "200": {
+            "description": "Coverage statistics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["total_chunks", "sources"],
+                  "properties": {
+                    "total_chunks": { "type": "integer" },
+                    "sources": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["id", "chunks"],
+                        "properties": {
+                          "id": { "type": "string" },
+                          "chunks": { "type": "integer", "description": "Ingested doc sections in the mesh" },
+                          "catalog_pages": { "type": "integer", "nullable": true, "description": "Pages in the source's own published catalog" },
+                          "coverage": { "type": "number", "nullable": true, "description": "ingested/catalog as a percentage; null = not measured" }
+                        }
+                      }
+                    },
+                    "note": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "operationId": "healthCheck",

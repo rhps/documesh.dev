@@ -457,7 +457,7 @@ export default {
         version: API_VERSION,
         version_date: API_VERSION_DATE,
         base: url.origin,
-        endpoints: ["/search", "/explain", "/vendors", "/health", "/ask", "/mcp"],
+        endpoints: ["/search", "/explain", "/vendors", "/stats", "/health", "/ask", "/mcp"],
         versioned_endpoints: ["/v1/search", "/v1/explain", "/v1/vendors", "/v1/health"],
         async_endpoints: { "POST /v1/submit-vendors": "202 + job polling at /v1/jobs/{job_id}" },
         versioning_policy: "URL path versioning (/v1/). New breaking versions introduce a new path prefix; the previous prefix is served with Deprecation and Sunset headers for at least 6 months before removal. Non-breaking additions do not bump the version.",
@@ -745,6 +745,49 @@ export default {
         ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION,
         search_backend: env.SEARCH_BACKEND || "shards",
         d1_bound: !!env.DB,
+      }, 200, apiEntry ? url.origin : null);
+    }
+
+    // /stats — per-source coverage: ingested chunk counts (live from D1,
+    // shards fallback) + published-catalog totals for the sync-percentage.
+    // Catalog totals come from the committed audit (indexer/coverage_audit.py
+    // vs each source's own llms.txt); snapshot fallback when audit absent.
+    if (path === "/stats") {
+      const counts = {};
+      try {
+        if ((env.SEARCH_BACKEND || "shards") === "d1" && env.DB) {
+          const { results } = await env.DB.prepare(
+            "SELECT vendor, COUNT(*) AS n FROM chunks GROUP BY vendor"
+          ).all();
+          for (const r of results) counts[r.vendor] = r.n;
+        }
+      } catch (e) {
+        console.error("stats d1 counts failed, using snapshot:", e.message);
+      }
+      if (!Object.keys(counts).length) {
+        try {
+          const snapRes = await env.ASSETS.fetch(new Request("https://internal/snapshot.json"));
+          if (snapRes.ok) {
+            const snap = await snapRes.json();
+            for (const [v, info] of Object.entries(snap.vendors || {})) counts[v] = info.chunks || 0;
+          }
+        } catch {}
+      }
+      let catalog = {};
+      try {
+        const auditRes = await env.ASSETS.fetch(new Request("https://internal/stats/coverage-catalog.json"));
+        if (auditRes.ok) catalog = await auditRes.json();
+      } catch {}
+      const sources = VENDOR_IDS.map(id => ({
+        id,
+        chunks: counts[id] || 0,
+        catalog_pages: catalog[id]?.catalog ?? null,
+        coverage: catalog[id]?.pct ?? null,
+      }));
+      return json({
+        total_chunks: Object.values(counts).reduce((a, b) => a + b, 0),
+        sources,
+        note: "coverage = ingested pages / source's own published catalog (llms.txt). null = catalog unknown.",
       }, 200, apiEntry ? url.origin : null);
     }
 
