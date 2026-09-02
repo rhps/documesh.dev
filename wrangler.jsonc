@@ -1,20 +1,18 @@
 // Documesh — Cloudflare Worker config
 //
-// documesh.selatan.org is THE deployment. Merge to main → "Deploy Staging"
-// workflow deploys it immediately. Promotion to production is a separate
-// tagged run ("Deploy Production" workflow, trigger: v* tag or manual).
+// documesh.selatan.org = STAGING (merge to main → "Deploy Staging" auto-deploys;
+//                        iterate freely here). Worker: documesh-api
+// documesh.dev         = PRODUCTION (tagged promotion, "Deploy Production" workflow).
+//                        Worker: documesh-api-prod
 //
-// Environments:
-//   staging    → documesh-api-staging → https://documesh.selatan.org
-//   production → documesh-api         → https://documesh.selatan.org
-//                documesh.dev (+ www)
-//
-// Both envs share the same custom domain: staging keeps the site live on
-// every merge; production is the tagged promotion of the same code.
+// Each environment owns its own custom domain — no shared routes, no
+// tug-of-war. Production is only ever updated by an explicit tag.
 //
 // Search backend (Option C, see docs/PLAN_D1_VECTORIZE.md):
 //   DB  — D1 database "documesh-search" (FTS5). Active when
 //         SEARCH_BACKEND=d1 — D1 FTS5 is the live search backend (shards = fallback).
+//         NOTE: staging and production share this one database/index by design;
+//         a separate staging DB is a deliberate post-v1 follow-up.
 {
   "name": "documesh-api",
   "main": "worker/src/index.js",
@@ -74,7 +72,6 @@
         "SEARCH_BACKEND": "d1"
       },
       "routes": [
-        { "pattern": "documesh.selatan.org", "custom_domain": true },
         { "pattern": "documesh.dev", "custom_domain": true },
         { "pattern": "www.documesh.dev", "custom_domain": true }
       ]

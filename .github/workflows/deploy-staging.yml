@@ -43,7 +43,7 @@ jobs:
         run: |
           HOST="https://documesh.selatan.org"
           # Fallback to workers.dev if the custom domain is still propagating
-          ALT="https://docs-mesh-staging.${{ vars.CF_SUBDOMAIN }}.workers.dev"
+          ALT="https://documesh-api.${{ vars.CF_SUBDOMAIN }}.workers.dev"
           for i in 1 2 3 4 5 6; do
             CODE=$(curl -s -o /tmp/health.json -w "%{http_code}" "$HOST/health" || true)
             [ "$CODE" = "200" ] && { echo "✅ staging healthy ($HOST):"; cat /tmp/health.json; exit 0; }
