@@ -61,21 +61,18 @@ export async function searchD1(env, query, opts = {}) {
   const lim = Math.min(Math.max(1, limit | 0 || 5), 50);
   const cur = decodeCursor(cursor);
 
-  const where = ["chunks_fts MATCH ?1"];
-  const bind = { q: match, lim: lim + 1 };
-  let idx = 3; // ?1 match, ?2 limit
+  // All-positional placeholders (?): D1 bind() maps them in order.
+  const where = ["chunks_fts MATCH ?"];
+  const bind = [match];
   if (vendors?.length) {
-    const placeholders = vendors.map((v) => {
-      bind[`v${idx}`] = String(v);
-      return `?v${idx++}`;
-    });
+    const placeholders = vendors.map((v) => { bind.push(String(v)); return "?"; });
     where.push(`c.vendor IN (${placeholders.join(",")})`);
   }
   if (cur) {
-    bind.score = cur.s;
-    bind.rowid = cur.r;
-    where.push(`(${FTS_COLS_WEIGHTED} < ?score OR (${FTS_COLS_WEIGHTED} = ?score AND c.id < ?rowid))`);
+    bind.push(cur.s, cur.s, cur.r);
+    where.push(`(${FTS_COLS_WEIGHTED} < ? OR (${FTS_COLS_WEIGHTED} = ? AND c.id < ?))`);
   }
+  bind.push(lim + 1);
 
   const sql = `
     SELECT c.id AS rowid, c.chunk_id, c.vendor, c.version, c.title,
@@ -86,11 +83,9 @@ export async function searchD1(env, query, opts = {}) {
     JOIN chunks c ON c.id = f.rowid
     WHERE ${where.join(" AND ")}
     ORDER BY score ASC, c.id DESC
-    LIMIT ?lim`;
+    LIMIT ?`;
 
-  const stmt = env.DB.prepare(sql);
-  const bound = stmt.bind(...Object.keys(bind).map((k) => bind[k]));
-  const { results } = await bound.all();
+  const { results } = await env.DB.prepare(sql).bind(...bind).all();
 
   const hasMore = results.length > lim;
   const page = hasMore ? results.slice(0, lim) : results;
