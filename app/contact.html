@@ -4,8 +4,24 @@
 </head>
 <body class="bg-white text-slate-900"><nav class="border-b border-slate-100 px-6 py-3"><a href="index.html" class="font-bold">🕸 Documesh</a></nav>
 <main class="max-w-3xl mx-auto px-6 py-12">
-<h1 class="text-3xl font-bold mb-6">Contact</h1>
-<p class="text-slate-600">Email: <a href="mailto:rhps@selatan.org" class="text-orange-600 underline">rhps@selatan.org</a></p>
-<p class="text-slate-600 mt-2">GitHub Issues: <a href="https://github.com/rhps/documesh.dev/issues" class="text-orange-600 underline">rhps/documesh.dev/issues</a></p>
-<p class="text-slate-600 mt-2">Organization: <a href="https://selatan.org" class="text-orange-600 underline">selatan.org</a></p>
+<h1 class="text-3xl font-bold mb-4">Contact Documesh</h1>
+<p class="text-slate-600 mb-4">Documesh is a federated developer documentation search engine that indexes official, openly licensed documentation from 38 software vendors — Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more — and serves it to AI agents and human developers through a REST API, an MCP server, and a WebMCP-powered web app.</p>
+
+<h2 class="text-xl font-semibold mt-8 mb-3">Getting in touch</h2>
+<p class="text-slate-600 mb-2"><strong>General inquiries:</strong> <a href="mailto:rhps@selatan.org" class="text-orange-600 underline">rhps@selatan.org</a> — we aim to reply within 2 business days.</p>
+<p class="text-slate-600 mb-2"><strong>Documentation corrections:</strong> if you spot an error in a doc section we serve, email us with the <code>chunk_id</code> and <code>source_url</code> from the API response and we will investigate against the upstream source.</p>
+<p class="text-slate-600 mb-2"><strong>Source inclusion requests:</strong> to propose adding a documentation source to the mesh, include the source name, docs origin URL, and its license. We only ingest official agent interfaces (llms.txt-permitted origins) or open-licensed repositories — we never scrape. For programmatic submission use <code>POST /v1/submit-vendors</code> (async-job pattern; you receive a <code>job_id</code> to poll).</p>
+<p class="text-slate-600 mb-2"><strong>Security reports:</strong> responsible disclosure is welcome at the same address; please allow 90 days before public disclosure.</p>
+<p class="text-slate-600 mb-2"><strong>Privacy requests:</strong> see the <a href="privacy.html" class="text-orange-600 underline">privacy policy</a> for data practices, and the <a href="about.html" class="text-orange-600 underline">about page</a> for project background.</p>
+
+<h2 class="text-xl font-semibold mt-8 mb-3">Project links</h2>
+<ul class="list-disc pl-6 text-slate-600 space-y-1">
+<li><strong>Live service:</strong> <a href="https://documesh.selatan.org" class="text-orange-600 underline">https://documesh.selatan.org</a></li>
+<li><strong>Source code:</strong> <a href="https://github.com/rhps/documesh.dev" class="text-orange-600 underline">github.com/rhps/documesh.dev</a> (MIT licensed)</li>
+<li><strong>API contract:</strong> <a href="openapi.json" class="text-orange-600 underline">/openapi.json</a></li>
+<li><strong>Developer portal:</strong> <a href="developers.html" class="text-orange-600 underline">/developers.html</a></li>
+<li><strong>Coverage &amp; licensing:</strong> <a href="coverage.html" class="text-orange-600 underline">/coverage.html</a></li>
+</ul>
+
+<p class="text-slate-600 mt-6">Documesh is maintained by the selatan.org organization and runs on Cloudflare's global network. There is no phone support; email is the fastest channel. When reporting an issue, include the endpoint, request parameters, and full response — it lets us reproduce in one pass.</p>
 </main></body></html>

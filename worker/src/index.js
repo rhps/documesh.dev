@@ -252,9 +252,9 @@ export default {
     }
 
     // .md twins for extension pages: /developers.html.md → developers.md
-    if (path.endsWith(".html.md") || path.endsWith(".json.md")) {
-      const stem = path.replace(/\.(html|json)\.md$/, "").replace(/^\//, "");
-      const candidates = [`${stem}.md`, stem === "openapi" ? null : null].filter(Boolean);
+    if (path.endsWith(".html.md") || path.endsWith(".json.md") || path.endsWith(".txt.md")) {
+      const stem = path.replace(/\.(html|json|txt)\.md$/, "").replace(/^\//, "");
+      const candidates = [`${stem}.md`, `${stem}.txt`];
       for (const cand of candidates) {
         const assetRes = await env.ASSETS.fetch(new Request(`https://internal/${cand}`));
         if (assetRes.ok) {
@@ -307,11 +307,26 @@ export default {
       });
     }
 
+    // OAuth discovery — extensionless aliases. RFC 9728 / RFC 8414 clients
+    // (and the agent-auth checks) probe /.well-known/oauth-protected-resource
+    // and /.well-known/oauth-authorization-server without an extension.
+    for (const wf of ["oauth-protected-resource", "oauth-authorization-server"]) {
+      if (path === `/.well-known/${wf}` || path === `/.well-known/${wf}.json`) {
+        const assetRes = await env.ASSETS.fetch(new Request(`https://internal/.well-known/${wf}.json`));
+        if (assetRes.ok) {
+          return new Response(await assetRes.text(), {
+            status: 200,
+            headers: { "Content-Type": "application/json; charset=utf-8", ...CORS },
+          });
+        }
+      }
+    }
+
     // MCP server card
     if (path === "/.well-known/mcp/server-card.json" || path === "/.well-known/mcp/server-card") {
       return json({
         name: "Documesh MCP Server",
-        description: "Federated developer documentation search across 18 vendors",
+        description: "Federated developer documentation search across 38 vendors",
         version: "0.2.0",
         serverUrl: `${url.origin}/mcp`,
         transport: "streamable-http",
@@ -323,10 +338,40 @@ export default {
       });
     }
 
+    // API catalog (RFC 9727) — served from the Worker so we can set the
+    // application/linkset+json content-type the spec requires.
+    if (path === "/.well-known/api-catalog") {
+      const assetRes = await env.ASSETS.fetch(new Request("https://internal/.well-known/api-catalog"));
+      if (assetRes.ok) {
+        return new Response(await assetRes.text(), {
+          status: 200,
+          headers: {
+            "Content-Type": 'application/linkset+json;profile="https://www.rfc-editor.org/info/rfc9727"',
+            ...CORS,
+          },
+        });
+      }
+    }
+
     // MCP protocol handler — full Streamable HTTP implementation.
-    // Exposed at /mcp (both methods) and mirrored at /.well-known/mcp so
-    // scanners that probe the well-known path find a live endpoint.
-    if ((path === "/mcp" || path === "/.well-known/mcp") && (request.method === "POST" || request.method === "GET")) {
+    // POST /mcp = JSON-RPC; GET /mcp = SSE stream.
+    // GET /.well-known/mcp = JSON manifest (endpoint + card) so scanners
+    // probing the well-known path find a machine-readable descriptor
+    // instead of an SSE stream that never terminates.
+    if (path === "/.well-known/mcp" && request.method === "GET") {
+      return json({
+        name: "Documesh MCP Server",
+        version: "0.2.0",
+        endpoint: `${url.origin}/mcp`,
+        transport: "streamable-http",
+        protocolVersion: "2025-03-26",
+        description: "Federated developer documentation search across 38 vendors",
+        server_card: `${url.origin}/.well-known/mcp/server-card.json`,
+        tools: ["search_docs_across", "explain_error", "list_vendors"],
+        resources: ["ui://documesh/search-results", "ui://documesh/error-match", "ui://documesh/vendor-grid"],
+      });
+    }
+    if (path === "/mcp" && (request.method === "POST" || request.method === "GET")) {
       return handleMCPServer(request, env, async (toolName, args) => {
         if (toolName === "search_docs_across") {
           const loaded = await loadVendors(env, args.vendors?.length ? args.vendors : VENDOR_IDS);
