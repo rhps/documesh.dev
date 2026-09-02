@@ -64,3 +64,6 @@ User-agent: Diffbot
 Disallow: /
 
 Sitemap: https://documesh.selatan.org/sitemap.xml
+
+# ── Agentmap: capability manifest for AI agents (ARD / AI-Catalog) ──
+Agentmap: https://documesh.selatan.org/.well-known/ard.json

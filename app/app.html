@@ -73,6 +73,7 @@
 }
 </script>
 <link rel="alternate" type="text/markdown" href="https://documesh.selatan.org/app.md" />
+<link rel="ai-catalog" type="application/json" href="https://documesh.selatan.org/.well-known/ard.json" />
 </head>
 <body class="bg-white text-slate-900 h-screen flex flex-col">
 
@@ -205,7 +206,14 @@ function createShim() {
       }
     }
   };
-  // Polyfill document.modelContext so webmcp-evals smoke can discover tools
+  // Polyfill modelContext (navigator per spec, document fallback) so
+  // webmcp-evals smoke and scanners can discover tools
+  if (!("modelContext" in navigator)) {
+    Object.defineProperty(navigator, "modelContext", {
+      get() { return shim; },
+      configurable: true,
+    });
+  }
   if (!("modelContext" in document)) {
     Object.defineProperty(document, "modelContext", {
       get() { return shim; },
@@ -320,5 +328,6 @@ fetch(API + "/health").then(r => r.json()).then(h => {
 registerWebMCP();
 runDeepLink();
 </script>
+<script src="webmcp-register.js"></script>
 </body>
 </html>

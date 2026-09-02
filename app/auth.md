@@ -27,12 +27,30 @@ Documesh is a **fully open, read-only API**. No API keys, no tokens, no registra
 
 ## Register
 
-No registration or provisioning endpoint is required. There is no account system.
+**Complete registration flow (anonymous, self-contained):**
 
-If you want a formal registration discovery block, it is published in the Authorization Server metadata:
+1. **Audience:** any AI agent or automated tool that needs developer documentation search. No approval, allowlist, or human step exists.
+2. **Registration endpoint:** `GET https://documesh.selatan.org/agent/identity` — call it to provision an anonymous identity context. It returns immediately with a `subject` (e.g. `anon:4f2a91c3`), `tier: "open"`, and the rate limit.
+3. **Method:** `anonymous` — the returned subject is informational; you do not need to present it back on subsequent calls.
+4. **Credential use:** none. All API endpoints accept unauthenticated requests. Keep the subject for your own logging/retry accounting if desired.
+
+**Example — register and query in two calls:**
+
+```bash
+# Step 1: register (provision anonymous identity)
+curl https://documesh.selatan.org/agent/identity
+# => {"identity_endpoint":"...","identity_types_supported":["anonymous"],
+#     "anonymous":{"subject":"anon:4f2a91c3","tier":"open",
+#                 "rate_limit":{"requests_per_minute":100}}}
+
+# Step 2: use the API — no credential header required
+curl "https://documesh.selatan.org/v1/search?q=edge+functions"
+```
+
+Formal registration discovery is also published in the Authorization Server metadata:
 
 - **`agent_auth.skill`**: `https://documesh.selatan.org/auth.md` (this document)
-- **`agent_auth.register_uri`**: not applicable — nothing to register for read access
+- **`agent_auth.register_uri`**: `https://documesh.selatan.org/agent/identity`
 
 ## Agent identity (optional, anonymous flow)
 

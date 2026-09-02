@@ -3,9 +3,10 @@
   "response_types_supported": [],
   "grant_types_supported": [],
   "token_endpoint_auth_methods_supported": ["none"],
+  "scopes_supported": ["docs:read", "search:query", "vendors:read"],
   "agent_auth": {
     "skill": "https://documesh.selatan.org/auth.md",
-    "register_uri": null,
+    "register_uri": "https://documesh.selatan.org/agent/identity",
     "identity_endpoint": "https://documesh.selatan.org/agent/identity",
     "claim_endpoint": null,
     "events_endpoint": null,

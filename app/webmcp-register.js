@@ -1,12 +1,55 @@
 /**
- * Documesh — WebMCP registration for the landing page.
+ * Documesh — WebMCP registration (landing page + app).
  * Registers all 3 tools so agents discover Documesh immediately on page load.
- * The tools call the same API endpoints as app.html.
+ *
+ * Per the WebMCP spec the ModelContext lives on `navigator.modelContext`.
+ * Some early implementations exposed `document.modelContext`, so we register
+ * on whichever exists (navigator preferred) and install a discovery shim on
+ * both when the API is absent, so scanners can enumerate registered tools.
  */
 const TOOL_VENDORS = ["cloudflare","netlify","vercel","kubernetes","bun","elysia","turso","upstash","sentry","stripe","hono","nuxt","solid","opentelemetry","argocd","helm","flux","cilium","react","pytorch","tensorflow","langchain","playwright","clickhouse","ollama","electron","hugo","docusaurus","pytest","nodejs","godot-docs","neovim","terragrunt","moby","elasticsearch","svelte-core","vue-core-docs","gitea"];
 
+function createShim() {
+  const tools = {};
+  const shim = {
+    registerTool: (t, options = {}) => {
+      tools[t.name] = t;
+      if (typeof window !== "undefined") {
+        window.__documeshWebMCPTools = window.__documeshWebMCPTools || {};
+        window.__documeshWebMCPTools[t.name] = {
+          name: t.name,
+          description: t.description,
+          inputSchema: t.inputSchema,
+        };
+      }
+      return t;
+    },
+    unregisterTool: (name) => { delete tools[name]; },
+    getTool: (name) => tools[name],
+  };
+  return shim;
+}
+
 async function registerWebMCP() {
-  const ctx = document.modelContext ?? createShim();
+  // navigator.modelContext is the spec location; document.modelContext is
+  // the early-implementation fallback. Install the shim on both if absent.
+  const ctx = navigator.modelContext ?? document.modelContext ?? (() => {
+    const shim = createShim();
+    try {
+      if (!("modelContext" in navigator)) {
+        Object.defineProperty(navigator, "modelContext", { get() { return shim; }, configurable: true });
+      }
+      if (!("modelContext" in document)) {
+        Object.defineProperty(document, "modelContext", { get() { return shim; }, configurable: true });
+      }
+    } catch {}
+    return shim;
+  })();
+
+  const controller = new AbortController();
+  const { signal } = controller;
+  if (typeof window !== "undefined") window.__documeshWebMCPAbort = controller;
+
   try {
     ctx.registerTool({
       name: "search_docs_across",
@@ -20,20 +63,21 @@ async function registerWebMCP() {
         },
         required: ["query"]
       },
-      execute: async (input) => {
+      execute: async (input, options = {}) => {
         const params = new URLSearchParams({ q: input.query, limit: String(input.limit ?? 5) });
         if (input.vendors?.length) params.set("vendors", input.vendors.join(","));
-        const data = await fetch(`/search?${params}`).then(r => r.json());
+        const res = await fetch(`/search?${params}`, { signal: options.signal ?? signal });
+        const data = await res.json();
         return {
           snapshot_date: data.snapshot_date,
-          results: data.results.map(r => ({
+          results: (data.results || []).map(r => ({
             vendor: r.vendor, version: r.version, title: r.title,
             section: r.heading_path, excerpt_link: r.source_url,
             license: r.license, last_updated: r.last_updated, relevance: r.score
           }))
         };
       }
-    });
+    }, { signal });
 
     ctx.registerTool({
       name: "explain_error",
@@ -46,44 +90,28 @@ async function registerWebMCP() {
         },
         required: ["log_excerpt"]
       },
-      execute: async (input) => {
+      execute: async (input, options = {}) => {
         const params = new URLSearchParams({ error: input.log_excerpt });
         if (input.vendor) params.set("vendor", input.vendor);
-        return await fetch(`/explain?${params}`).then(r => r.json());
+        const res = await fetch(`/explain?${params}`, { signal: options.signal ?? signal });
+        return await res.json();
       }
-    });
+    }, { signal });
 
     ctx.registerTool({
       name: "list_vendors",
       description: "List the documentation vendors in the mesh with their license and attribution requirements.",
       inputSchema: { type: "object", properties: {} },
-      execute: async () => await fetch("/vendors").then(r => r.json())
-    });
+      execute: async (_input, options = {}) => await fetch("/vendors", { signal: options.signal ?? signal }).then(r => r.json())
+    }, { signal });
 
-    console.log("[webmcp] Documesh tools registered on landing page");
+    if (typeof window !== "undefined") {
+      window.__documeshWebMCPReady = true;
+    }
+    console.log("[webmcp] Documesh tools registered (navigator.modelContext)");
   } catch (e) {
     console.error("[webmcp] registration failed:", e);
   }
-}
-
-function createShim() {
-  const tools = {};
-  const shim = {
-    registerTool: (t) => {
-      tools[t.name] = t;
-      if (typeof window !== "undefined") {
-        window.__documeshTools = window.__documeshTools || {};
-        window.__documeshTools[t.name] = t;
-      }
-    }
-  };
-  if (!("modelContext" in document)) {
-    Object.defineProperty(document, "modelContext", {
-      get() { return shim; },
-      configurable: true,
-    });
-  }
-  return shim;
 }
 
 registerWebMCP();

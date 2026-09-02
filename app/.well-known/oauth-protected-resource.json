@@ -1,14 +1,18 @@
 {
   "resource": "https://documesh.selatan.org",
   "authorization_servers": ["https://documesh.selatan.org"],
-  "scopes_supported": [],
+  "scopes_supported": ["docs:read", "search:query", "vendors:read"],
   "bearer_methods_supported": ["header"],
   "resource_documentation": "https://documesh.selatan.org/auth.md",
   "agent_auth": {
-    "type": "none",
+    "type": "anonymous",
     "skill": "https://documesh.selatan.org/auth.md",
-    "register_uri": null,
+    "register_uri": "https://documesh.selatan.org/agent/identity",
     "identity_types_supported": ["anonymous"],
+    "anonymous": {
+      "credential_types_supported": ["none"],
+      "claim_uri": "https://documesh.selatan.org/agent/identity"
+    },
     "description": "Documesh API is fully open for read-only access. No authentication required. Anonymous identity context available at /agent/identity."
   }
 }
