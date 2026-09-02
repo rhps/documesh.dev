@@ -67,6 +67,55 @@
   "softwareRequirements": "WebMCP-compatible browser (ChatGPT in-app browser or Chrome 149+)"
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Documesh?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Documesh is a WebMCP-powered federated search engine for developer documentation. It indexes official docs from 18+ software vendors (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more) and returns version-cited, license-attributed excerpts via a REST API, an MCP server, and in-browser WebMCP tools." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I search Documesh programmatically?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Call GET https://documesh.selatan.org/search?q=your+query (optionally with vendors= and limit= parameters). No API key is required. The full contract is in the OpenAPI spec at /openapi.json, and an MCP server is available at /mcp using Streamable HTTP transport." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Documesh free?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The API is fully open for read-only access with no authentication and no cost. Rate limits apply (100 requests/hour), declared via RateLimit response headers. A staging sandbox is available at documesh-beta.selatan.org." }
+        },
+        {
+          "@type": "Question",
+          "name": "Where does Documesh documentation come from?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Only from official vendor-published machine interfaces (llms.txt, .md endpoints) or open-licensed git repositories. Sources under BUSL or restrictive copyleft are deliberately excluded. Every result names its license and canonical source URL. See the coverage page for the full vendor and license registry." }
+        }
+      ]
+    },
+    {
+      "@type": "Service",
+      "name": "Documesh Federated Documentation Search",
+      "serviceType": "Developer documentation search API",
+      "provider": { "@type": "Organization", "name": "selatan.org", "url": "https://selatan.org" },
+      "areaServed": "Worldwide",
+      "url": "https://documesh.selatan.org/search"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Documesh", "item": "https://documesh.selatan.org/" },
+        { "@type": "ListItem", "position": 2, "name": "Capabilities", "item": "https://documesh.selatan.org/capabilities.html" },
+        { "@type": "ListItem", "position": 3, "name": "Developer Portal", "item": "https://documesh.selatan.org/developers.html" },
+        { "@type": "ListItem", "position": 4, "name": "Coverage", "item": "https://documesh.selatan.org/coverage.html" }
+      ]
+    }
+  ]
+}
+</script>
 <link rel="alternate" type="text/markdown" href="https://documesh.selatan.org/.md" />
 </head>
 <body class="bg-white text-slate-900 antialiased">

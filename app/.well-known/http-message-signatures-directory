@@ -1,3 +1,12 @@
 {
-  "keys": []
+  "keys": [
+    {
+      "kty": "OKP",
+      "crv": "Ed25519",
+      "kid": "documesh-5a2eeecfe64b627f",
+      "x": "rDqWRQFVMVlKkzXto1FQVnMrYdW9wxBBRJ0JbOYJt3Q",
+      "nbf": 1788314137,
+      "exp": 1819850137
+    }
+  ]
 }

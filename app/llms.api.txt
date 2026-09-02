@@ -1,0 +1,35 @@
+# Documesh API — llms.txt
+
+> Scoped agent context for the Documesh REST API and MCP server.
+
+## API surface
+
+- GET /health — service health and vendor count
+- GET /search?q=&vendors=&limit=&cursor= — federated documentation search (cursor pagination)
+- POST /search {"query", "vendors", "limit"} — same, JSON body; safe retries via Idempotency-Key header
+- GET /explain?error=&vendor= — error/log excerpt → closest documentation sections
+- GET /vendors?cursor=&limit= — vendor registry with licenses
+- POST /v1/submit-vendors — async vendor submission (returns 202 + job_id)
+- GET /v1/jobs/{job_id} — poll async job status
+- GET /ask?q= or POST /ask {"query","prefer":{"streaming":true}} — NLWeb query; SSE streaming on request
+- POST /mcp — MCP Streamable HTTP (JSON-RPC 2.0); GET /mcp for SSE
+- GET /api — route index and versioning policy
+- GET /openapi.json — OpenAPI 3.0 specification
+
+## Versioning
+
+- URL path versioning: /v1/search, /v1/explain, /v1/vendors, /v1/health. Unversioned paths are live aliases of /v1.
+- Deprecation policy: Deprecation header on deprecated routes; Sunset (RFC 8594) at least 90 days before removal. Full policy at /api and in openapi.json x-api-versioning.
+
+## Authentication
+
+None. The API is fully open for read-only use; no keys, no OAuth. See /auth.md.
+
+## Errors
+
+All API paths return structured JSON errors: {"error": {"code", "message", "status", "resolution"}}.
+
+## Related indexes
+
+- Full site index: /llms.txt
+- MCP tools reference: /webmcp.html and /.well-known/mcp/server-card.json
