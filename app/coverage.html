@@ -94,18 +94,18 @@
 <header class="max-w-5xl mx-auto px-6 pt-16 pb-10">
   <h1 class="text-4xl font-bold tracking-tight">Coverage & Licenses</h1>
   <p class="mt-4 text-slate-600 max-w-3xl leading-relaxed">
-    What's in the mesh, what's deliberately out, and why. Documesh treats licensing as a
-    first-class feature: sources are ingested only via permissive licenses or their own
-    official agent interfaces — and every tool response names its source license.
+    Documesh treats licensing as a first-class feature: sources are synced to our
+    Documesh mesh network only via permissive licenses or their own official agent
+    interfaces, and every tool response names its source license.
   </p>
   <div class="mt-6 grid grid-cols-3 gap-4 max-w-lg">
     <div class="border border-green-200 bg-green-50 rounded-xl px-4 py-3 text-center">
-      <div class="text-2xl font-bold text-green-700">18</div>
-      <div class="text-xs text-green-800">sources covered</div>
+      <div class="text-2xl font-bold text-green-700">47</div>
+      <div class="text-xs text-green-800">sources synced to the mesh</div>
     </div>
     <div class="border border-slate-200 bg-slate-50 rounded-xl px-4 py-3 text-center">
-      <div class="text-2xl font-bold text-slate-600">4+</div>
-      <div class="text-xs text-slate-500">deferred (v2)</div>
+      <div class="text-2xl font-bold text-slate-600">6</div>
+      <div class="text-xs text-slate-500">queued for sync</div>
     </div>
     <div class="border border-red-200 bg-red-50 rounded-xl px-4 py-3 text-center">
       <div class="text-2xl font-bold text-red-600">4</div>
@@ -122,7 +122,7 @@
       <h2 class="text-2xl font-bold">✅ Covered</h2>
       <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">synced to the mesh</span>
     </div>
-    <p class="mt-2 text-slate-600 text-sm">Click any source to search its docs in the app. Coverage = the share of a source's own published documentation catalog (its llms.txt / docs index) that is synced into the Documesh mesh.</p>
+    <p class="mt-2 text-slate-600 text-sm">Click any source to search its docs in the app. Coverage = the share of a source's own published documentation catalog (its llms.txt / docs index) that is synced into the Documesh mesh network.</p>
     <div class="mt-6 overflow-x-auto border border-slate-100 rounded-2xl">
       <table class="w-full text-sm">
         <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-400">
@@ -138,11 +138,11 @@
       </table>
     </div>
     <p class="mt-3 text-xs text-slate-400">
-      <span class="font-medium text-green-700">Green ≥ 90%</span> — this documentation is synced into the Documesh mesh with ≥90% coverage ·
-      <span class="font-medium text-amber-600">Yellow 30–89%</span> — partially synced; deepening on the roadmap ·
-      <span class="font-medium text-red-600">Red &lt; 30%</span> — synced but thin; priority for ingestion depth ·
-      <span class="font-medium text-slate-500">Gray</span> — coverage vs. catalog not yet measured (git-tree ingested or no published catalog).
-      Counts are live from the mesh. All sources are ingested via official llms.txt /
+      <span class="font-medium text-green-700">Synced</span> — the source's published documentation is synced into the Documesh mesh network (≥90% of its catalog) ·
+      <span class="font-medium text-amber-600">Partial</span> — a meaningful share of the catalog is synced; deepening continues ·
+      <span class="font-medium text-red-600">Early</span> — syncing has begun; this source is a priority for ingestion depth ·
+      <span class="font-medium text-slate-500">—</span> — coverage not yet measured (git-tree ingested or no published catalog).
+      Counts are live from the mesh. All documents are synced via official llms.txt /
       <code>.md</code> agent interfaces or open-licensed git repositories — never by scraping rendered HTML.
     </p>
   </section>
@@ -154,16 +154,18 @@
       <span class="text-xs bg-[#a9af8b]/30 text-[#4b5320] px-2 py-1 rounded-full">license OK · interface work needed</span>
     </div>
     <p class="mt-2 text-slate-600 text-sm">
-      These projects are actively maintained with permissive licenses — the docs are legally
-      usable — but they lack a machine-ready interface today (no llms.txt, no <code>.md</code>
-      endpoints, docs generated from site-specific builds). Each needs a small custom crawler;
-      they're on the v2 roadmap.
+      These projects are actively maintained with permissive licenses, the docs are legally
+      usable, but they lack a machine-ready interface today (no llms.txt, no <code>.md</code>
+      endpoints, docs generated from site-specific builds). They are on queue now to be
+      synced to our Documesh mesh network.
     </p>
-    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Apache Airflow</div><div class="text-xs text-slate-500 mt-1">ASF · Apache-2.0 · docs generated outside main repo</div></div>
-      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Go</div><div class="text-xs text-slate-500 mt-1">Google · BSD-3 · thin in-repo docs surface</div></div>
-      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Django</div><div class="text-xs text-slate-500 mt-1">DSF · BSD · Sphinx-generated HTML</div></div>
-      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Flask · Python · Rails</div><div class="text-xs text-slate-500 mt-1">Permissive · Sphinx/generated site builds</div></div>
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Apache Airflow</div><div class="text-xs text-slate-500 mt-1">License: Apache-2.0 · docs generated outside main repo</div></div>
+      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Go</div><div class="text-xs text-slate-500 mt-1">License: BSD-3-Clause · thin in-repo docs surface</div></div>
+      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Django</div><div class="text-xs text-slate-500 mt-1">License: BSD-3-Clause · Sphinx-generated HTML</div></div>
+      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Flask</div><div class="text-xs text-slate-500 mt-1">License: BSD-3-Clause · Sphinx-generated docs</div></div>
+      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Python</div><div class="text-xs text-slate-500 mt-1">License: PSF-2.0 · docs generated from Sphinx sources</div></div>
+      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Ruby on Rails</div><div class="text-xs text-slate-500 mt-1">License: MIT · guides generated from edge guides</div></div>
     </div>
     <p class="mt-4 text-sm text-slate-500">
       Want one of these prioritized (or a source we haven't listed)?
@@ -179,7 +181,7 @@
     </div>
     <p class="mt-2 text-slate-600 text-sm">
       These sources were evaluated and rejected. In an AI-agent world, respecting these
-      boundaries is not compliance theater — it's what keeps an agentic web worth having.
+      boundaries is not compliance theater, it's what keeps an agentic web worth having.
     </p>
     <div class="mt-6 space-y-3">
       <div class="border border-red-200 rounded-xl p-5">
@@ -221,8 +223,8 @@
   <section id="policy" class="scroll-mt-24 border border-slate-100 rounded-2xl p-8 bg-slate-50">
     <h2 class="text-2xl font-bold">Our ingestion policy</h2>
     <ol class="mt-4 space-y-3 text-slate-600 leading-relaxed">
-      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">1.</span><span><strong>Official interfaces first.</strong> We ingest via source-published llms.txt / <code>.md</code> endpoints, or open-licensed git repositories — never scraped HTML.</span></li>
-      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">2.</span><span><strong>Excerpts + canonical links.</strong> We return short excerpts that link back to the source's page. No full-text mirroring.</span></li>
+      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">1.</span><span><strong>Official interfaces first.</strong> We sync documents from the source via source-published llms.txt / <code>.md</code> endpoints, or open-licensed git repositories. We never scrape HTML.</span></li>
+      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">2.</span><span><strong>Excerpts + canonical links.</strong> We return short excerpts that link back to the source's page. No full-text mirroring, and results always come back with their citation.</span></li>
       <li class="flex gap-3"><span class="text-[#6a7337] font-bold">3.</span><span><strong>Attribution everywhere.</strong> Every tool response names its license and source. The UI displays it on every card.</span></li>
       <li class="flex gap-3"><span class="text-[#6a7337] font-bold">4.</span><span><strong>When in doubt, exclude.</strong> BUSL, AGPL, bot-blocked and proprietary-without-consent sources stay out. A smaller honest mesh beats a larger ambiguous one.</span></li>
     </ol>
@@ -284,14 +286,14 @@ const tb = document.getElementById("covered-tbody");
 tb.innerHTML = "";
 
 function coverageBadge(s) {
-  if (s.coverage == null) return `<span class="inline-block w-20 text-right text-slate-400">—</span>`;
+  if (s.coverage == null) return `<span class="inline-block w-24 text-right text-slate-400">—</span>`;
   const pct = s.coverage;
-  const [cls, dot] = pct >= 90 ? ["bg-green-100 text-green-700", "bg-green-500"]
-    : pct >= 30 ? ["bg-amber-100 text-amber-700", "bg-amber-500"]
-    : ["bg-red-100 text-red-700", "bg-red-500"];
+  const [cls, dot, label] = pct >= 90 ? ["bg-green-100 text-green-700", "bg-green-500", "Synced"]
+    : pct >= 30 ? ["bg-amber-100 text-amber-700", "bg-amber-500", "Partial"]
+    : ["bg-red-100 text-red-700", "bg-red-500", "Early"];
   return `<span class="inline-flex items-center gap-1.5 justify-end">
     <span class="w-2 h-2 rounded-full ${dot}"></span>
-    <span class="px-2 py-0.5 rounded-full text-xs font-medium ${cls}">${pct >= 90 ? "Green" : pct >= 30 ? "Yellow" : "Red"} · ${pct}%</span>
+    <span class="px-2 py-0.5 rounded-full text-xs font-medium ${cls}">${label}</span>
   </span>`;
 }
 
@@ -310,7 +312,7 @@ for (const s of data.sources) {
 // add verified marker legend
 const legend = document.createElement("p");
 legend.className = "mt-3 text-xs text-slate-400";
-legend.textContent = "Coverage compares each source's ingested pages with the catalog that source publishes about itself (llms.txt / docs index). Green: this documentation is synced into the Documesh mesh with ≥90% coverage.";
+legend.textContent = "Coverage compares each source's ingested pages with the catalog that source publishes about itself (llms.txt / docs index). Synced: this documentation is synced into the Documesh mesh network with ≥90% coverage.";
 tb.parentElement.insertAdjacentElement("afterend", legend);
 </script>
 <script src="webmcp-register.js"></script>
