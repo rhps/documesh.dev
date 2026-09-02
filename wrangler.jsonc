@@ -1,14 +1,16 @@
-// Documesh — Cloudflare Worker config (main product deployment)
+// Documesh — Cloudflare Worker config
 //
-// Production endpoints:
-//   production → documesh-api → https://documesh.selatan.org
-//   production → documesh-api → https://documesh.dev (+ www)
+// documesh.selatan.org is THE deployment. Merge to main → "Deploy Staging"
+// workflow deploys it immediately. Promotion to production is a separate
+// tagged run ("Deploy Production" workflow, trigger: v* tag or manual).
 //
-// Deploy commands:
-//   npx wrangler deploy
+// Environments:
+//   staging    → documesh-api-staging → https://documesh.selatan.org
+//   production → documesh-api         → https://documesh.selatan.org
+//                documesh.dev (+ www)
 //
-// Prerequisite: zones (selatan.org and documesh.dev) exist in this
-// Cloudflare account — CF creates DNS records + SSL certs automatically.
+// Both envs share the same custom domain: staging keeps the site live on
+// every merge; production is the tagged promotion of the same code.
 {
   "name": "documesh-api",
   "main": "worker/src/index.js",
@@ -18,25 +20,20 @@
     "directory": "./app",
     "run_worker_first": true
   },
-  "routes": [
-    { "pattern": "documesh.selatan.org", "custom_domain": true },
-    { "pattern": "documesh.dev", "custom_domain": true },
-    { "pattern": "www.documesh.dev", "custom_domain": true }
-  ],
   "env": {
     "staging": {
-      "name": "documesh-api-staging",
+      "name": "documesh-api",
       "assets": {
         "binding": "ASSETS",
         "directory": "./app",
         "run_worker_first": true
       },
       "routes": [
-        { "pattern": "documesh-beta.selatan.org", "custom_domain": true }
+        { "pattern": "documesh.selatan.org", "custom_domain": true }
       ]
     },
     "production": {
-      "name": "documesh-api",
+      "name": "documesh-api-prod",
       "assets": {
         "binding": "ASSETS",
         "directory": "./app",

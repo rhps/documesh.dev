@@ -59,7 +59,7 @@ All API paths return structured JSON: `{"error": {"code", "message", "status", "
 
 ## Sandbox
 
-Staging environment: https://documesh-beta.selatan.org — same API surface, no production impact.
+Sandbox: documesh.selatan.org itself — the API is read-only and free, so the live service is safe to exercise. No separate sandbox host.
 
 ## More
 

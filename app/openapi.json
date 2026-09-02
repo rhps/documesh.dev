@@ -15,8 +15,7 @@
     "license": { "name": "MIT", "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE" }
   },
   "servers": [
-    { "url": "https://documesh.selatan.org", "description": "Production" },
-    { "url": "https://documesh-beta.selatan.org", "description": "Staging (beta)" }
+    { "url": "https://documesh.selatan.org", "description": "Production" }
   ],
   "tags": [
     { "name": "search", "description": "Documentation search operations" },
@@ -26,8 +25,7 @@
   ],
   "x-versioned-servers": [
     { "url": "https://documesh.selatan.org/v1", "description": "Production v1 (preferred)" },
-    { "url": "https://documesh.selatan.org", "description": "Production (unversioned alias of v1)" },
-    { "url": "https://documesh-beta.selatan.org", "description": "Staging / sandbox (beta)" }
+    { "url": "https://documesh.selatan.org", "description": "Production (unversioned alias of v1)" }
   ],
   "paths": {
     "/v1/search": { "$ref": "#/paths/~1search" },

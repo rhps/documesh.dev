@@ -469,26 +469,20 @@ export default {
       });
     }
 
-    // Sandbox discovery + verification. The staging environment at
-    // documesh-beta.selatan.org runs the same Worker with the same index;
-    // agents can exercise the full API there with zero production impact.
+    // Sandbox discovery. Documesh ships as a single deployment
+    // (documesh.selatan.org); the API is read-only and free, so agents can
+    // exercise it directly with zero risk. No separate sandbox host exists.
     if (path === "/sandbox" || path === "/v1/sandbox") {
-      const beta = "https://documesh-beta.selatan.org";
-      let betaOk = false;
-      try {
-        const probe = await fetch(`${beta}/health`, { signal: AbortSignal.timeout(5000) });
-        betaOk = probe.ok;
-      } catch {}
       return json({
         sandbox: {
-          base: beta,
-          healthy: betaOk,
-          description: "Full mirror of the production API on isolated infrastructure. Same endpoints, same contract, no production data or limits.",
+          base: url.origin,
+          healthy: true,
+          description: "Documesh is a read-only, free, open API — the live service itself is safe to exercise. No separate sandbox host; every endpoint here is non-destructive.",
           identical_surface: true,
-          try: [`${beta}/search?q=edge+functions`, `${beta}/explain?error=OOMKilled`, `${beta}/mcp`],
-          production_base: url.origin,
+          destructive_operations: "none (read-only API; writes are limited to the async vendor-submission queue)",
+          try: [`${url.origin}/search?q=edge+functions`, `${url.origin}/explain?error=OOMKilled`, `${url.origin}/mcp`],
         },
-        usage: "Point any production request at the sandbox base to test agents and integrations safely.",
+        usage: "Call any documented endpoint directly — no credentials, no production data at risk.",
       });
     }
 
@@ -561,7 +555,7 @@ export default {
     if (path === "/mcp/product" && (request.method === "POST" || request.method === "GET")) {
       return handleMCPServer(request, env, async (toolName, args) => {
         if (toolName === "service_status") {
-          return { content: [{ type: "text", text: JSON.stringify({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION, sandbox: `${url.origin.replace("documesh.", "documesh-beta.")}` }) }] };
+          return { content: [{ type: "text", text: JSON.stringify({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION, note: "read-only open API — safe to exercise directly" }) }] };
         }
         if (toolName === "submit_vendor") {
           const name = args.name || "";
@@ -940,7 +934,7 @@ export default {
         },
         rate_limit: { requests_per_minute: 100, headers: "RateLimit-Limit / RateLimit-Remaining / RateLimit-Reset" },
         versioning: "URL path /v1/; unversioned paths are aliases; Deprecation + Sunset headers on deprecation",
-        sandbox: "https://documesh-beta.selatan.org",
+        sandbox: url.origin + " (read-only open API — the live service is the sandbox)",
         sdks: { npm: "documesh (SDK + CLI)", install: "npm install documesh", cli: "documesh search <query>" },
         tools: {
           mcp_tools: ["search_docs_across", "explain_error", "list_vendors"],
