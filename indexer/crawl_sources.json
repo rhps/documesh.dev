@@ -1,39 +1,208 @@
 {
-  "digitalocean": {"name": "DigitalOcean", "llms": "https://docs.digitalocean.com/llms.txt", "license": "llms.txt agent-permitted"},
-  "ibmcloud": {"name": "IBM Cloud", "llms": "https://www.ibm.com/docs/en/llms.txt", "license": "llms.txt agent-permitted"},
-  "opentelemetry": {"name": "OpenTelemetry", "repo": "open-telemetry/opentelemetry.io", "docs_path": "content/en/docs", "license": "CC-BY-4.0"},
-  "pulumi": {"name": "Pulumi", "llms": "https://www.pulumi.com/docs/llms.txt", "license": "Apache-2.0"},
-  "sentry": {"name": "Sentry", "llms": "https://docs.sentry.io/llms.txt", "license": "llms.txt agent-permitted"},
-  "langchain": {"name": "LangChain", "repo": "langchain-ai/langchain", "docs_path": "docs", "license": "MIT"},
-  "vercel": {"name": "Vercel", "llms": "https://vercel.com/docs/llms.txt", "license": "llms.txt agent-permitted"},
-  "hugo": {"name": "Hugo", "repo": "gohugoio/hugoDocs", "docs_path": "content/en", "license": "Apache-2.0"},
-  "docusaurus": {"name": "Docusaurus", "repo": "facebook/docusaurus", "docs_path": "docs", "license": "MIT"},
-  "upstash": {"name": "Upstash", "llms": "https://docs.upstash.com/llms.txt", "license": "llms.txt agent-permitted"},
-  "bun": {"name": "Bun", "llms": "https://bun.com/docs/llms.txt", "license": "MIT"},
-  "tensorflow": {"name": "TensorFlow", "repo": "tensorflow/docs", "docs_path": "site/en", "license": "Apache-2.0"},
-  "clickhouse": {"name": "ClickHouse", "repo": "ClickHouse/clickhouse-docs", "docs_path": "docs/en", "license": "Apache-2.0"},
-  "nuxt": {"name": "Nuxt", "llms": "https://nuxt.com/docs/llms.txt", "license": "MIT"},
-  "solid": {"name": "SolidJS", "repo": "solidjs/solid-docs", "docs_path": "src", "license": "MIT"},
-  "vue-core-docs": {"name": "Vue (core)", "repo": "vuejs/docs", "docs_path": "src", "license": "MIT"},
-  "gitea": {"name": "Gitea", "repo": "go-gitea/gitea", "docs_path": "docs/content", "license": "MIT"},
-  "terragrunt": {"name": "Terragrunt", "repo": "gruntwork-io/terragrunt", "docs_path": "docs/src", "license": "MIT"},
-  "argocd": {"name": "Argo CD", "repo": "argoproj/argo-cd", "docs_path": "docs", "license": "Apache-2.0"},
-  "moby": {"name": "Docker (Moby)", "repo": "moby/moby", "docs_path": "docs", "license": "Apache-2.0"},
-  "helm": {"name": "Helm", "repo": "helm/helm", "docs_path": "docs/content/en/docs", "license": "Apache-2.0"},
-  "flux": {"name": "Flux CD", "repo": "fluxcd/flux2", "docs_path": "docs", "license": "Apache-2.0"},
-  "cilium": {"name": "Cilium", "repo": "cilium/cilium", "docs_path": "Documentation", "license": "Apache-2.0"},
-  "temporal": {"name": "Temporal", "llms": "https://docs.temporal.io/llms.txt", "license": "llms.txt agent-permitted"},
-  "kong": {"name": "Kong", "llms": "https://developer.konghq.com/llms.txt", "license": "llms.txt agent-permitted"},
-  "react": {"name": "React", "llms": "https://react.dev/llms.txt", "license": "MIT"},
-  "neovim": {"name": "Neovim", "repo": "neovim/neovim", "docs_path": "runtime/doc", "license": "Apache-2.0"},
-  "netlify": {"name": "Netlify", "llms": "https://docs.netlify.com/llms.txt", "license": "llms.txt agent-permitted"},
-  "elasticsearch": {"name": "Elasticsearch", "llms": "https://www.elastic.co/docs/llms.txt", "license": "Elastic License 2.0 / Apache-2.0 components"},
-  "godot": {"name": "Godot", "repo": "godotengine/godot-docs", "docs_path": "", "license": "MIT"},
-  "electron": {"name": "Electron", "repo": "electron/electron", "docs_path": "docs", "license": "MIT"},
-  "svelte-core": {"name": "Svelte", "llms": "https://svelte.dev/llms.txt", "license": "MIT"},
-  "anthropic": {"name": "Anthropic", "llms": "https://docs.anthropic.com/llms.txt", "license": "llms.txt agent-permitted"},
-  "neon": {"name": "Neon", "llms": "https://neon.com/docs/llms.txt", "license": "llms.txt agent-permitted"},
-  "clerk": {"name": "Clerk", "llms": "https://clerk.com/docs/llms.txt", "license": "llms.txt agent-permitted"},
-  "cloudflare": {"name": "Cloudflare", "llms": "https://developers.cloudflare.com/llms.txt", "license": "CC-BY-4.0"},
-  "nodejs": {"name": "Node.js", "repo": "nodejs/node", "docs_path": "doc/api", "license": "MIT"}
+  "digitalocean": {
+    "name": "DigitalOcean",
+    "llms": "https://docs.digitalocean.com/llms.txt",
+    "license": "llms.txt agent-permitted"
+  },
+  "ibmcloud": {
+    "name": "IBM Cloud",
+    "llms": "https://cloud.ibm.com/docs/llms.txt",
+    "license": "llms.txt agent-permitted"
+  },
+  "opentelemetry": {
+    "name": "OpenTelemetry",
+    "repo": "open-telemetry/opentelemetry.io",
+    "docs_path": "content/en/docs",
+    "license": "CC-BY-4.0"
+  },
+  "pulumi": {
+    "name": "Pulumi",
+    "repo": "pulumi/docs",
+    "branch": "master",
+    "docs_path": "content/docs",
+    "license": "Apache-2.0"
+  },
+  "sentry": {
+    "name": "Sentry",
+    "llms": "https://docs.sentry.io/llms.txt",
+    "license": "llms.txt agent-permitted"
+  },
+  "langchain": {
+    "name": "LangChain",
+    "repo": "langchain-ai/langchain",
+    "docs_path": "docs",
+    "license": "MIT"
+  },
+  "vercel": {
+    "name": "Vercel",
+    "llms": "https://vercel.com/docs/llms.txt",
+    "license": "llms.txt agent-permitted"
+  },
+  "hugo": {
+    "name": "Hugo",
+    "repo": "gohugoio/hugoDocs",
+    "docs_path": "content/en",
+    "license": "Apache-2.0"
+  },
+  "docusaurus": {
+    "name": "Docusaurus",
+    "repo": "facebook/docusaurus",
+    "docs_path": "docs",
+    "license": "MIT"
+  },
+  "upstash": {
+    "name": "Upstash",
+    "llms": "https://docs.upstash.com/llms.txt",
+    "license": "llms.txt agent-permitted"
+  },
+  "bun": {
+    "name": "Bun",
+    "llms": "https://bun.com/docs/llms.txt",
+    "license": "MIT"
+  },
+  "tensorflow": {
+    "name": "TensorFlow",
+    "repo": "tensorflow/docs",
+    "docs_path": "site/en",
+    "license": "Apache-2.0"
+  },
+  "clickhouse": {
+    "name": "ClickHouse",
+    "repo": "ClickHouse/clickhouse-docs",
+    "docs_path": "docs/en",
+    "license": "Apache-2.0"
+  },
+  "nuxt": {
+    "name": "Nuxt",
+    "llms": "https://nuxt.com/docs/llms.txt",
+    "license": "MIT"
+  },
+  "solid": {
+    "name": "SolidJS",
+    "repo": "solidjs/solid-docs",
+    "docs_path": "src",
+    "license": "MIT"
+  },
+  "vue-core-docs": {
+    "name": "Vue (core)",
+    "repo": "vuejs/docs",
+    "docs_path": "src",
+    "license": "MIT"
+  },
+  "gitea": {
+    "name": "Gitea",
+    "repo": "go-gitea/gitea",
+    "docs_path": "docs/content",
+    "license": "MIT"
+  },
+  "terragrunt": {
+    "name": "Terragrunt",
+    "repo": "gruntwork-io/terragrunt",
+    "docs_path": "docs/src",
+    "license": "MIT"
+  },
+  "argocd": {
+    "name": "Argo CD",
+    "repo": "argoproj/argo-cd",
+    "docs_path": "docs",
+    "license": "Apache-2.0"
+  },
+  "moby": {
+    "name": "Docker (Moby)",
+    "repo": "moby/moby",
+    "docs_path": "docs",
+    "license": "Apache-2.0"
+  },
+  "helm": {
+    "name": "Helm",
+    "repo": "helm/helm",
+    "docs_path": "docs/content/en/docs",
+    "license": "Apache-2.0"
+  },
+  "flux": {
+    "name": "Flux CD",
+    "repo": "fluxcd/flux2",
+    "docs_path": "docs",
+    "license": "Apache-2.0"
+  },
+  "cilium": {
+    "name": "Cilium",
+    "repo": "cilium/cilium",
+    "docs_path": "Documentation",
+    "license": "Apache-2.0"
+  },
+  "temporal": {
+    "name": "Temporal",
+    "llms": "https://docs.temporal.io/llms.txt",
+    "license": "llms.txt agent-permitted"
+  },
+  "kong": {
+    "name": "Kong",
+    "llms": "https://developer.konghq.com/llms.txt",
+    "license": "llms.txt agent-permitted"
+  },
+  "react": {
+    "name": "React",
+    "llms": "https://react.dev/llms.txt",
+    "license": "MIT"
+  },
+  "neovim": {
+    "name": "Neovim",
+    "repo": "neovim/neovim",
+    "docs_path": "runtime/doc",
+    "license": "Apache-2.0"
+  },
+  "netlify": {
+    "name": "Netlify",
+    "llms": "https://docs.netlify.com/llms.txt",
+    "license": "llms.txt agent-permitted"
+  },
+  "elasticsearch": {
+    "name": "Elasticsearch",
+    "llms": "https://www.elastic.co/docs/llms.txt",
+    "license": "Elastic License 2.0 / Apache-2.0 components"
+  },
+  "godot": {
+    "name": "Godot",
+    "repo": "godotengine/godot-docs",
+    "docs_path": "",
+    "license": "MIT"
+  },
+  "electron": {
+    "name": "Electron",
+    "repo": "electron/electron",
+    "docs_path": "docs",
+    "license": "MIT"
+  },
+  "svelte-core": {
+    "name": "Svelte",
+    "llms": "https://svelte.dev/llms.txt",
+    "license": "MIT"
+  },
+  "anthropic": {
+    "name": "Anthropic",
+    "llms": "https://docs.anthropic.com/llms.txt",
+    "license": "llms.txt agent-permitted"
+  },
+  "neon": {
+    "name": "Neon",
+    "llms": "https://neon.com/docs/llms.txt",
+    "license": "llms.txt agent-permitted"
+  },
+  "clerk": {
+    "name": "Clerk",
+    "llms": "https://clerk.com/docs/llms.txt",
+    "license": "llms.txt agent-permitted"
+  },
+  "cloudflare": {
+    "name": "Cloudflare",
+    "llms": "https://developers.cloudflare.com/llms.txt",
+    "license": "CC-BY-4.0"
+  },
+  "nodejs": {
+    "name": "Node.js",
+    "repo": "nodejs/node",
+    "docs_path": "doc/api",
+    "license": "MIT"
+  }
 }
