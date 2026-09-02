@@ -1,6 +1,6 @@
 ---
 title: Documesh
-description: Federated developer documentation search across 18 vendors. Powered by WebMCP.
+description: Federated developer documentation search across 47 vendors. Powered by WebMCP.
 canonical: https://documesh.selatan.org/
 last-updated: 2026-09-01
 ---
@@ -10,7 +10,7 @@ last-updated: 2026-09-01
 Documentation that agents can not only read, but operate.
 
 Documesh is an application powered by WebMCP — federated developer documentation
-from 18 vendors, with version-cited, license-attributed answers.
+from 47 vendors, with version-cited, license-attributed answers.
 
 ## Vendors in the mesh
 

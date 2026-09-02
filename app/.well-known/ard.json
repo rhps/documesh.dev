@@ -41,7 +41,7 @@
     {
       "identifier": "urn:air:documesh.selatan.org:api:search",
       "displayName": "Documesh Federated Documentation Search",
-      "description": "Search developer documentation across 18 vendors including Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more. Every result carries vendor, version, license, and canonical source URL.",
+      "description": "Search developer documentation across 47 vendors including Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more. Every result carries vendor, version, license, and canonical source URL.",
       "type": "application/json",
       "url": "https://documesh.selatan.org/search",
       "keywords": ["documentation", "search", "developers", "cloudflare", "kubernetes", "webmcp"],
@@ -55,7 +55,7 @@
     {
       "identifier": "urn:air:documesh.selatan.org:api:explain-error",
       "displayName": "Documesh Error-to-Docs Matching",
-      "description": "Given a log excerpt or error message, find the closest matching documentation sections across 18 vendors. Returns version-cited sections with an honest disclaimer.",
+      "description": "Given a log excerpt or error message, find the closest matching documentation sections across 47 vendors. Returns version-cited sections with an honest disclaimer.",
       "type": "application/json",
       "url": "https://documesh.selatan.org/explain",
       "keywords": ["errors", "debugging", "troubleshooting", "documentation", "webmcp"],

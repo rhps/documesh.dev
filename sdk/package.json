@@ -1,7 +1,7 @@
 {
   "name": "documesh",
   "version": "0.2.0",
-  "description": "Official SDK and CLI for Documesh — federated developer documentation search across 38 vendors (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more). Version-cited, license-attributed results via REST API and MCP.",
+  "description": "Official SDK and CLI for Documesh — federated developer documentation search across 47 vendors (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more). Version-cited, license-attributed results via REST API and MCP.",
   "keywords": [
     "documesh",
     "documentation",

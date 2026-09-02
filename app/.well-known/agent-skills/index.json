@@ -4,7 +4,7 @@
     {
       "name": "search-docs",
       "type": "skill-md",
-      "description": "Search developer documentation across 18 vendors simultaneously",
+      "description": "Search developer documentation across 47 vendors simultaneously",
       "url": "https://documesh.selatan.org/.well-known/agent-skills/search-docs-SKILL.md",
       "digest": "sha256:84cd9afed8620b28e99027bdfef4465a84fad85b5a2de90c8bf61cc8002b97d5"
     },

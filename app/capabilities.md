@@ -9,7 +9,7 @@ last-updated: 2026-09-01
 
 ## search_docs_across (answer)
 
-Federated documentation search across 18 vendors. Results carry vendor, version, license, canonical URL.
+Federated documentation search across 47 vendors. Results carry vendor, version, license, canonical URL.
 
 ## explain_error (answer)
 

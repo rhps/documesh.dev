@@ -2,12 +2,12 @@
 title: Documesh Coverage
 description: Vendors, licenses, legal exclusions
 canonical: https://documesh.selatan.org/coverage.html
-last-updated: 2026-09-01
+last-updated: 2026-09-02
 ---
 
 # Documesh Coverage
 
-18 vendors covered. Full license attribution on every result.
+47 vendors covered. Full license attribution on every result.
 
 ## Covered vendors
 
@@ -18,7 +18,12 @@ Argo CD (Apache-2.0), Helm (Apache-2.0), Flux CD (Apache-2.0), Cilium (Apache-2.
 React (MIT), PyTorch (BSD), TensorFlow (Apache-2.0), LangChain (MIT), Playwright (Apache-2.0),
 ClickHouse (Apache-2.0), Ollama (MIT), Electron (MIT), Hugo (Apache-2.0), Docusaurus (MIT),
 pytest (MIT), Node.js (MIT), Godot (MIT), Neovim (Apache-2.0), Terragrunt (MIT),
-Moby (Apache-2.0), Elasticsearch (Apache-2.0), Svelte (MIT), Vue (MIT), Gitea (MIT)
+Moby (Apache-2.0), Elasticsearch (Apache-2.0), Svelte (MIT), Vue (MIT), Gitea (MIT),
+AWS (llms.txt), DigitalOcean (llms.txt), IBM Cloud (llms.txt), Anthropic (llms.txt),
+Neon (llms.txt), Clerk (llms.txt), Pulumi (llms.txt; SDK Apache-2.0),
+Temporal (llms.txt; core MIT), Kong (llms.txt; Gateway Apache-2.0)
+
+Note: GitLab publishes llms.txt but its .md endpoints block automated fetching (403) — excluded until an agent-permitted markdown path exists. 47 shards are live.
 
 ## Excluded on legal grounds
 

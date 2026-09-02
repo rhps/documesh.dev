@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/skills.json",
   "name": "documesh",
-  "description": "Federated developer documentation search across 18 vendors with version-cited, license-attributed results.",
+  "description": "Federated developer documentation search across 47 vendors with version-cited, license-attributed results.",
   "skills": [
     {
       "name": "search-docs",

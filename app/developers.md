@@ -1,6 +1,6 @@
 # Documesh — Developer Portal
 
-Federated developer documentation search across 38 vendors. Open API — no keys. This page is the markdown twin of https://documesh.selatan.org/developers.html.
+Federated developer documentation search across 47 vendors. Open API — no keys. This page is the markdown twin of https://documesh.selatan.org/developers.html.
 
 ## Quickstart
 

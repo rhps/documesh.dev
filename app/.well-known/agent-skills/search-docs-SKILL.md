@@ -1,6 +1,6 @@
 # search-docs
 
-Search developer documentation across 18 vendors simultaneously.
+Search developer documentation across 47 vendors simultaneously.
 
 ## When to use
 
@@ -10,6 +10,6 @@ Search developer documentation across 18 vendors simultaneously.
 
 ## How it works
 
-Queries a federated index of 17,000+ documentation chunks from 38 vendors.
+Queries a federated index of 17,000+ documentation chunks from 47 vendors.
 Returns ranked excerpts with vendor, version, license, and canonical source URL.
 Every result is deterministic — same query, same results.

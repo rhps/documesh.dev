@@ -1,6 +1,6 @@
 # Documesh
 
-> Federated developer documentation from 18 vendors. Powered by WebMCP.
+> Federated developer documentation from 47 vendors. Powered by WebMCP.
 
 ## When to use Documesh
 

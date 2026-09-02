@@ -1,6 +1,6 @@
 # documesh
 
-Official JavaScript SDK and CLI for [Documesh](https://documesh.selatan.org) — federated developer documentation search across 38 vendors (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more). Every result carries vendor, version, license, and canonical source URL.
+Official JavaScript SDK and CLI for [Documesh](https://documesh.selatan.org) — federated developer documentation search across 47 vendors (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more). Every result carries vendor, version, license, and canonical source URL.
 
 - REST API: open, no keys required
 - MCP server: `https://documesh.selatan.org/mcp` (Streamable HTTP)

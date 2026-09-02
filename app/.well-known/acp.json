@@ -23,7 +23,7 @@
       {
         "id": "docs-search",
         "name": "Federated Documentation Search",
-        "description": "Search developer documentation across 38 vendors; results carry vendor, version, license, and canonical source URL.",
+        "description": "Search developer documentation across 47 vendors; results carry vendor, version, license, and canonical source URL.",
         "endpoint": "/v1/search",
         "transport": "rest",
         "pricing": { "model": "free", "amount": 0, "currency": "USD", "payment_required": false }

@@ -496,7 +496,7 @@ export default {
     if (path === "/.well-known/mcp/server-card.json" || path === "/.well-known/mcp/server-card") {
       return json({
         name: "Documesh MCP Server",
-        description: "Federated developer documentation search across 38 vendors",
+        description: "Federated developer documentation search across 47 vendors",
         version: "0.2.0",
         serverUrl: `${url.origin}/mcp`,
         transport: "streamable-http",
@@ -535,7 +535,7 @@ export default {
         endpoint: `${url.origin}/mcp`,
         transport: "streamable-http",
         protocolVersion: "2025-03-26",
-        description: "Federated developer documentation search across 38 vendors",
+        description: "Federated developer documentation search across 47 vendors",
         instructions: "Call search_docs_across for documentation queries across vendors, explain_error to match error messages or stack traces to docs, list_vendors for the source registry with licenses. POST JSON-RPC 2.0 to /mcp; initialize first.",
         serverInfo: { name: "documesh", version: "0.2.0", title: "Documesh", instructions: "Call search_docs_across for documentation queries, explain_error to match error messages to docs, list_vendors for the source registry." },
         server_card: `${url.origin}/.well-known/mcp/server-card.json`,
@@ -894,7 +894,7 @@ export default {
     if (path === "/" && url.searchParams.get("mode") === "agent") {
       return json({
         name: "Documesh",
-        description: "Federated developer documentation search across 38 vendors",
+        description: "Federated developer documentation search across 47 vendors",
         version: API_VERSION,
         api_base: url.origin,
         capabilities: {

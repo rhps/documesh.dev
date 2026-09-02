@@ -9,7 +9,7 @@
   },
   "info": {
     "title": "Documesh API",
-    "description": "Federated developer documentation search across 18 vendors. Every result carries vendor, version, license, and canonical source URL.",
+    "description": "Federated developer documentation search across 47 vendors. Every result carries vendor, version, license, and canonical source URL.",
     "version": "1.0.0",
     "contact": { "name": "selatan.org", "url": "https://selatan.org", "email": "rhps@selatan.org" },
     "license": { "name": "MIT", "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE" }
@@ -57,7 +57,7 @@
         "operationId": "searchDocsAcross",
         "tags": ["search"],
         "summary": "Federated documentation search",
-        "description": "Search developer documentation across 18 vendors. Every result carries vendor, version, license, and canonical source URL.",
+        "description": "Search developer documentation across 47 vendors. Every result carries vendor, version, license, and canonical source URL.",
         "parameters": [
           { "name": "q", "in": "query", "required": true, "schema": { "type": "string", "minLength": 1 }, "description": "Search query" },
           { "name": "vendors", "in": "query", "schema": { "type": "string" }, "description": "Comma-separated vendor filter (e.g. cloudflare,kubernetes)" },

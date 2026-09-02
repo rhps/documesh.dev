@@ -42,6 +42,16 @@ const VENDOR_META = {
   "svelte-core": { name: "Svelte", license: "MIT", docs_origin: "sveltejs/svelte git-hosted docs" },
   "vue-core-docs": { name: "Vue (core)", license: "MIT", docs_origin: "vuejs/core git-hosted docs" },
   gitea: { name: "Gitea", license: "MIT", docs_origin: "go-gitea/gitea git-hosted docs" },
+  // Tier-1 cloud/AI batch (2026-09-02): llms.txt agent-permitted
+  aws: { name: "AWS", license: "llms.txt agent-permitted", docs_origin: "llms.txt + .md" },
+  digitalocean: { name: "DigitalOcean", license: "llms.txt agent-permitted", docs_origin: "llms.txt + .md" },
+  ibmcloud: { name: "IBM Cloud", license: "llms.txt agent-permitted", docs_origin: "llms.txt + format=markdown" },
+  anthropic: { name: "Anthropic", license: "llms.txt agent-permitted", docs_origin: "llms.txt + .md" },
+  neon: { name: "Neon", license: "llms.txt agent-permitted", docs_origin: "llms.txt + .md" },
+  clerk: { name: "Clerk", license: "llms.txt agent-permitted", docs_origin: "llms.txt + .md" },
+  pulumi: { name: "Pulumi", license: "llms.txt agent-permitted; SDK Apache-2.0", docs_origin: "llms.txt + .md" },
+  temporal: { name: "Temporal", license: "llms.txt agent-permitted; core MIT", docs_origin: "llms.txt + .md" },
+  kong: { name: "Kong", license: "llms.txt agent-permitted; Gateway Apache-2.0", docs_origin: "llms.txt + .md" },
 };
 
 const VENDOR_IDS = Object.keys(VENDOR_META);
