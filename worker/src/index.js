@@ -136,6 +136,31 @@ export default {
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
 
+    // ── Content negotiation: Accept: text/markdown → serve .md twin ──
+    const acceptHeader = request.headers.get("Accept") || "";
+    const wantsMarkdown = acceptHeader.includes("text/markdown");
+
+    // Bot-UA markdown serving: if a known AI bot requests HTML, serve markdown anyway
+    const userAgent = request.headers.get("User-Agent") || "";
+    const isBotUA = /GPTBot|ClaudeBot|ChatGPT-User|PerplexityBot|Google-Extended|Applebot-Extended|ora-agent|DeepSeekBot/i.test(userAgent);
+    const serveMarkdown = wantsMarkdown || isBotUA;
+
+    if (serveMarkdown && !path.endsWith(".md") && !path.startsWith("/api") && !path.startsWith("/search") && !path.startsWith("/explain") && !path.startsWith("/vendors") && !path.startsWith("/health") && !path.startsWith("/ask") && !path.startsWith("/mcp") && !path.startsWith("/.well-known")) {
+      const mdPath = path.replace(/\/$/, "").replace(/^\//, "") || "index";
+      const assetRes = await env.ASSETS.fetch(new Request(`https://internal/${mdPath}.md`));
+      if (assetRes.ok) {
+        const md = await assetRes.text();
+        return new Response(md, {
+          status: 200,
+          headers: {
+            "Content-Type": "text/markdown; charset=utf-8",
+            "Vary": "Accept",
+            ...CORS,
+          },
+        });
+      }
+    }
+
     // API version info at /api and /api/v1
     if (path === "/api" || path === "/api/v1") {
       return json({

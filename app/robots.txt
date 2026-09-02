@@ -1,7 +1,28 @@
 # Documesh — federated developer documentation for humans and AI agents
 # Powered by WebMCP
 
-# ── AI answer & search crawlers (allowed — they cite and refer) ──
+# As a condition of accessing this website, you agree to abide by the following
+# content signals:
+# (a) If a content-signal = yes, you may collect content for the corresponding use.
+# (b) If a content-signal = no, you may not collect content for the corresponding use.
+# (c) If the website operator does not include a content signal for a corresponding
+#     use, the website operator neither grants nor restricts permission via content
+#     signal with respect to the corresponding use.
+#
+# The content signals and their meanings are:
+# search: building a search index and providing search results.
+# ai-input: inputting content into one or more AI models (e.g. RAG, grounding).
+# ai-train: training or fine-tuning AI models.
+#
+# ANY RESTRICTIONS EXPRESSED VIA CONTENT SIGNALS ARE EXPRESS RESERVATIONS OF
+# RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN UNION DIRECTIVE 2019/790.
+
+# ── Allow search + AI input (agents can use our docs) but not AI training ──
+User-agent: *
+Content-Signal: ai-train=no, search=yes, ai-input=yes
+Allow: /
+
+# ── AI answer & search crawlers (explicitly allowed — they cite and refer) ──
 User-agent: GPTBot
 Allow: /
 
@@ -29,7 +50,7 @@ Allow: /
 User-agent: DeepSeekBot
 Allow: /
 
-# ── Training-only crawlers (restricted — we share docs via llms.txt instead) ──
+# ── Training-only crawlers (restricted) ──
 User-agent: CCBot
 Disallow: /
 
@@ -39,11 +60,4 @@ Disallow: /
 User-agent: Diffbot
 Disallow: /
 
-# ── General ──
-User-agent: *
-Allow: /
-
 Sitemap: https://documesh.selatan.org/sitemap.xml
-
-# Content Signals
-# search=yes, ai-train=no
