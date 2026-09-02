@@ -34,6 +34,19 @@
       "routes": [
         { "pattern": "documesh-beta.selatan.org", "custom_domain": true }
       ]
+    },
+    "production": {
+      "name": "documesh-api",
+      "assets": {
+        "binding": "ASSETS",
+        "directory": "./app",
+        "run_worker_first": true
+      },
+      "routes": [
+        { "pattern": "documesh.selatan.org", "custom_domain": true },
+        { "pattern": "documesh.dev", "custom_domain": true },
+        { "pattern": "www.documesh.dev", "custom_domain": true }
+      ]
     }
   }
 }
