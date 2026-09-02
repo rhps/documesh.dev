@@ -6,21 +6,21 @@
       "type": "skill-md",
       "description": "Search developer documentation across 18 vendors simultaneously",
       "url": "https://documesh.selatan.org/.well-known/agent-skills/search-docs-SKILL.md",
-      "digest": "sha256:placeholder-computed-at-deploy"
+      "digest": "sha256:84cd9afed8620b28e99027bdfef4465a84fad85b5a2de90c8bf61cc8002b97d5"
     },
     {
       "name": "explain-error",
       "type": "skill-md",
       "description": "Match error messages to closest documentation sections",
       "url": "https://documesh.selatan.org/.well-known/agent-skills/explain-error-SKILL.md",
-      "digest": "sha256:placeholder-computed-at-deploy"
+      "digest": "sha256:5a1af3b714f954f53a06a82f0e9fc726e728dd274b063918e140fe5a5a1adfb7"
     },
     {
       "name": "list-vendors",
       "type": "skill-md",
       "description": "List all documentation vendors with license info",
       "url": "https://documesh.selatan.org/.well-known/agent-skills/list-vendors-SKILL.md",
-      "digest": "sha256:placeholder-computed-at-deploy"
+      "digest": "sha256:22cc46bbb90bf1f97b0852f7de82410ea747ed1597a0b857612b08b17b45a779"
     }
   ]
 }

@@ -1,79 +1,98 @@
 {
   "specVersion": "0.91",
-  "updated": "2026-09-01",
+  "updated": "2026-09-02",
+  "host": {
+    "displayName": "Documesh",
+    "identifier": "did:web:documesh.selatan.org"
+  },
   "entries": [
     {
-      "identifier": "documesh-search",
+      "identifier": "urn:air:documesh.selatan.org:mcp:documesh",
+      "displayName": "Documesh MCP Server",
+      "description": "Model Context Protocol server exposing federated documentation search, error matching, and vendor lookup as Streamable HTTP tools.",
+      "type": "application/mcp-server-card+json",
+      "url": "https://documesh.selatan.org/.well-known/mcp/server-card.json",
+      "keywords": ["mcp", "modelcontextprotocol", "documentation", "search"],
+      "trustManifest": {
+        "identity": {
+          "name": "Documesh",
+          "url": "https://documesh.selatan.org"
+        },
+        "attestations": [
+          { "type": "license", "value": "MIT", "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE" },
+          { "type": "provenance", "value": "All ingested documentation is from official vendor-published machine interfaces or open-licensed git repositories. No scraping.", "url": "https://documesh.selatan.org/coverage.html" }
+        ]
+      }
+    },
+    {
+      "identifier": "urn:air:documesh.selatan.org:api:search",
       "displayName": "Documesh Federated Documentation Search",
       "description": "Search developer documentation across 18 vendors including Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more. Every result carries vendor, version, license, and canonical source URL.",
-      "mediaType": "application/json",
+      "type": "application/json",
       "url": "https://documesh.selatan.org/search",
       "keywords": ["documentation", "search", "developers", "cloudflare", "kubernetes", "webmcp"],
-      "transport": "http"
+      "trustManifest": {
+        "identity": { "name": "Documesh", "url": "https://documesh.selatan.org" },
+        "attestations": [
+          { "type": "license", "value": "MIT", "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE" }
+        ]
+      }
     },
     {
-      "identifier": "documesh-explain-error",
+      "identifier": "urn:air:documesh.selatan.org:api:explain-error",
       "displayName": "Documesh Error-to-Docs Matching",
       "description": "Given a log excerpt or error message, find the closest matching documentation sections across 18 vendors. Returns version-cited sections with an honest disclaimer.",
-      "mediaType": "application/json",
+      "type": "application/json",
       "url": "https://documesh.selatan.org/explain",
       "keywords": ["errors", "debugging", "troubleshooting", "documentation", "webmcp"],
-      "transport": "http"
+      "trustManifest": {
+        "identity": { "name": "Documesh", "url": "https://documesh.selatan.org" },
+        "attestations": [
+          { "type": "license", "value": "MIT", "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE" }
+        ]
+      }
     },
     {
-      "identifier": "documesh-vendor-registry",
+      "identifier": "urn:air:documesh.selatan.org:api:vendor-registry",
       "displayName": "Documesh Vendor Registry",
       "description": "List all 18 documentation vendors with their license and attribution requirements.",
-      "mediaType": "application/json",
+      "type": "application/json",
       "url": "https://documesh.selatan.org/vendors",
       "keywords": ["vendors", "licenses", "attribution"],
-      "transport": "http"
+      "trustManifest": {
+        "identity": { "name": "Documesh", "url": "https://documesh.selatan.org" },
+        "attestations": [
+          { "type": "license", "value": "MIT", "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE" }
+        ]
+      }
     },
     {
-      "identifier": "documesh-health",
-      "displayName": "Documesh Health Check",
-      "description": "Service health and snapshot date for the Documesh documentation mesh.",
-      "mediaType": "application/json",
-      "url": "https://documesh.selatan.org/health",
-      "keywords": ["health", "status"],
-      "transport": "http"
-    },
-    {
-      "identifier": "documesh-webmcp-app",
-      "displayName": "Documesh WebMCP Chat App",
-      "description": "Interactive chat interface with 3 WebMCP tools registered via document.modelContext.registerTool(). Agent-operable documentation search, error matching, and vendor lookup.",
-      "mediaType": "text/html",
-      "url": "https://documesh.selatan.org/app.html",
-      "keywords": ["webmcp", "agent-tools", "modelcontext", "chat", "documentation"],
-      "transport": "web"
-    },
-    {
-      "identifier": "documesh-openapi",
+      "identifier": "urn:air:documesh.selatan.org:api:openapi",
       "displayName": "Documesh API Specification",
       "description": "OpenAPI 3.0 specification for the Documesh API with typed response schemas.",
-      "mediaType": "application/json",
+      "type": "application/openapi+json",
       "url": "https://documesh.selatan.org/openapi.json",
       "keywords": ["openapi", "api", "specification"],
-      "transport": "http"
-    }
-  ],
-  "trustManifest": {
-    "identity": {
-      "name": "Documesh",
-      "url": "https://documesh.selatan.org",
-      "organization": "selatan.org"
-    },
-    "attestations": [
-      {
-        "type": "license",
-        "value": "MIT",
-        "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE"
-      },
-      {
-        "type": "docs-license",
-        "value": "All ingested documentation is from official vendor-published machine interfaces or open-licensed git repositories. No scraping.",
-        "url": "https://documesh.selatan.org/coverage.html"
+      "trustManifest": {
+        "identity": { "name": "Documesh", "url": "https://documesh.selatan.org" },
+        "attestations": [
+          { "type": "license", "value": "MIT", "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE" }
+        ]
       }
-    ]
-  }
+    },
+    {
+      "identifier": "urn:air:documesh.selatan.org:agent:webmcp-app",
+      "displayName": "Documesh WebMCP Chat App",
+      "description": "Interactive chat interface with 3 WebMCP tools registered via document.modelContext.registerTool(). Agent-operable documentation search, error matching, and vendor lookup.",
+      "type": "text/html",
+      "url": "https://documesh.selatan.org/app.html",
+      "keywords": ["webmcp", "agent-tools", "modelcontext", "chat", "documentation"],
+      "trustManifest": {
+        "identity": { "name": "Documesh", "url": "https://documesh.selatan.org" },
+        "attestations": [
+          { "type": "license", "value": "MIT", "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE" }
+        ]
+      }
+    }
+  ]
 }
