@@ -83,8 +83,14 @@ function jsonRPC(id, error, result) {
   });
 }
 
-export function handleMCPServer(request, env, handleToolCall) {
+export function handleMCPServer(request, env, handleToolCall, options = {}) {
   const sessionId = request.headers.get("Mcp-Session-Id");
+  const serverName = options.serverName || "documesh";
+  const serverTitle = options.serverTitle || "Documesh";
+  const serverDescription = options.serverDescription || "Federated developer documentation search across 38 vendors";
+  const serverInstructions = options.serverInstructions || "Call search_docs_across for documentation queries, explain_error to match error messages to docs, list_vendors for the source registry.";
+  const tools = options.tools || TOOLS;
+  const resources = options.resources || RESOURCES;
 
   // GET = SSE stream for server→client notifications
   if (request.method === "GET") {
@@ -119,7 +125,7 @@ export function handleMCPServer(request, env, handleToolCall) {
         return jsonRPCWithSession(id, null, {
           protocolVersion: agreed,
           capabilities: { tools: { listChanged: true }, resources: { subscribe: false, listChanged: true } },
-          serverInfo: { name: "documesh", version: "0.2.0", title: "Documesh", description: "Federated developer documentation search across 38 vendors", instructions: "Call search_docs_across for documentation queries, explain_error to match error messages to docs, list_vendors for the source registry." },
+          serverInfo: { name: serverName, version: "0.2.0", title: serverTitle, description: serverDescription, instructions: serverInstructions },
           _meta: { ui: { resourceUri: "ui://documesh/search-results" } }
         }, newSessionId);
       } catch (e) {
@@ -137,7 +143,7 @@ export function handleMCPServer(request, env, handleToolCall) {
       let result;
       switch (method) {
         case "tools/list":
-          result = { tools: TOOLS };
+          result = { tools };
           break;
         case "tools/call": {
           const toolName = params?.name;
@@ -146,11 +152,11 @@ export function handleMCPServer(request, env, handleToolCall) {
           break;
         }
         case "resources/list":
-          result = { resources: RESOURCES };
+          result = { resources };
           break;
         case "resources/read": {
           const uri = params?.uri;
-          const resource = RESOURCES.find(r => r.uri === uri);
+          const resource = resources.find(r => r.uri === uri);
           if (!resource) {
             return jsonRPC(id, null, { code: -32602, message: `Resource not found: ${uri}` });
           }

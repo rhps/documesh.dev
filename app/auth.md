@@ -17,6 +17,17 @@ The Documesh API is public. No API keys, tokens, or authentication are needed fo
 
 No registration required. The API is fully open for read access.
 
+## Agent identity (optional)
+
+Agents that want an identity context can call the anonymous identity endpoint:
+
+- **identity_endpoint:** `https://documesh.selatan.org/agent/identity` — returns an anonymous subject, open tier, and rate-limit info. No credentials needed.
+- **claim_endpoint / events_endpoint:** intentionally absent — there are no tokens to claim and no auth events to subscribe to on an open API.
+- **protected_resource_metadata:** `https://documesh.selatan.org/.well-known/oauth-protected-resource`
+- **authorization_server_metadata:** `https://documesh.selatan.org/.well-known/oauth-authorization-server`
+
+Walkthrough: `GET /.well-known/oauth-protected-resource` → `authorization_servers: []` (open API) → `GET /agent/identity` for the anonymous identity context. API responses on entry points also carry `WWW-Authenticate: Bearer resource_metadata="..."` pointing at the protected-resource metadata.
+
 ## Claim
 
 No claims or tokens needed. All data is publicly accessible.
