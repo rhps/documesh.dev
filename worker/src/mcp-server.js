@@ -16,6 +16,13 @@ const TOOLS = [
       },
       required: ["query"]
     },
+    annotations: {
+      title: "Federated documentation search",
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: true,
+    },
     _meta: { ui: { resourceUri: "ui://documesh/search-results" } }
   },
   {
@@ -29,12 +36,26 @@ const TOOLS = [
       },
       required: ["log_excerpt"]
     },
+    annotations: {
+      title: "Error-to-docs matching",
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
     _meta: { ui: { resourceUri: "ui://documesh/error-match" } }
   },
   {
     name: "list_vendors",
     description: "List all vendors in the mesh with license and attribution requirements.",
-    inputSchema: { type: "object", properties: {} }
+    inputSchema: { type: "object", properties: {} },
+    annotations: {
+      title: "Vendor registry",
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    }
   }
 ];
 
@@ -92,11 +113,15 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
   const tools = options.tools || TOOLS;
   const resources = options.resources || RESOURCES;
 
-  // GET = SSE stream for server→client notifications
+  // GET = SSE stream for server→client notifications.
+  // Spec (Streamable HTTP, 2025-03-26 §6.1): if the server accepts GET it
+  // MUST send an `endpoint` event pointing at the URI to POST messages to.
   if (request.method === "GET") {
     const encoder = new TextEncoder();
+    const sid = sessionId || crypto.randomUUID();
     const stream = new ReadableStream({
       start(controller) {
+        controller.enqueue(encoder.encode(`event: endpoint\ndata: ${new URL(request.url).origin}${new URL(request.url).pathname}?sessionId=${sid}\n\n`));
         controller.enqueue(encoder.encode(": keepalive\n\n"));
         const interval = setInterval(() => {
           try { controller.enqueue(encoder.encode(": keepalive\n\n")); } catch {}
@@ -105,7 +130,12 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
       }
     });
     return new Response(stream, {
-      headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache", "Access-Control-Allow-Origin": "*" }
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        "Access-Control-Allow-Origin": "*",
+        "Mcp-Session-Id": sid,
+      }
     });
   }
 
@@ -147,7 +177,23 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
           break;
         case "tools/call": {
           const toolName = params?.name;
+          if (!toolName || typeof toolName !== "string") {
+            return jsonRPC(id, { code: -32602, message: "Invalid params: 'name' is required and must be a string identifying a tool." }, null);
+          }
+          if (!tools.some(t => t.name === toolName)) {
+            return jsonRPC(id, { code: -32602, message: `Unknown tool: ${toolName}. Valid tools: ${tools.map(t => t.name).join(", ")}.` }, null);
+          }
+          const tool = tools.find(t => t.name === toolName);
           const toolArgs = params?.arguments || {};
+          // Validate required arguments against the tool's inputSchema.
+          const required = tool?.inputSchema?.required || [];
+          const missing = required.filter(k => toolArgs[k] === undefined || toolArgs[k] === null || toolArgs[k] === "");
+          if (missing.length) {
+            return jsonRPC(id, { code: -32602, message: `Invalid params: missing required argument(s) for ${toolName}: ${missing.join(", ")}.` }, null);
+          }
+          if (params?.arguments !== undefined && typeof params.arguments !== "object") {
+            return jsonRPC(id, { code: -32602, message: "Invalid params: 'arguments' must be an object." }, null);
+          }
           result = handleToolCall(toolName, toolArgs, env);
           break;
         }

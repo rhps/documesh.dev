@@ -25,6 +25,20 @@
       }
     },
     {
+      "identifier": "urn:air:documesh.selatan.org:mcp:documesh-product",
+      "displayName": "Documesh Product MCP Server",
+      "description": "MCP surface for acting on the Documesh product itself: check service status, submit a documentation source for ingestion review (async job), and inspect the API surface. Distinct from the docs MCP server.",
+      "type": "application/mcp-server-card+json",
+      "url": "https://documesh.selatan.org/mcp/product",
+      "keywords": ["mcp", "product", "service-status", "submit", "actions"],
+      "trustManifest": {
+        "identity": { "name": "Documesh", "url": "https://documesh.selatan.org" },
+        "attestations": [
+          { "type": "license", "value": "MIT", "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE" }
+        ]
+      }
+    },
+    {
       "identifier": "urn:air:documesh.selatan.org:api:search",
       "displayName": "Documesh Federated Documentation Search",
       "description": "Search developer documentation across 18 vendors including Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more. Every result carries vendor, version, license, and canonical source URL.",

@@ -363,6 +363,29 @@ export default {
       });
     }
 
+    // Sandbox discovery + verification. The staging environment at
+    // documesh-beta.selatan.org runs the same Worker with the same index;
+    // agents can exercise the full API there with zero production impact.
+    if (path === "/sandbox" || path === "/v1/sandbox") {
+      const beta = "https://documesh-beta.selatan.org";
+      let betaOk = false;
+      try {
+        const probe = await fetch(`${beta}/health`, { signal: AbortSignal.timeout(5000) });
+        betaOk = probe.ok;
+      } catch {}
+      return json({
+        sandbox: {
+          base: beta,
+          healthy: betaOk,
+          description: "Full mirror of the production API on isolated infrastructure. Same endpoints, same contract, no production data or limits.",
+          identical_surface: true,
+          try: [`${beta}/search?q=edge+functions`, `${beta}/explain?error=OOMKilled`, `${beta}/mcp`],
+          production_base: url.origin,
+        },
+        usage: "Point any production request at the sandbox base to test agents and integrations safely.",
+      });
+    }
+
     // MCP server card
     if (path === "/.well-known/mcp/server-card.json" || path === "/.well-known/mcp/server-card") {
       return json({
