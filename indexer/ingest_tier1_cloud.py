@@ -30,7 +30,7 @@ BASE = Path(__file__).resolve().parent.parent
 CHUNKS_DIR = BASE / "data" / "chunks"
 UA = {"User-Agent": "Mozilla/5.0 (compatible; documesh-indexer/1.0)"}
 CHUNK_TARGET = 1800
-MAX_PAGES = 45          # per vendor — keeps build tractable
+MAX_PAGES = 400         # per vendor — politeness-delayed crawl, no artificial cap
 HEADING_RE = re.compile(r"^(#{1,4})\s+(.+?)\s*$", re.M)
 SNAPSHOT_DATE = time.strftime("%Y-%m-%d")
 

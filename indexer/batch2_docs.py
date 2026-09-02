@@ -17,7 +17,7 @@ BASE = Path(__file__).resolve().parent.parent
 CHUNKS_DIR = BASE / "data" / "chunks"
 UA = {"User-Agent": "Mozilla/5.0 (docs-mesh indexer)"}
 HEADING_RE = re.compile(r"^(#{1,4})\s+(.+?)\s*$", re.M)
-MAX = 60
+MAX = 400
 
 
 def fetch(url, timeout=25, redirects=5):

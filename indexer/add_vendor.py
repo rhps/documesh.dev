@@ -301,7 +301,7 @@ def main():
     p.add_argument("--base-url", help="Base URL for P1/P3 page links")
     p.add_argument("--license", required=True, help="License SPDX (e.g. 'MIT', 'Apache-2.0', 'llms.txt agent-permitted')")
     p.add_argument("--license-url", default="", help="URL to license file")
-    p.add_argument("--cap", type=int, default=60, help="Max pages to crawl")
+    p.add_argument("--cap", type=int, default=400, help="Max pages to crawl")
     p.add_argument("--include", default="", help="Comma-separated include filters for P4")
     p.add_argument("--exclude", default="changelog,_test,cmdref", help="Comma-separated exclude filters")
     args = p.parse_args()
