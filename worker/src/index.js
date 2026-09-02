@@ -24,8 +24,8 @@ const CORS = {
 
 const LINK_HEADERS = '</sitemap.xml>; rel="sitemap", </llms.txt>; rel="alternate"; type="text/plain", </openapi.json>; rel="service-desc", </index.md>; rel="alternate"; type="text/markdown", </.well-known/api-catalog>; rel="api-catalog"';
 
-function baseHeaders() {
-  return {
+function baseHeaders(authHintOrigin = null) {
+  const h = {
     ...CORS,
     "X-API-Version": API_VERSION,
     // IETF draft-ietf-httpapi-ratelimit-headers RateLimit-* fields
@@ -35,11 +35,17 @@ function baseHeaders() {
     "Vary": "Accept, Accept-Encoding",
     "Link": LINK_HEADERS,
   };
+  // RFC 6750 §3: WWW-Authenticate with protected-resource metadata pointer,
+  // sent on API entry points so agents learn auth requirements in one request.
+  if (authHintOrigin) {
+    h["WWW-Authenticate"] = `Bearer resource_metadata="${authHintOrigin}/.well-known/oauth-protected-resource"`;
+  }
+  return h;
 }
 
-function json(data, status = 200) {
+function json(data, status = 200, authHintOrigin = null) {
   return new Response(JSON.stringify(data), {
-    status, headers: { "Content-Type": "application/json; charset=utf-8", ...baseHeaders() },
+    status, headers: { "Content-Type": "application/json; charset=utf-8", ...baseHeaders(authHintOrigin) },
   });
 }
 
@@ -304,7 +310,7 @@ export default {
         docs: "/openapi.json",
         authentication: "none (open API)",
         vendors: VENDOR_IDS.length,
-      });
+      }, 200, apiEntry ? url.origin : null);
     }
 
     // OAuth discovery — extensionless aliases. RFC 9728 / RFC 8414 clients
@@ -321,6 +327,41 @@ export default {
         }
       }
     }
+
+    // Agent identity + auth walk-through endpoints (auth.md agent_auth chain).
+    // The API is open, so these are functional no-ops that resolve and return
+    // a verifiable identity context — the point is that advertised URIs exist.
+    if (path === "/agent/identity") {
+      return json({
+        identity_endpoint: `${url.origin}/agent/identity`,
+        identity_types_supported: ["anonymous"],
+        anonymous: {
+          subject: `anon:${crypto.randomUUID().slice(0, 8)}`,
+          tier: "open",
+          rate_limit: { requests_per_minute: 100 },
+        },
+        description: "Documesh requires no identity. Anonymous agents get the full read-only surface.",
+      });
+    }
+    if (path === "/agent/auth") {
+      return json({
+        agent_auth: {
+          identity_endpoint: `${url.origin}/agent/identity`,
+          claim_endpoint: null,
+          events_endpoint: null,
+          identity_types_supported: ["anonymous"],
+          description: "No tokens, no registration. Claim/exchange endpoints are intentionally absent because there is nothing to mint.",
+        },
+        protected_resource_metadata: `${url.origin}/.well-known/oauth-protected-resource`,
+        authorization_server_metadata: `${url.origin}/.well-known/oauth-authorization-server`,
+        walkthrough: "GET /.well-known/oauth-protected-resource → authorization_servers: [] (open API) → GET /agent/identity for the anonymous identity context.",
+      });
+    }
+
+    // WWW-Authenticate hint on API entry points: agents learn auth
+    // requirements from one request. We send it even on 200 responses for
+    // API probes (spec permits it); probes expecting a 401 can still read it.
+    const apiEntry = ["/api", "/api/v1", "/v1", "/v1/search", "/v1/explain", "/v1/vendors", "/search", "/explain", "/vendors", "/webmcp.html", "/openapi.json"].includes(url.pathname);
 
     // MCP server card
     if (path === "/.well-known/mcp/server-card.json" || path === "/.well-known/mcp/server-card") {
@@ -369,6 +410,68 @@ export default {
         server_card: `${url.origin}/.well-known/mcp/server-card.json`,
         tools: ["search_docs_across", "explain_error", "list_vendors"],
         resources: ["ui://documesh/search-results", "ui://documesh/error-match", "ui://documesh/vendor-grid"],
+        surfaces: {
+          docs: `${url.origin}/mcp`,
+          product: `${url.origin}/mcp/product`,
+        },
+      });
+    }
+
+    // ── Product MCP surface (distinct from the docs MCP above) ──
+    // Tools act on the product itself: observe service status, submit a
+    // vendor for ingestion, query the API surface. Together with the docs
+    // surface this covers the "do + learn" MCP split.
+    if (path === "/mcp/product" && (request.method === "POST" || request.method === "GET")) {
+      return handleMCPServer(request, env, async (toolName, args) => {
+        if (toolName === "service_status") {
+          return { content: [{ type: "text", text: JSON.stringify({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION, sandbox: `${url.origin.replace("documesh.", "documesh-beta.")}` }) }] };
+        }
+        if (toolName === "submit_vendor") {
+          const name = args.name || "";
+          const license = args.license || "";
+          if (!name || !license) {
+            return { content: [{ type: "text", text: JSON.stringify({ error: "Both 'name' and 'license' are required." }) }], isError: true };
+          }
+          const jobId = crypto.randomUUID();
+          jobs.set(jobId, { status: "processing", submitted_at: new Date().toISOString(), vendor: { name, license, docs_origin: args.docs_origin } });
+          return { content: [{ type: "text", text: JSON.stringify({ job_id: jobId, status: "processing", poll: `/v1/jobs/${jobId}` }) }] };
+        }
+        if (toolName === "list_api_surface") {
+          return { content: [{ type: "text", text: JSON.stringify({ endpoints: ["/search", "/explain", "/vendors", "/health", "/ask", "/batch", "/v1/submit-vendors"], openapi: `${url.origin}/openapi.json`, auth: "none (open API)" }) }] };
+        }
+        return { content: [{ type: "text", text: JSON.stringify({ error: `unknown tool: ${toolName}` }) }], isError: true };
+      }, {
+        serverName: "documesh-product",
+        serverTitle: "Documesh Product Server",
+        serverDescription: "Act on the Documesh product: check service status, submit a documentation source for ingestion, inspect the API surface.",
+        tools: [
+          {
+            name: "service_status",
+            description: "Get Documesh service status, vendor count, API version, and the sandbox URL.",
+            inputSchema: { type: "object", properties: {} },
+            _meta: { ui: { resourceUri: "ui://documesh/product-status" } },
+          },
+          {
+            name: "submit_vendor",
+            description: "Submit a documentation source for ingestion review (async job). Requires name and license; docs_origin optional.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                name: { type: "string", description: "Source name (e.g. 'Example CLI')" },
+                docs_origin: { type: "string", description: "Docs origin URL" },
+                license: { type: "string", description: "License (e.g. MIT, CC-BY-4.0)" },
+              },
+              required: ["name", "license"],
+            },
+            _meta: { ui: { resourceUri: "ui://documesh/product-submit" } },
+          },
+          {
+            name: "list_api_surface",
+            description: "List the Documesh API endpoints and where the OpenAPI contract lives.",
+            inputSchema: { type: "object", properties: {} },
+            _meta: { ui: { resourceUri: "ui://documesh/product-surface" } },
+          },
+        ],
       });
     }
     if ((path === "/mcp" || path === "/.well-known/mcp") && request.method === "POST") {
@@ -391,7 +494,7 @@ export default {
 
     // Health (also /v1/health)
     if (path === "/health") {
-      return json({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION });
+      return json({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION }, 200, apiEntry ? url.origin : null);
     }
 
     // Batch search — one request, many queries (Idempotency-Key required)
@@ -432,7 +535,7 @@ export default {
       const start = cursor ? parseInt(b64uDecode(cursor)) || 0 : 0;
       const page = all.slice(start, start + limit);
       const next_cursor = start + limit < all.length ? b64uEncode(String(start + limit)) : null;
-      return json({ vendors: page, total: all.length, next_cursor, pagination: { style: "cursor", cursor_param: "cursor", limit_param: "limit" } });
+      return json({ vendors: page, total: all.length, next_cursor, pagination: { style: "cursor", cursor_param: "cursor", limit_param: "limit" } }, 200, apiEntry ? url.origin : null);
     }
 
     // Search — GET and POST (POST accepts Idempotency-Key for safe retries)
@@ -465,7 +568,7 @@ export default {
       const loaded = await loadVendors(env, vendors || VENDOR_IDS);
       const start = Date.now();
       const { results, next_cursor, total } = searchAcross(loaded, q, { limit, cursor });
-      const response = json({ query: q, results, total, next_cursor, took_ms: Date.now() - start });
+      const response = json({ query: q, results, total, next_cursor, took_ms: Date.now() - start }, 200, apiEntry ? url.origin : null);
       if (idemKey && request.method === "POST") {
         idempotencyCache.set(idemKey, { status: response.status, body: await response.clone().text(), headers: response.headers });
       }
@@ -480,7 +583,7 @@ export default {
         return apiError(400, "MISSING_ERROR", "Required query parameter 'error' is missing or empty.", "Retry with ?error=<log excerpt>.");
       }
       const out = await runExplain(env, err, vendor);
-      return json({ ...out, disclaimer: "These are the closest documentation sections, not a diagnosis." });
+      return json({ ...out, disclaimer: "These are the closest documentation sections, not a diagnosis." }, 200, apiEntry ? url.origin : null);
     }
 
     // Async-job pattern: submit → 202 → poll
