@@ -55,7 +55,8 @@ const TOOLS = [
       destructiveHint: false,
       idempotentHint: true,
       openWorldHint: false,
-    }
+    },
+    _meta: { ui: { resourceUri: "ui://documesh/vendor-grid" } }
   }
 ];
 
