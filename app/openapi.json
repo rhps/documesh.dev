@@ -1,59 +1,123 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.0.3",
   "info": {
     "title": "Documesh API",
     "description": "Federated developer documentation search across 18 vendors. Every result carries vendor, version, license, and canonical source URL.",
-    "version": "0.2.0"
+    "version": "1.0.0",
+    "contact": { "name": "selatan.org", "url": "https://selatan.org", "email": "rhps@selatan.org" },
+    "license": { "name": "MIT", "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE" }
   },
-  "servers": [{ "url": "https://documesh.selatan.org" }],
+  "servers": [
+    { "url": "https://documesh.selatan.org", "description": "Production" },
+    { "url": "https://documesh-beta.selatan.org", "description": "Staging (beta)" }
+  ],
+  "tags": [
+    { "name": "search", "description": "Documentation search operations" },
+    { "name": "errors", "description": "Error-to-documentation matching" },
+    { "name": "registry", "description": "Vendor and license registry" },
+    { "name": "system", "description": "System operations" }
+  ],
   "paths": {
     "/health": {
       "get": {
+        "operationId": "healthCheck",
+        "tags": ["system"],
         "summary": "Service health check",
-        "responses": { "200": { "description": "Service status and snapshot date" } }
-      }
-    },
-    "/search": {
-      "get": {
-        "summary": "Federated documentation search",
-        "description": "Search across Cloudflare, Netlify, Vercel, Kubernetes, Bun, Stripe, Sentry, OpenTelemetry, Argo CD, Helm, Flux, Cilium, React, PyTorch, TensorFlow, LangChain, Playwright, ClickHouse, Ollama, Electron, Hugo, Docusaurus, pytest, Node.js, Godot, Neovim, Terragrunt, Moby, Svelte, Vue, Gitea and more. Every result carries vendor, version, license, and canonical source URL.",
-        "parameters": [
-          { "name": "q", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Search query" },
-          { "name": "vendors", "in": "query", "schema": { "type": "string" }, "description": "Comma-separated vendor filter" },
-          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 5, "max": 20 }, "description": "Max results" }
-        ],
+        "description": "Returns service status, vendor count, and API version.",
         "responses": {
           "200": {
-            "description": "Ranked search results with provenance",
+            "description": "Service is healthy",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "results": { "type": "array", "items": { "$ref": "#/components/schemas/SearchResult" } },
-                    "snapshot_date": { "type": "string" }
-                  }
-                }
+                "schema": { "$ref": "#/components/schemas/HealthResponse" }
               }
             }
           }
         }
       }
     },
+    "/search": {
+      "get": {
+        "operationId": "searchDocsAcross",
+        "tags": ["search"],
+        "summary": "Federated documentation search",
+        "description": "Search developer documentation across 18 vendors. Every result carries vendor, version, license, and canonical source URL.",
+        "parameters": [
+          { "name": "q", "in": "query", "required": true, "schema": { "type": "string", "minLength": 1 }, "description": "Search query" },
+          { "name": "vendors", "in": "query", "schema": { "type": "string" }, "description": "Comma-separated vendor filter (e.g. cloudflare,kubernetes)" },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 5, "minimum": 1, "maximum": 20 }, "description": "Max results" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ranked search results",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SearchResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing query parameter",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      }
+    },
     "/explain": {
       "get": {
+        "operationId": "explainError",
+        "tags": ["errors"],
         "summary": "Error-to-documentation matching",
+        "description": "Given a log excerpt, find the closest matching documentation sections. Returns top-3 diversified results with an honest disclaimer.",
         "parameters": [
-          { "name": "error", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Error message or log excerpt" },
+          { "name": "error", "in": "query", "required": true, "schema": { "type": "string", "minLength": 1 }, "description": "Error message or log excerpt" },
           { "name": "vendor", "in": "query", "schema": { "type": "string" }, "description": "Optional vendor filter" }
         ],
-        "responses": { "200": { "description": "Closest matching doc sections with disclaimer" } }
+        "responses": {
+          "200": {
+            "description": "Matched documentation sections",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExplainResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing error parameter",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
       }
     },
     "/vendors": {
       "get": {
-        "summary": "Vendor registry with licenses",
-        "responses": { "200": { "description": "List of vendors with license details" } }
+        "operationId": "listVendors",
+        "tags": ["registry"],
+        "summary": "Vendor registry",
+        "description": "List all documentation vendors in the mesh with license and attribution requirements.",
+        "responses": {
+          "200": {
+            "description": "Vendor registry",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VendorsResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "healthCheck",
+        "tags": ["system"],
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HealthResponse" } } }
+          }
+        }
       }
     }
   },
@@ -61,18 +125,86 @@
     "schemas": {
       "SearchResult": {
         "type": "object",
+        "required": ["vendor", "version", "title", "source_url", "license", "last_updated", "score"],
         "properties": {
-          "vendor": { "type": "string" },
-          "version": { "type": "string" },
-          "title": { "type": "string" },
-          "heading_path": { "type": "string" },
-          "source_url": { "type": "string", "format": "uri" },
+          "chunk_id": { "type": "string", "description": "Unique chunk identifier" },
+          "vendor": { "type": "string", "description": "Vendor ID (e.g. cloudflare, netlify)" },
+          "version": { "type": "string", "description": "Docs version (e.g. latest, 1.32)" },
+          "title": { "type": "string", "description": "Section title" },
+          "heading_path": { "type": "string", "description": "Breadcrumb path (e.g. 'Build > Environment variables')" },
+          "path": { "type": "string", "description": "Relative content path" },
+          "source_url": { "type": "string", "format": "uri", "description": "Canonical vendor page URL" },
+          "license": { "type": "string", "description": "License of the source documentation" },
+          "attribution": { "type": "string", "description": "Attribution text for this source" },
+          "last_updated": { "type": "string", "format": "date", "description": "Last updated date" },
+          "score": { "type": "number", "description": "Relevance score" }
+        }
+      },
+      "SearchResponse": {
+        "type": "object",
+        "required": ["query", "results", "took_ms"],
+        "properties": {
+          "query": { "type": "string" },
+          "results": { "type": "array", "items": { "$ref": "#/components/schemas/SearchResult" } },
+          "took_ms": { "type": "integer" },
+          "snapshot_date": { "type": "string", "format": "date" }
+        }
+      },
+      "ExplainResponse": {
+        "type": "object",
+        "required": ["extracted_signatures", "matches", "disclaimer"],
+        "properties": {
+          "extracted_signatures": { "type": "array", "items": { "type": "string" } },
+          "matches": { "type": "array", "items": { "$ref": "#/components/schemas/SearchResult" } },
+          "disclaimer": { "type": "string", "description": "Always present — honest abstention notice" }
+        }
+      },
+      "VendorsResponse": {
+        "type": "object",
+        "required": ["vendors", "total"],
+        "properties": {
+          "vendors": { "type": "array", "items": { "$ref": "#/components/schemas/Vendor" } },
+          "total": { "type": "integer" }
+        }
+      },
+      "Vendor": {
+        "type": "object",
+        "required": ["id", "name", "license"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
           "license": { "type": "string" },
-          "attribution": { "type": "string" },
-          "last_updated": { "type": "string", "format": "date" },
-          "score": { "type": "number" }
-        },
-        "required": ["vendor", "title", "source_url", "license", "last_updated"]
+          "license_url": { "type": "string", "format": "uri" },
+          "docs_origin": { "type": "string" },
+          "attribution_required": { "type": "boolean" }
+        }
+      },
+      "HealthResponse": {
+        "type": "object",
+        "required": ["ok", "service", "vendors", "version"],
+        "properties": {
+          "ok": { "type": "boolean" },
+          "service": { "type": "string" },
+          "vendors": { "type": "integer" },
+          "version": { "type": "string" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": ["code", "message", "status"],
+            "properties": {
+              "code": { "type": "string", "description": "Machine-readable error code (e.g. MISSING_QUERY)" },
+              "message": { "type": "string", "description": "Human-readable error message" },
+              "status": { "type": "integer", "description": "HTTP status code" },
+              "timestamp": { "type": "string", "format": "date-time" },
+              "version": { "type": "string", "description": "API version" }
+            }
+          }
+        }
       }
     }
   }

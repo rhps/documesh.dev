@@ -1,0 +1,11 @@
+{
+  "issuer": "https://documesh.selatan.org",
+  "response_types_supported": [],
+  "grant_types_supported": [],
+  "token_endpoint_auth_methods_supported": ["none"],
+  "agent_auth": {
+    "identity_endpoint": null,
+    "identity_types_supported": ["anonymous"],
+    "description": "Documesh API is fully open. No authentication tokens are issued or required."
+  }
+}
