@@ -730,7 +730,11 @@ export default {
 
     // Health (also /v1/health)
     if (path === "/health") {
-      return json({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION }, 200, apiEntry ? url.origin : null);
+      return json({
+        ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION,
+        search_backend: env.SEARCH_BACKEND || "shards",
+        d1_bound: !!env.DB,
+      }, 200, apiEntry ? url.origin : null);
     }
 
     // Batch search — one request, many queries (Idempotency-Key required)
