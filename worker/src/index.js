@@ -296,6 +296,11 @@ export default {
       return apiError(404, "not_found", `No markdown twin at ${url.pathname}`, "See /llms.txt for the content index.");
     }
 
+    // WWW-Authenticate hint on API entry points: agents learn auth
+    // requirements from one request. We send it even on 200 responses for
+    // API probes (spec permits it); probes expecting a 401 can still read it.
+    const apiEntry = ["/api", "/api/v1", "/v1", "/v1/search", "/v1/explain", "/v1/vendors", "/search", "/explain", "/vendors", "/webmcp.html", "/openapi.json"].includes(url.pathname);
+
     // API version info at /api and /api/v1
     if (path === "/api" || path === "/api/v1" || url.pathname === "/v1") {
       return json({
@@ -357,11 +362,6 @@ export default {
         walkthrough: "GET /.well-known/oauth-protected-resource → authorization_servers: [] (open API) → GET /agent/identity for the anonymous identity context.",
       });
     }
-
-    // WWW-Authenticate hint on API entry points: agents learn auth
-    // requirements from one request. We send it even on 200 responses for
-    // API probes (spec permits it); probes expecting a 401 can still read it.
-    const apiEntry = ["/api", "/api/v1", "/v1", "/v1/search", "/v1/explain", "/v1/vendors", "/search", "/explain", "/vendors", "/webmcp.html", "/openapi.json"].includes(url.pathname);
 
     // MCP server card
     if (path === "/.well-known/mcp/server-card.json" || path === "/.well-known/mcp/server-card") {
