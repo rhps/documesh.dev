@@ -67,6 +67,10 @@ Full attribution on every response.
 - [API area](https://documesh.selatan.org/api/llms.txt): REST + MCP surface, versioning, errors, auth
 - [Developers area](https://documesh.selatan.org/developers/llms.txt): portal, quickstart, rate limits, SDKs
 
+## Source Code
+
+- [GitHub — rhps/documesh.dev](https://github.com/rhps/documesh.dev): the complete source repository (MIT). Contains [AGENTS.md](https://github.com/rhps/documesh.dev/blob/main/AGENTS.md) with instructions for AI coding agents, and [.cursorrules](https://github.com/rhps/documesh.dev/blob/main/.cursorrules) for Cursor/Windsurf.
+
 ## License
 
 MIT — see LICENSE in the repository.
