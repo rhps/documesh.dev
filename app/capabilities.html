@@ -97,7 +97,7 @@
 <header class="max-w-5xl mx-auto px-6 pt-16 pb-10">
   <h1 class="text-4xl font-bold tracking-tight">Capabilities</h1>
   <p class="mt-4 text-slate-600 max-w-2xl leading-relaxed">
-    Everything Documesh can do — as experienced by a human in the browser, and as
+    Everything Documesh can do, both as experienced by a human in the browser and as
     callable by an AI agent through WebMCP. Every capability is a real tool with a
     schema, deterministic behavior, and full source attribution.
   </p>
@@ -116,7 +116,7 @@
       One query, fifteen sources. The mesh fans your query out across every source in parallel,
       merges the results by relevance, and returns them with the full provenance trail:
       which source, which version, the canonical URL, the license, and when it was last updated.
-      Filter by source when you already know whose docs you need.
+      You can also filter by source when you already know whose docs you need.
     </p>
     <div class="mt-5 grid md:grid-cols-2 gap-4">
       <div class="border border-slate-100 rounded-xl p-5">
@@ -139,7 +139,7 @@
     <div class="mt-4 flex gap-3 text-sm">
       <a href="app.html?q=edge%20functions%20environment%20variables" class="text-[#4b5320] hover:text-[#6a7337]">Try it live →</a>
       <span class="text-slate-300">|</span>
-      <span class="text-slate-400">Indexed sections: 4,186 across 47 sources</span>
+      <span class="text-slate-400">Indexed sections: 36,000+ across 47 sources</span>
     </div>
   </section>
 
@@ -153,8 +153,8 @@
     </div>
     <h2 class="text-2xl font-bold mt-3">🩺 Errors-to-Docs Bridge</h2>
     <p class="mt-3 text-slate-600 leading-relaxed">
-      Paste any stack trace or error log. The bridge extracts error signatures —
-      exception classes, k8s state reasons, errno codes, exit codes — and matches them
+      Paste any stack trace or error log. The bridge extracts error signatures
+      (exception classes, k8s state reasons, errno codes, exit codes) and matches them
       against the index, returning the three closest official documentation sections
       with a fix sketch. Crucially, it <strong>declines to guess</strong>: every answer
       carries an explicit disclaimer that this is a closest-match, not a diagnosis, and
@@ -189,7 +189,7 @@ matches:
     </div>
     <h2 class="text-2xl font-bold mt-3">🏷 Version awareness</h2>
     <p class="mt-3 text-slate-600 leading-relaxed">
-      Kubernetes docs are indexed per release branch (v1.32, v1.29) — so a question about
+      Kubernetes docs are indexed per release branch (v1.32, v1.29), so a question about
       pod lifecycle returns <em>both</em> versions side-by-side, letting you spot behavioral
       changes between releases. Every answer names its version. This is the anti-"2021 blog
       post" feature: the mesh grounds answers in the exact version you run.
@@ -217,7 +217,7 @@ kubernetes v1.29 → "Container restart policy"   score 236.4
       Ingestion is gated on legality, not convenience. Sources enter the mesh only via
       (a) permissive licenses (CC-BY-4.0, MIT, Apache-2.0) or (b) official agent interfaces
       (llms.txt, `.md` endpoints) that explicitly permit machine consumption. Sources with
-      unclear or restrictive terms — Terraform (BUSL), Grafana (AGPL) — are deliberately
+      unclear or restrictive terms, such as Terraform (BUSL) or Grafana (AGPL), are deliberately
       excluded. Every single response names its license; the
       <a href="coverage.html" class="text-[#4b5320] hover:text-[#6a7337]">coverage page</a>
       documents both sides of that line.
@@ -233,11 +233,11 @@ kubernetes v1.29 → "Container restart policy"   score 236.4
     </div>
     <h2 class="text-2xl font-bold mt-3">🤖 Fully agent-operable</h2>
     <p class="mt-3 text-slate-600 leading-relaxed">
-      Everything above is exposed as WebMCP tools — structured, schema-described
+      Everything above is exposed as WebMCP tools: structured, schema-described
       capabilities registered in the page via <code class="bg-slate-100 px-1 rounded text-sm">document.modelContext.registerTool()</code>.
       A visitor's existing agent (ChatGPT in the in-app browser, or any MCP-compatible agent in Chrome)
-      discovers and calls them directly. The human sees the same cited sources on screen —
-      collaboration, not automation.
+      discovers and calls them directly. The human sees the same cited sources on screen,
+      so it feels like collaboration rather than automation.
     </p>
     <a href="webmcp.html" class="inline-block mt-4 text-sm bg-slate-900 text-white px-4 py-2 rounded-lg">Full WebMCP tool reference →</a>
   </section>
