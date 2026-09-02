@@ -38,12 +38,14 @@ Any WebMCP-compatible agent can discover and call these tools when the page is o
 
 ## Developer Portal
 
+- [Developer Resources Index](https://documesh.selatan.org/resources.html): every developer resource — API docs, OpenAPI spec, MCP server, auth docs, SDK/CLI, sandbox
 - [Developer Portal](https://documesh.selatan.org/developers.html): API docs, quickstart, OpenAPI spec
 - [OpenAPI Spec](https://documesh.selatan.org/openapi.json): Machine-readable API specification
 - [Authentication](https://documesh.selatan.org/auth.md): Auth guide (open API, no keys needed)
 
 ## Pages
 
+- [Developer Resources](https://documesh.selatan.org/resources.html): one-page index of all API docs, OpenAPI, MCP, auth, SDK, and sandbox links
 - [Home](https://documesh.selatan.org/): Overview and stats
 - [App](https://documesh.selatan.org/app.html): Chat interface with WebMCP tools
 - [Capabilities](https://documesh.selatan.org/capabilities.html): Tool documentation with schemas
