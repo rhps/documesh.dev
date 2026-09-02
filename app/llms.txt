@@ -62,8 +62,8 @@ Full attribution on every response.
 
 ## Modular llms.txt per product area
 
-- [API area](https://documesh.selatan.org/llms.api.txt): REST + MCP surface, versioning, errors, auth
-- [Developers area](https://documesh.selatan.org/llms.developers.txt): portal, quickstart, rate limits, SDKs
+- [API area](https://documesh.selatan.org/api/llms.txt): REST + MCP surface, versioning, errors, auth
+- [Developers area](https://documesh.selatan.org/developers/llms.txt): portal, quickstart, rate limits, SDKs
 
 ## License
 
