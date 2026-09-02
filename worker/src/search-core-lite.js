@@ -34,7 +34,7 @@ const VENDOR_META = {
   docusaurus: { name: "Docusaurus", license: "MIT", docs_origin: "git-hosted docs" },
   pytest: { name: "pytest", license: "MIT", docs_origin: "git-hosted docs" },
   nodejs: { name: "Node.js", license: "MIT", docs_origin: "nodejs/node git-hosted docs" },
-  "godot-docs": { name: "Godot", license: "MIT", docs_origin: "godot-docs git-hosted docs" },
+  godot: { name: "Godot", license: "MIT", docs_origin: "godotengine/godot git-hosted docs" },
   neovim: { name: "Neovim", license: "Apache-2.0", docs_origin: "neovim/neovim git-hosted docs" },
   terragrunt: { name: "Terragrunt", license: "MIT", docs_origin: "gruntwork-io/terragrunt git-hosted docs" },
   moby: { name: "Docker (Moby)", license: "Apache-2.0", docs_origin: "moby/moby git-hosted docs" },
