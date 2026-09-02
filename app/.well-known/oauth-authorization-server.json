@@ -4,10 +4,16 @@
   "grant_types_supported": [],
   "token_endpoint_auth_methods_supported": ["none"],
   "agent_auth": {
+    "skill": "https://documesh.selatan.org/auth.md",
+    "register_uri": null,
     "identity_endpoint": "https://documesh.selatan.org/agent/identity",
     "claim_endpoint": null,
     "events_endpoint": null,
     "identity_types_supported": ["anonymous"],
+    "anonymous": {
+      "credential_types_supported": ["none"],
+      "claim_uri": "https://documesh.selatan.org/agent/identity"
+    },
     "description": "Documesh API is fully open. No authentication tokens are issued or required. The identity endpoint returns an anonymous identity context for agents that want one."
   },
   "protected_resource_metadata": "https://documesh.selatan.org/.well-known/oauth-protected-resource",

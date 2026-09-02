@@ -1,47 +1,57 @@
-# Documesh API Authentication
+# Documesh auth.md — Agent Registration & Authentication
 
-Documesh uses an open API model — no authentication required for read-only access.
+auth.md — how AI agents register with and authenticate to the Documesh API.
+
+## TL;DR
+
+Documesh is a **fully open, read-only API**. No API keys, no tokens, no registration. Start calling endpoints immediately. Agents that want a machine-verified identity context can use the anonymous identity flow below.
 
 ## Discover
 
-The Documesh API is public. No API keys, tokens, or authentication are needed for any GET endpoint.
+- **Audience:** AI agents and automated developer tools consuming the documentation search API.
+- **API surface:** `/search`, `/explain`, `/vendors`, `/health`, `/ask`, `/batch`, `/mcp` — all open.
+- **OpenAPI contract:** https://documesh.selatan.org/openapi.json
+- **Protected Resource Metadata (RFC 9728):** https://documesh.selatan.org/.well-known/oauth-protected-resource
+  - `resource`: https://documesh.selatan.org
+  - `authorization_servers`: `[]` (open resource — no authorization server required)
+  - `scopes_supported`: `[]`
+  - `bearer_methods_supported`: `["header"]`
+- **Authorization Server metadata:** https://documesh.selatan.org/.well-known/oauth-authorization-server (issuer matches the resource above)
 
 ## Pick a method
 
 | Method | When to use |
 |--------|-------------|
-| anonymous | All GET endpoints (/search, /explain, /vendors, /health) — no auth needed |
-| service_auth | Future write operations (vendor submission API) — not yet implemented |
+| `anonymous` | Everything. All endpoints are open for read-only use — no credentials needed. |
+| `service_auth` | Reserved for future write operations (vendor submission API). Not yet issued; see the async submission endpoint for the current flow. |
 
 ## Register
 
-No registration required. The API is fully open for read access.
+No registration or provisioning endpoint is required. There is no account system.
 
-## Agent identity (optional)
+If you want a formal registration discovery block, it is published in the Authorization Server metadata:
+
+- **`agent_auth.skill`**: `https://documesh.selatan.org/auth.md` (this document)
+- **`agent_auth.register_uri`**: not applicable — nothing to register for read access
+
+## Agent identity (optional, anonymous flow)
 
 Agents that want an identity context can call the anonymous identity endpoint:
 
-- **identity_endpoint:** `https://documesh.selatan.org/agent/identity` — returns an anonymous subject, open tier, and rate-limit info. No credentials needed.
-- **claim_endpoint / events_endpoint:** intentionally absent — there are no tokens to claim and no auth events to subscribe to on an open API.
-- **protected_resource_metadata:** `https://documesh.selatan.org/.well-known/oauth-protected-resource`
-- **authorization_server_metadata:** `https://documesh.selatan.org/.well-known/oauth-authorization-server`
+- **identity_endpoint:** `https://documesh.selatan.org/agent/identity`
+- **identity_types_supported:** `["anonymous"]`
+- **anonymous.credential_types_supported:** `["none"]`
+- **claim_uri:** `https://documesh.selatan.org/agent/identity` — returns an anonymous subject, open tier, and rate-limit info. No credentials needed.
+- **claim_endpoint / events_endpoint:** intentionally absent — there are no tokens to claim and no auth events on an open API.
 
-Walkthrough: `GET /.well-known/oauth-protected-resource` → `authorization_servers: []` (open API) → `GET /agent/identity` for the anonymous identity context. API responses on entry points also carry `WWW-Authenticate: Bearer resource_metadata="..."` pointing at the protected-resource metadata.
-
-## Claim
-
-No claims or tokens needed. All data is publicly accessible.
-
-## Exchange
-
-N/A — no token exchange required for read-only access.
+Walkthrough: `GET /.well-known/oauth-protected-resource` → `authorization_servers: []` (open API) → `GET /agent/identity` for the anonymous identity context. API entry-point responses also carry `WWW-Authenticate: Bearer resource_metadata="..."` pointing at the protected-resource metadata.
 
 ## Use the access_token
 
-N/A — no access tokens required. Simply call any GET endpoint directly:
+N/A — no access tokens required. Call any endpoint directly:
 
 ```bash
-curl "https://documesh.selatan.org/search?q=edge+functions"
+curl "https://documesh.selatan.org/v1/search?q=edge+functions"
 ```
 
 ## Errors
@@ -50,10 +60,10 @@ curl "https://documesh.selatan.org/search?q=edge+functions"
 |--------|---------|
 | 400 | Missing or invalid parameter |
 | 404 | Resource not found (see response body for suggestions) |
-| 429 | Rate limited (100 req/hour) — check X-RateLimit-Remaining header |
+| 429 | Rate limited (100 req/min) — check RateLimit-Remaining header |
 | 500 | Internal server error |
 
-All errors return JSON: `{ "error": { "code": "...", "message": "...", "status": N } }`
+All errors return JSON: `{ "error": { "code", "message", "status", "resolution" } }`
 
 ## Revocation
 
