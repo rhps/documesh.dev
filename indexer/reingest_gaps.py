@@ -147,9 +147,15 @@ def md_url_of(u):
     return u + ".md" if not u.endswith(".md") else u
 
 def crawl_llms_catalog(vendor, index_url, cap, lic, exclude=r"/(blog|changelog)(/|$)", prioritize=None):
-    """Generic llms.txt crawler: exact-URL dedupe, optional prioritization."""
+    """Generic llms.txt crawler: exact-URL dedupe, optional prioritization.
+    Relative catalog links are resolved against the catalog URL's directory."""
+    from urllib.parse import urljoin
     print(f"    [{vendor}] fetching catalog {index_url}")
     links = parse_llms(fetch(index_url))
+    _cat_base = index_url.rsplit("/", 1)[0] + "/"
+    for l in links:
+        if not l["url"].startswith("http"):
+            l["url"] = urljoin(_cat_base, l["url"])
     if prioritize:
         links.sort(key=lambda l: 0 if prioritize(l["url"]) else 1)
     seen, out = set(), []
