@@ -1,0 +1,21 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://documesh.selatan.org/.well-known/api-catalog",
+      "service-desc": [
+        { "href": "https://documesh.selatan.org/openapi.json", "type": "application/json" }
+      ],
+      "service-doc": [
+        { "href": "https://documesh.selatan.org/developers.html", "type": "text/html" }
+      ],
+      "status": [
+        { "href": "https://documesh.selatan.org/health" }
+      ],
+      "item": [
+        { "href": "https://documesh.selatan.org/search", "title": "Federated documentation search" },
+        { "href": "https://documesh.selatan.org/explain", "title": "Error-to-docs matching" },
+        { "href": "https://documesh.selatan.org/vendors", "title": "Vendor registry" }
+      ]
+    }
+  ]
+}

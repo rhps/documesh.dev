@@ -22,7 +22,7 @@ function baseHeaders() {
     "X-API-Version": API_VERSION,
     "X-RateLimit-Limit": "100",
     "X-RateLimit-Remaining": "99",
-    "Link": '</sitemap.xml>; rel="sitemap", </llms.txt>; rel="alternate"; type="text/plain", </openapi.json>; rel="service-desc", </index.md>; rel="alternate"; type="text/markdown"',
+    "Link": '</sitemap.xml>; rel="sitemap", </llms.txt>; rel="alternate"; type="text/plain", </openapi.json>; rel="service-desc", </index.md>; rel="alternate"; type="text/markdown", </.well-known/api-catalog>; rel="api-catalog"',
   };
 }
 

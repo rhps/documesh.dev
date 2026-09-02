@@ -1,0 +1,12 @@
+{
+  "schemamap": [
+    {
+      "type": "application/ld+json",
+      "url": "https://documesh.selatan.org/"
+    },
+    {
+      "type": "application/json",
+      "url": "https://documesh.selatan.org/openapi.json"
+    }
+  ]
+}
