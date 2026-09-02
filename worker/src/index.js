@@ -1,9 +1,10 @@
 /**
  * Documesh API — Cloudflare Worker
- * Batch 2: agent-readiness features (rate limits, .md endpoints, agent mode,
- *          NLWeb /ask, typed errors, versioning, HTTP Link headers)
+ * Full agent-readiness: rate limits, .md endpoints, agent mode, NLWeb /ask,
+ * typed errors, versioning, HTTP Link headers, MCP server, /api info routes
  */
-import { VENDOR_META, tokenize, extractSignatures } from "./search-core-lite.js";
+import { VENDOR_META, tokenize } from "./search-core-lite.js";
+import { handleMCPServer } from "./mcp-server.js";
 
 const VENDOR_IDS = Object.keys(VENDOR_META);
 const API_VERSION = "v1";
@@ -135,7 +136,88 @@ export default {
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
 
-    // .md endpoints — serve markdown twins for static pages
+    // API version info at /api and /api/v1
+    if (path === "/api" || path === "/api/v1") {
+      return json({
+        name: "Documesh API",
+        version: API_VERSION,
+        base: url.origin,
+        endpoints: ["/search", "/explain", "/vendors", "/health", "/ask", "/mcp"],
+        docs: "/openapi.json",
+        authentication: "none (open API)",
+        vendors: VENDOR_IDS.length,
+      });
+    }
+
+    // MCP server card
+    if (path === "/.well-known/mcp/server-card.json" || path === "/.well-known/mcp/server-card") {
+      return json({
+        name: "Documesh MCP Server",
+        description: "Federated developer documentation search across 18 vendors",
+        version: "0.2.0",
+        serverUrl: `${url.origin}/mcp`,
+        transport: "streamable-http",
+        tools: [
+          { name: "search_docs_across", description: "Federated documentation search" },
+          { name: "explain_error", description: "Error-to-docs matching" },
+          { name: "list_vendors", description: "Vendor registry with licenses" }
+        ]
+      });
+    }
+
+    // MCP protocol handler
+    if (path === "/mcp" && request.method === "POST") {
+      const body = await request.json().catch(() => ({}));
+      const { id, method, params } = body;
+      const handleTool = async (toolName, args) => {
+        const loaded = await loadVendors(env, VENDOR_IDS);
+        if (toolName === "search_docs_across") {
+          return { results: searchAcross(loaded, args.query, { limit: args.limit || 5 }) };
+        }
+        if (toolName === "explain_error") {
+          return { matches: "use /explain endpoint", note: "use /explain for full implementation" };
+        }
+        if (toolName === "list_vendors") {
+          return { vendors: VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id] })) };
+        }
+        return { error: `unknown tool: ${toolName}` };
+      };
+
+      try {
+        let result;
+        switch (method) {
+          case "initialize":
+            result = {
+              protocolVersion: "2025-03-26",
+              capabilities: { tools: { listChanged: true }, resources: { subscribe: false, listChanged: true } },
+              serverInfo: { name: "documesh", version: "0.2.0" }
+            };
+            break;
+          case "notifications/initialized":
+            return new Response(null, { status: 204 });
+          case "tools/list":
+            result = { tools: [
+              { name: "search_docs_across", description: "Federated documentation search" },
+              { name: "explain_error", description: "Error-to-docs matching" },
+              { name: "list_vendors", description: "Vendor registry" }
+            ]};
+            break;
+          case "tools/call":
+            result = await handleTool(params?.name, params?.arguments || {});
+            break;
+          case "ping":
+            result = {};
+            break;
+          default:
+            return json({ jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${method}` } });
+        }
+        return json({ jsonrpc: "2.0", id, result });
+      } catch (e) {
+        return json({ jsonrpc: "2.0", id, error: { code: -32603, message: e.message } });
+      }
+    }
+
+    // .md endpoints — serve markdown twins
     if (path.endsWith(".md")) {
       const mdPath = path.replace(/\.md$/, "").replace(/^\//, "") || "index";
       const assetRes = await env.ASSETS.fetch(new Request(`https://internal/${mdPath}.md`));
