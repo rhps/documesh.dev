@@ -1,0 +1,178 @@
+{
+ "netlify": {
+  "catalog": 105,
+  "pct": 99.0
+ },
+ "aws": {
+  "catalog": 1289,
+  "pct": 0.6
+ },
+ "digitalocean": {
+  "catalog": 293,
+  "pct": 26.6
+ },
+ "ibmcloud": {
+  "catalog": 197,
+  "pct": 15.7
+ },
+ "anthropic": {
+  "catalog": 679,
+  "pct": 1.9
+ },
+ "neon": {
+  "catalog": 246,
+  "pct": 7.7
+ },
+ "clerk": {
+  "catalog": 2489,
+  "pct": 4.3
+ },
+ "pulumi": {
+  "catalog": 33,
+  "pct": 0.0
+ },
+ "temporal": {
+  "catalog": 105,
+  "pct": 9.5
+ },
+ "kong": {
+  "catalog": 2354,
+  "pct": 0.5
+ },
+ "elysia": {
+  "catalog": 89,
+  "pct": 7.9
+ },
+ "turso": {
+  "catalog": 286,
+  "pct": 10.5
+ },
+ "sentry": {
+  "catalog": 125,
+  "pct": 12.8
+ },
+ "stripe": {
+  "catalog": 463,
+  "pct": 1.1
+ },
+ "bun": {
+  "catalog": null,
+  "pct": null
+ },
+ "upstash": {
+  "catalog": null,
+  "pct": null
+ },
+ "hono": {
+  "catalog": 89,
+  "pct": 30.3
+ },
+ "cloudflare": {
+  "catalog": 3062,
+  "pct": 12.4
+ },
+ "react": {
+  "catalog": null,
+  "pct": null
+ },
+ "pytorch": {
+  "catalog": null,
+  "pct": null
+ },
+ "tensorflow": {
+  "catalog": null,
+  "pct": null
+ },
+ "ollama": {
+  "catalog": null,
+  "pct": null
+ },
+ "electron": {
+  "catalog": null,
+  "pct": null
+ },
+ "hugo": {
+  "catalog": null,
+  "pct": null
+ },
+ "pytest": {
+  "catalog": null,
+  "pct": null
+ },
+ "nodejs": {
+  "catalog": null,
+  "pct": null
+ },
+ "godot": {
+  "catalog": null,
+  "pct": null
+ },
+ "neovim": {
+  "catalog": null,
+  "pct": null
+ },
+ "terragrunt": {
+  "catalog": null,
+  "pct": null
+ },
+ "moby": {
+  "catalog": null,
+  "pct": null
+ },
+ "elasticsearch": {
+  "catalog": null,
+  "pct": null
+ },
+ "opentelemetry": {
+  "catalog": null,
+  "pct": null
+ },
+ "argocd": {
+  "catalog": null,
+  "pct": null
+ },
+ "helm": {
+  "catalog": null,
+  "pct": null
+ },
+ "flux": {
+  "catalog": null,
+  "pct": null
+ },
+ "cilium": {
+  "catalog": null,
+  "pct": null
+ },
+ "gitea": {
+  "catalog": null,
+  "pct": null
+ },
+ "playwright": {
+  "catalog": null,
+  "pct": null
+ },
+ "docusaurus": {
+  "catalog": null,
+  "pct": null
+ },
+ "svelte-core": {
+  "catalog": null,
+  "pct": null
+ },
+ "vue-core-docs": {
+  "catalog": null,
+  "pct": null
+ },
+ "langchain": {
+  "catalog": null,
+  "pct": null
+ },
+ "clickhouse": {
+  "catalog": null,
+  "pct": null
+ },
+ "kubernetes": {
+  "catalog": null,
+  "pct": null
+ }
+}
