@@ -12,7 +12,7 @@ from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
 CHUNKS_DIR = BASE / "data" / "chunks"
-OUT_DIR = BASE.parent / "app" / "shards"
+OUT_DIR = BASE / "app" / "shards"
 
 STOP = set("a an and are as at be by for from has have how in is it its of on or that the to was what when where which who why will with".split())
 TOKEN_RE = re.compile(r"[a-z0-9]{2,}")
@@ -20,6 +20,29 @@ TOKEN_RE = re.compile(r"[a-z0-9]{2,}")
 
 def tokenize(text):
     return [t for t in TOKEN_RE.findall(text.lower()) if t not in STOP]
+
+
+def make_snippet(content: str, max_chars: int = 280) -> str:
+    """Extract a quotable plaintext snippet from a chunk for LLM consumption.
+
+    Strips markdown formatting; prefers the first prose paragraph over
+    headings/code fences; hard-truncates at word boundary with ellipsis.
+    """
+    text = re.sub(r"`{1,3}([^`]*)`{1,3}", r"\1", content)      # inline code / fences
+    text = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", text)            # images
+    text = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)        # links → text
+    text = re.sub(r"^#{1,6}\s+", "", text, flags=re.M)          # headings
+    text = re.sub(r"[ \t]+", " ", text)
+    paras = [p.strip() for p in text.split("\n\n") if p.strip()]
+    # prefer first paragraph that isn't a nav/header artifact
+    snippet = next((p for p in paras
+                    if len(p) > 80 and not re.match(r"^(last updated|copy as markdown|\|)", p, re.I)),
+                   paras[0] if paras else "")
+    snippet = snippet.replace("\n", " ").strip()
+    if len(snippet) <= max_chars:
+        return snippet
+    cut = snippet[:max_chars].rsplit(" ", 1)[0]
+    return cut + "…"
 
 
 def build():
@@ -43,6 +66,7 @@ def build():
                 "title": c["title"], "heading_path": c["heading_path"], "path": c["path"],
                 "source_url": c["source_url"], "license": c["license"],
                 "attribution": c["attribution"], "last_updated": c["last_updated"],
+                "snippet": make_snippet(c.get("content", "")),
             })
             toks = tokenize(c["title"] + " " + c["heading_path"]) * 3 + tokenize(c["content"])
             for tok, tf in Counter(toks).items():
