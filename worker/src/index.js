@@ -538,7 +538,7 @@ export default {
         ],
       });
     }
-    if ((path === "/mcp" || path === "/.well-known/mcp") && request.method === "POST") {
+    if (path === "/mcp" || path === "/.well-known/mcp") {
       return handleMCPServer(request, env, async (toolName, args) => {
         if (toolName === "search_docs_across") {
           const loaded = await loadVendors(env, args.vendors?.length ? args.vendors : VENDOR_IDS);
