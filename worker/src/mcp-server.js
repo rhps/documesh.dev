@@ -110,11 +110,17 @@ export function handleMCPServer(request, env, handleToolCall) {
     // Track session
     if (method === "initialize") {
       const newSessionId = crypto.randomUUID();
+      // Echo the client's requested protocol version when we support it,
+      // otherwise fall back to our latest supported version (spec behavior).
+      const SUPPORTED = ["2025-06-18", "2025-03-26", "2024-11-05"];
+      const requested = params?.protocolVersion;
+      const agreed = SUPPORTED.includes(requested) ? requested : SUPPORTED[0];
       try {
         return jsonRPCWithSession(id, null, {
-          protocolVersion: "2025-03-26",
+          protocolVersion: agreed,
           capabilities: { tools: { listChanged: true }, resources: { subscribe: false, listChanged: true } },
-          serverInfo: { name: "documesh", version: "0.2.0", description: "Federated developer documentation search across 18 vendors" }
+          serverInfo: { name: "documesh", version: "0.2.0", title: "Documesh", description: "Federated developer documentation search across 38 vendors", instructions: "Call search_docs_across for documentation queries, explain_error to match error messages to docs, list_vendors for the source registry." },
+          _meta: { ui: { resourceUri: "ui://documesh/search-results" } }
         }, newSessionId);
       } catch (e) {
         return jsonRPC(id, { code: -32603, message: e.message }, null);
