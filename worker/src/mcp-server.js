@@ -274,7 +274,17 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
     } catch (e) {
       return jsonRPC(id, { code: -32603, message: e.message }, null);
     }
-  }).catch(e => jsonRPC(null, { code: -32700, message: "Parse error" }, null));
+  }).catch(e => jsonRPCParseError());
+}
+
+// JSON-RPC parse errors over Streamable HTTP should be HTTP 400 (the server
+// rejected the request itself), not 200 — scanners and clients treat 200+error
+// as a successful call and may misreport the handshake as failed.
+function jsonRPCParseError() {
+  return new Response(JSON.stringify({
+    jsonrpc: "2.0", id: null,
+    error: { code: -32700, message: "Parse error: request body is not valid JSON" },
+  }), { status: 400, headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } });
 }
 
 function jsonRPCWithSession(id, error, result, sessionId) {
