@@ -468,6 +468,12 @@ export default {
         server_card: `${url.origin}/.well-known/mcp/server-card.json`,
         tools: ["search_docs_across", "explain_error", "list_vendors"],
         resources: ["ui://documesh/search-results", "ui://documesh/error-match", "ui://documesh/vendor-grid"],
+        extensions: { "io.modelcontextprotocol/ui": { version: "0.1.0" } },
+        mcp_apps: {
+          supported: true,
+          ui_resources: 3,
+          tools_with_ui: ["search_docs_across", "explain_error"],
+        },
         surfaces: {
           docs: `${url.origin}/mcp`,
           product: `${url.origin}/mcp/product`,
