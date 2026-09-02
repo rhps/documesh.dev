@@ -44,7 +44,7 @@
         {
           "binding": "DB",
           "database_name": "documesh-search-staging",
-          "database_id": "STAGING_DB_ID_PLACEHOLDER"
+          "database_id": "ebf178ef-b7c6-4f92-920c-6d95528b9f19"
         }
       ],
       "vars": {
