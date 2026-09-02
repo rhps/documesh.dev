@@ -550,6 +550,70 @@ export default {
       });
     }
 
+    // ── A2A (Agent2Agent) JSON-RPC endpoint ──
+    // Card at /.well-known/agent-card.json advertises this URL. Skills map
+    // to the docs mesh: search, explain, vendors.
+    if (path === "/a2a" && request.method === "POST") {
+      const body = await request.json().catch(() => ({}));
+      const { id, method, params } = body;
+      if (method === "message/send") {
+        const text = params?.message?.parts?.find(p => p.kind === "text" || p.type === "text")?.text
+          || params?.message?.parts?.[0]?.text || "";
+        const taskId = crypto.randomUUID();
+        let replyText;
+        try {
+          if (!text.trim()) {
+            replyText = "Ask me to search developer documentation across vendors, or paste an error message and I will find the closest official docs.";
+          } else if (/license|attribution|vendor list|sources/i.test(text)) {
+            const r = await fetch(`${url.origin}/vendors`).then(r => r.json());
+            replyText = `Documesh indexes ${r.total} sources. Licenses:\n` + (r.vendors || [])
+              .slice(0, 10).map(v => `- ${v.id}: ${v.license}`).join("\n")
+              + (r.total > 10 ? `\n… and ${r.total - 10} more. Full registry: ${url.origin}/vendors` : "");
+          } else if (/error|exception|crash|trace|ECONN|ENOENT|OOM|BackOff|EADDR/i.test(text) && text.length > 24) {
+            const r = await fetch(`${url.origin}/explain?error=${encodeURIComponent(text.slice(0, 400))}`).then(r => r.json());
+            replyText = (r.matches || []).length
+              ? `Closest official documentation sections:\n` + r.matches.map(m =>
+                  `- [${m.vendor}${m.version ? "@" + m.version : ""}] ${m.title}\n  ${m.source_url} (${m.license})`).join("\n")
+                + `\n\n${r.disclaimer || ""}`
+              : "No matching documentation sections found. Try the full search: " + url.origin + `/search?q=${encodeURIComponent(text.slice(0, 80))}`;
+          } else {
+            const r = await fetch(`${url.origin}/search?q=${encodeURIComponent(text.slice(0, 200))}&limit=3`).then(r => r.json());
+            replyText = (r.results || []).length
+              ? `Top documentation results:\n` + r.results.map(x =>
+                  `- [${x.vendor}${x.version ? "@" + x.version : ""}] ${x.title}\n  ${x.source_url} (${x.license})`).join("\n")
+              : `No results for "${text.slice(0, 60)}". Covered vendors: ${url.origin}/vendors`;
+          }
+        } catch (e) {
+          replyText = `Documesh search error: ${e.message}. API status: ${url.origin}/health`;
+        }
+        return json({
+          jsonrpc: "2.0",
+          id,
+          result: {
+            id: taskId,
+            contextId: params?.message?.contextId || crypto.randomUUID(),
+            status: { state: "completed" },
+            kind: "task",
+            artifacts: [{
+              artifactId: crypto.randomUUID(),
+              name: "documesh-response",
+              parts: [{ kind: "text", text: replyText }],
+            }],
+            history: [{
+              role: "agent",
+              parts: [{ kind: "text", text: replyText }],
+              messageId: crypto.randomUUID(),
+              kind: "message",
+            }],
+          },
+        });
+      }
+      if (method === "tasks/get") {
+        return json({ jsonrpc: "2.0", id, error: { code: -32001, message: "Tasks are completed synchronously; no persisted task state." } });
+      }
+      return json({ jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${method}. Supported: message/send, tasks/get.` } });
+    }
+
     // Health (also /v1/health)
     if (path === "/health") {
       return json({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION }, 200, apiEntry ? url.origin : null);

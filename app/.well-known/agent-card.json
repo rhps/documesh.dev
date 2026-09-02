@@ -1,30 +1,49 @@
 {
   "name": "Documesh",
   "description": "Federated developer documentation search across 38 vendors. Search, error matching, and vendor lookup with version-cited, license-attributed results. Powered by WebMCP.",
-  "version": "0.2.1",
-  "url": "https://documesh.selatan.org",
+  "version": "1.0.0",
+  "protocolVersion": "1.0",
+  "url": "https://documesh.selatan.org/a2a",
+  "preferredTransport": "JSONRPC",
+  "supportedInterfaces": [
+    { "url": "https://documesh.selatan.org/a2a", "transport": "JSONRPC" },
+    { "url": "https://documesh.selatan.org/a2a", "transport": "HTTP+JSON" }
+  ],
   "provider": {
     "organization": "selatan.org",
     "url": "https://selatan.org"
   },
   "capabilities": {
-    "federated_search": {
-      "description": "Search documentation across 18 vendors simultaneously",
-      "vendors": ["cloudflare", "netlify", "vercel", "kubernetes", "bun", "elysia", "turso", "upstash", "sentry", "stripe", "hono", "nuxt", "solid", "opentelemetry", "argocd", "helm", "flux", "cilium", "react", "pytorch", "tensorflow", "langchain", "playwright", "clickhouse", "ollama", "electron", "hugo", "docusaurus", "pytest", "nodejs", "godot-docs", "neovim", "terragrunt", "moby", "elasticsearch", "svelte-core", "vue-core-docs", "gitea"]
-    },
-    "error_matching": {
-      "description": "Match error messages and stack traces to documentation sections",
-      "examples": ["CrashLoopBackOff", "EADDRINUSE", "OOMKilled", "ERR_MODULE_NOT_FOUND"]
-    },
-    "license_attribution": {
-      "description": "Every result carries license and attribution for the source documentation"
-    }
+    "streaming": false,
+    "pushNotifications": false,
+    "extendedAgentCard": false
   },
-  "defaultInputModes": ["text"],
-  "defaultOutputModes": ["text", "json"],
+  "securitySchemes": [],
+  "security": [],
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain", "application/json"],
   "skills": [
-    { "id": "federated-doc-search", "name": "Federated Documentation Search", "description": "Search developer docs across multiple vendors simultaneously", "tags": ["search", "documentation", "multi-vendor"] },
-    { "id": "error-docs-matching", "name": "Error to Docs Matching", "description": "Match error messages to relevant documentation sections", "tags": ["errors", "debugging", "docs"] },
-    { "id": "vendor-license-lookup", "name": "Vendor License Lookup", "description": "Look up vendor license and attribution information", "tags": ["license", "vendor", "legal"] }
-  ]
+    {
+      "id": "federated-doc-search",
+      "name": "Federated Documentation Search",
+      "description": "Search developer documentation across 38 vendors (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more) simultaneously. Every result carries vendor, version, license, and canonical source URL.",
+      "tags": ["search", "documentation", "multi-vendor", "developers"],
+      "examples": ["edge functions environment variables", "kubernetes pod security context"]
+    },
+    {
+      "id": "error-docs-matching",
+      "name": "Error to Docs Matching",
+      "description": "Match an error message or stack trace to the closest official documentation sections, with an honest disclaimer — never a fake diagnosis.",
+      "tags": ["errors", "debugging", "docs"],
+      "examples": ["CrashLoopBackOff in pod docs-api", "EADDRINUSE port 3000"]
+    },
+    {
+      "id": "vendor-license-lookup",
+      "name": "Source License Lookup",
+      "description": "Look up license and attribution information for every documentation source in the mesh.",
+      "tags": ["license", "attribution", "legal"],
+      "examples": ["what license is the Cloudflare docs under?"]
+    }
+  ],
+  "supportsAuthenticatedExtendedCard": false
 }
