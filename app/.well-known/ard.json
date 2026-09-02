@@ -3,35 +3,35 @@
   "updated": "2026-09-01",
   "entries": [
     {
-      "urn": "urn:air:documesh:api:search",
-      "name": "Documesh Federated Documentation Search",
+      "identifier": "documesh-search",
+      "displayName": "Documesh Federated Documentation Search",
       "description": "Search developer documentation across 18 vendors including Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more. Every result carries vendor, version, license, and canonical source URL.",
       "mediaType": "application/json",
       "url": "https://documesh.selatan.org/search",
-      "keywords": ["documentation", "search", "developers", "cloudflare", "kubernetes", "webmcp", "react", "pytorch", "tensorflow"],
+      "keywords": ["documentation", "search", "developers", "cloudflare", "kubernetes", "webmcp"],
       "transport": "http"
     },
     {
-      "urn": "urn:air:documesh:api:explain-error",
-      "name": "Documesh Error-to-Docs Matching",
+      "identifier": "documesh-explain-error",
+      "displayName": "Documesh Error-to-Docs Matching",
       "description": "Given a log excerpt or error message, find the closest matching documentation sections across 18 vendors. Returns version-cited sections with an honest disclaimer.",
       "mediaType": "application/json",
       "url": "https://documesh.selatan.org/explain",
-      "keywords": ["errors", "debugging", "troubleshooting", "documentation", "webmcp", "crashloopbackoff"],
+      "keywords": ["errors", "debugging", "troubleshooting", "documentation", "webmcp"],
       "transport": "http"
     },
     {
-      "urn": "urn:air:documesh:api:vendors",
-      "name": "Documesh Vendor Registry",
+      "identifier": "documesh-vendor-registry",
+      "displayName": "Documesh Vendor Registry",
       "description": "List all 18 documentation vendors with their license and attribution requirements.",
       "mediaType": "application/json",
       "url": "https://documesh.selatan.org/vendors",
-      "keywords": ["vendors", "licenses", "attribution", "registry"],
+      "keywords": ["vendors", "licenses", "attribution"],
       "transport": "http"
     },
     {
-      "urn": "urn:air:documesh:api:health",
-      "name": "Documesh Health Check",
+      "identifier": "documesh-health",
+      "displayName": "Documesh Health Check",
       "description": "Service health and snapshot date for the Documesh documentation mesh.",
       "mediaType": "application/json",
       "url": "https://documesh.selatan.org/health",
@@ -39,8 +39,8 @@
       "transport": "http"
     },
     {
-      "urn": "urn:air:documesh:webmcp:app",
-      "name": "Documesh WebMCP Chat App",
+      "identifier": "documesh-webmcp-app",
+      "displayName": "Documesh WebMCP Chat App",
       "description": "Interactive chat interface with 3 WebMCP tools registered via document.modelContext.registerTool(). Agent-operable documentation search, error matching, and vendor lookup.",
       "mediaType": "text/html",
       "url": "https://documesh.selatan.org/app.html",
@@ -48,8 +48,8 @@
       "transport": "web"
     },
     {
-      "urn": "urn:air:documesh:spec:openapi",
-      "name": "Documesh API Specification",
+      "identifier": "documesh-openapi",
+      "displayName": "Documesh API Specification",
       "description": "OpenAPI 3.0 specification for the Documesh API with typed response schemas.",
       "mediaType": "application/json",
       "url": "https://documesh.selatan.org/openapi.json",
