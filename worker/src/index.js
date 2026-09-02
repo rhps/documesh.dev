@@ -785,8 +785,12 @@ export default {
 
     // JSON 404 for API-ish paths and JSON Accept — required so agents get
     // structured errors; keep markdown 404 elsewhere (agent-friendly-404).
-    const apiPath404 = (url.pathname.startsWith("/api/") || url.pathname.startsWith("/v1/") || url.pathname.startsWith("/v2/") || url.pathname.startsWith("/jobs/")) ||
-      (acceptHeader.includes("application/json") && !acceptHeader.includes("text/html"));
+    // Never swallow /.well-known/* or dotted static paths: they fall through
+    // to the asset layer below (ard.json etc. must stay reachable with
+    // Accept: application/json).
+    const apiPath404 = !path.startsWith("/.well-known") && !/\.[a-z0-9]+$/i.test(path) &&
+      ((url.pathname.startsWith("/api/") || url.pathname.startsWith("/v1/") || url.pathname.startsWith("/v2/") || url.pathname.startsWith("/jobs/")) ||
+      (acceptHeader.includes("application/json") && !acceptHeader.includes("text/html")));
     if (apiPath404) {
       return apiError(404, "not_found", `No API route at ${url.pathname}.`, "Valid routes: /search, /explain, /vendors, /health, /ask, /mcp, /v1/*, /api. See /openapi.json for the full contract.");
     }
