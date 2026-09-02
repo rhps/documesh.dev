@@ -9,7 +9,7 @@
   },
   "info": {
     "title": "Documesh API",
-    "description": "Federated developer documentation search across 47 vendors. Every result carries vendor, version, license, and canonical source URL.",
+    "description": "Federated developer documentation search across 47 sources (documentation origins). Every result carries source, version, license, and canonical source URL.",
     "version": "1.0.0",
     "contact": { "name": "selatan.org", "url": "https://selatan.org", "email": "rhps@selatan.org" },
     "license": { "name": "MIT", "url": "https://github.com/rhps/documesh.dev/blob/main/LICENSE" }
@@ -55,7 +55,7 @@
         "operationId": "searchDocsAcross",
         "tags": ["search"],
         "summary": "Federated documentation search",
-        "description": "Search developer documentation across 47 vendors. Every result carries vendor, version, license, and canonical source URL.",
+        "description": "Search developer documentation across 47 documentation sources. Every result carries a 'source' field (legacy name 'vendor'), version, license, and canonical source URL.",
         "parameters": [
           { "name": "q", "in": "query", "required": true, "schema": { "type": "string", "minLength": 1 }, "description": "Search query" },
           { "name": "vendors", "in": "query", "schema": { "type": "string" }, "description": "Comma-separated vendor filter (e.g. cloudflare,kubernetes)" },
@@ -108,7 +108,7 @@
         "operationId": "listVendors",
         "tags": ["registry"],
         "summary": "Vendor registry",
-        "description": "List all documentation vendors in the mesh with license and attribution requirements.",
+        "description": "List all documentation sources in the mesh with license and attribution requirements.",
         "responses": {
           "200": {
             "description": "Vendor registry",
@@ -298,7 +298,8 @@
         "required": ["vendor", "version", "title", "source_url", "license", "last_updated", "score"],
         "properties": {
           "chunk_id": { "type": "string", "description": "Unique chunk identifier" },
-          "vendor": { "type": "string", "description": "Vendor ID (e.g. cloudflare, netlify)" },
+          "vendor": { "type": "string", "description": "Vendor ID (e.g. cloudflare, netlify). Deprecated name — prefer 'source' (same value)." },
+          "source": { "type": "string", "description": "Documentation source ID (e.g. cloudflare, netlify). Canonical name for the legacy 'vendor' field." },
           "version": { "type": "string", "description": "Docs version (e.g. latest, 1.32)" },
           "title": { "type": "string", "description": "Section title" },
           "heading_path": { "type": "string", "description": "Breadcrumb path (e.g. 'Build > Environment variables')" },
@@ -368,7 +369,8 @@
         "type": "object",
         "required": ["vendors", "total"],
         "properties": {
-          "vendors": { "type": "array", "items": { "$ref": "#/components/schemas/Vendor" } },
+          "vendors": { "type": "array", "items": { "$ref": "#/components/schemas/Vendor" }, "description": "Deprecated name — prefer 'sources' (same list)." },
+          "sources": { "type": "array", "items": { "$ref": "#/components/schemas/Vendor" }, "description": "Documentation sources in the mesh." },
           "total": { "type": "integer" }
         }
       },

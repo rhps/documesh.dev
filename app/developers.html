@@ -66,7 +66,7 @@
   <h2 class="text-2xl font-bold mb-4">Quickstart</h2>
   <p class="text-slate-600 mb-4">Search documentation with a single HTTP request:</p>
   <pre class="bg-slate-900 text-slate-100 rounded-xl p-5 text-sm overflow-x-auto"><code>curl "https://documesh.selatan.org/search?q=edge+functions+env+vars"</code></pre>
-  <p class="mt-3 text-sm text-slate-500">Returns ranked results with vendor, version, license, and canonical source URL for every match.</p>
+  <p class="mt-3 text-sm text-slate-500">Returns ranked results with source, version, license, and canonical source URL for every match.</p>
 </section>
 
 <!-- API Reference -->
@@ -76,9 +76,9 @@
     <thead><tr class="bg-slate-50 text-left"><th class="px-4 py-2 border border-slate-200">Endpoint</th><th class="px-4 py-2 border border-slate-200">Method</th><th class="px-4 py-2 border border-slate-200">Description</th></tr></thead>
     <tbody class="divide-y divide-slate-100">
       <tr><td class="px-4 py-2 border border-slate-200"><code>/health</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">Service health and version</td></tr>
-      <tr><td class="px-4 py-2 border border-slate-200"><code>/search</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">Federated search across 47 vendors. Params: <code>q</code> (required), <code>vendors</code> (comma-separated), <code>limit</code> (default 5)</td></tr>
-      <tr><td class="px-4 py-2 border border-slate-200"><code>/explain</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">Error-to-docs matching. Params: <code>error</code> (required), <code>vendor</code> (optional)</td></tr>
-      <tr><td class="px-4 py-2 border border-slate-200"><code>/vendors</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">Vendor registry with licenses</td></tr>
+      <tr><td class="px-4 py-2 border border-slate-200"><code>/search</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">Federated search across 47 sources. Params: <code>q</code> (required), <code>sources</code> (comma-separated), <code>limit</code> (default 5)</td></tr>
+      <tr><td class="px-4 py-2 border border-slate-200"><code>/explain</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">Error-to-docs matching. Params: <code>error</code> (required), <code>source</code> (optional)</td></tr>
+      <tr><td class="px-4 py-2 border border-slate-200"><code>/vendors</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">Source registry with licenses</td></tr>
       <tr><td class="px-4 py-2 border border-slate-200"><code>/ask?q=</code></td><td class="px-4 py-2 border border-slate-200">GET or POST</td><td class="px-4 py-2 border border-slate-200">NLWeb natural language query endpoint</td></tr>
       <tr><td class="px-4 py-2 border border-slate-200"><code>/mcp</code></td><td class="px-4 py-2 border border-slate-200">POST</td><td class="px-4 py-2 border border-slate-200">MCP Streamable HTTP (JSON-RPC 2.0)</td></tr>
       <tr><td class="px-4 py-2 border border-slate-200"><code>/openapi.json</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">OpenAPI 3.0 specification with typed schemas</td></tr>
@@ -89,7 +89,7 @@
   <pre class="bg-slate-900 text-slate-100 rounded-xl p-5 text-sm overflow-x-auto"><code>{
   "query": "edge functions env vars",
   "results": [{
-    "vendor": "netlify",
+    "source": "netlify",
     "version": "latest",
     "title": "Environment variables at Netlify",
     "heading_path": "Build > Environment variables > Overview",
@@ -105,7 +105,7 @@
 <!-- Agent Mode -->
 <section class="mt-12">
   <h2 class="text-2xl font-bold mb-4">Agent Mode</h2>
-  <p class="text-slate-600 mb-4">Add <code>?mode=agent</code> to the root URL for a machine-readable view of all capabilities, endpoints, and vendors.</p>
+  <p class="text-slate-600 mb-4">Add <code>?mode=agent</code> to the root URL for a machine-readable view of all capabilities, endpoints, and sources.</p>
   <pre class="bg-slate-900 text-slate-100 rounded-xl p-5 text-sm overflow-x-auto"><code>curl "https://documesh.selatan.org/?mode=agent"</code></pre>
 </section>
 

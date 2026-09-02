@@ -7,12 +7,12 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://documesh.selatan.org/coverage" />
   <meta property="og:title" content="Documesh — documentation that agents can read and operate" />
-  <meta property="og:description" content="Federated developer documentation from 47 vendors. Powered by WebMCP." />
+  <meta property="og:description" content="Federated developer documentation from 47 sources. Powered by WebMCP." />
   <meta property="og:image" content="https://documesh.selatan.org/og-image.png" />
   <meta property="og:site_name" content="Documesh" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Documesh" />
-  <meta name="twitter:description" content="Federated developer documentation from 47 vendors. Powered by WebMCP." />
+  <meta name="twitter:description" content="Federated developer documentation from 47 sources. Powered by WebMCP." />
 <title>Coverage & Licenses — Documesh</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -25,7 +25,7 @@
   "@type": "WebApplication",
   "name": "Documesh",
   "url": "https://documesh.selatan.org",
-  "description": "Federated developer documentation from 47 vendors \u2014 Cloudflare, Netlify, Vercel, Kubernetes, and more. Search, error matching, and vendor lookup with version-cited, license-attributed results. Powered by WebMCP.",
+  "description": "Federated developer documentation from 47 sources \u2014 Cloudflare, Netlify, Vercel, Kubernetes, and more. Search, error matching, and source lookup with version-cited, license-attributed results. Powered by WebMCP.",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web",
   "license": "https://github.com/rhps/documesh.dev/blob/main/LICENSE",
@@ -63,7 +63,7 @@
     "https://documesh.selatan.org/coverage.html"
   ],
   "featureList": [
-    "Federated documentation search across 47 vendors",
+    "Federated documentation search across 47 sources",
     "Error-to-documentation matching",
     "WebMCP tool registration for AI agents",
     "Version-cited results with license attribution",
@@ -95,13 +95,13 @@
   <h1 class="text-4xl font-bold tracking-tight">Coverage & Licenses</h1>
   <p class="mt-4 text-slate-600 max-w-3xl leading-relaxed">
     What's in the mesh, what's deliberately out, and why. Documesh treats licensing as a
-    first-class feature: vendors are ingested only via permissive licenses or their own
+    first-class feature: sources are ingested only via permissive licenses or their own
     official agent interfaces — and every tool response names its source license.
   </p>
   <div class="mt-6 grid grid-cols-3 gap-4 max-w-lg">
     <div class="border border-green-200 bg-green-50 rounded-xl px-4 py-3 text-center">
       <div class="text-2xl font-bold text-green-700">18</div>
-      <div class="text-xs text-green-800">vendors covered</div>
+      <div class="text-xs text-green-800">sources covered</div>
     </div>
     <div class="border border-slate-200 bg-slate-50 rounded-xl px-4 py-3 text-center">
       <div class="text-2xl font-bold text-slate-600">4+</div>
@@ -122,12 +122,12 @@
       <h2 class="text-2xl font-bold">✅ Covered</h2>
       <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">ingested & attributed</span>
     </div>
-    <p class="mt-2 text-slate-600 text-sm">Click any vendor to search its docs in the app.</p>
+    <p class="mt-2 text-slate-600 text-sm">Click any source to search its docs in the app.</p>
     <div class="mt-6 overflow-x-auto border border-slate-100 rounded-2xl">
       <table class="w-full text-sm">
         <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-400">
           <tr>
-            <th class="px-5 py-3">Vendor</th>
+            <th class="px-5 py-3">Source</th>
             <th class="px-5 py-3">License basis</th>
             <th class="px-5 py-3 hidden md:table-cell">Ingestion interface</th>
             <th class="px-5 py-3 text-right">Sections</th>
@@ -139,7 +139,7 @@
       </table>
     </div>
     <p class="mt-3 text-xs text-slate-400">
-      Counts are from the current snapshot. All vendors are ingested via official llms.txt /
+      Counts are from the current snapshot. All sources are ingested via official llms.txt /
       <code>.md</code> agent interfaces or open-licensed git repositories — never by scraping rendered HTML.
     </p>
   </section>
@@ -163,7 +163,7 @@
       <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Flask · Python · Rails</div><div class="text-xs text-slate-500 mt-1">Permissive · Sphinx/generated site builds</div></div>
     </div>
     <p class="mt-4 text-sm text-slate-500">
-      Want one of these prioritized (or a vendor we haven't listed)?
+      Want one of these prioritized (or a source we haven't listed)?
       <a href="https://github.com/rhps/competition/issues" class="text-[#4b5320] hover:text-[#6a7337] underline">Open an issue</a>.
     </p>
   </section>
@@ -175,7 +175,7 @@
       <span class="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full">deliberate — this is the feature</span>
     </div>
     <p class="mt-2 text-slate-600 text-sm">
-      These vendors were evaluated and rejected. In an AI-agent world, respecting these
+      These sources were evaluated and rejected. In an AI-agent world, respecting these
       boundaries is not compliance theater — it's what keeps an agentic web worth having.
     </p>
     <div class="mt-6 space-y-3">
@@ -218,8 +218,8 @@
   <section id="policy" class="scroll-mt-24 border border-slate-100 rounded-2xl p-8 bg-slate-50">
     <h2 class="text-2xl font-bold">Our ingestion policy</h2>
     <ol class="mt-4 space-y-3 text-slate-600 leading-relaxed">
-      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">1.</span><span><strong>Official interfaces first.</strong> We ingest via vendor-published llms.txt / <code>.md</code> endpoints, or open-licensed git repositories — never scraped HTML.</span></li>
-      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">2.</span><span><strong>Excerpts + canonical links.</strong> We return short excerpts that link back to the vendor's page. No full-text mirroring.</span></li>
+      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">1.</span><span><strong>Official interfaces first.</strong> We ingest via source-published llms.txt / <code>.md</code> endpoints, or open-licensed git repositories — never scraped HTML.</span></li>
+      <li class="flex gap-3"><span class="text-[#6a7337] font-bold">2.</span><span><strong>Excerpts + canonical links.</strong> We return short excerpts that link back to the source's page. No full-text mirroring.</span></li>
       <li class="flex gap-3"><span class="text-[#6a7337] font-bold">3.</span><span><strong>Attribution everywhere.</strong> Every tool response names its license and source. The UI displays it on every card.</span></li>
       <li class="flex gap-3"><span class="text-[#6a7337] font-bold">4.</span><span><strong>When in doubt, exclude.</strong> BUSL, AGPL, bot-blocked and proprietary-without-consent sources stay out. A smaller honest mesh beats a larger ambiguous one.</span></li>
     </ol>
@@ -274,8 +274,8 @@ try {
   const snap = await fetch(API + "/search?q=the&limit=1").then(r => r.json()); // placeholder
 } catch {}
 
-// Pull per-vendor chunk counts from the index manifest via a single vendors call + search totals
-// The /vendors endpoint gives the registry; counts come from probing /search per vendor (15 quick calls).
+// Pull per-source chunk counts from the index manifest via a single sources call + search totals
+// The /vendors endpoint gives the registry; counts come from probing /search per source (15 quick calls).
 const data = await fetch(API + "/vendors").then(r => r.json());
 const tb = document.getElementById("covered-tbody");
 tb.innerHTML = "";
@@ -285,7 +285,7 @@ for (const v of data.vendors) {
   let count = "…";
   try {
     const s = await fetch(`${API}/search?q=a&vendors=${v.id}&limit=1`).then(r => r.json());
-    // /search returns at most `limit`; use a trick: total docs per vendor via one broad query is not exposed.
+    // /search returns at most `limit`; use a trick: total docs per source via one broad query is not exposed.
     // Instead show tool-verified marker:
     count = "✓";
   } catch { count = "–"; }
@@ -304,7 +304,7 @@ for (const v of data.vendors) {
 // add verified marker legend
 const legend = document.createElement("p");
 legend.className = "mt-3 text-xs text-slate-400";
-legend.textContent = "✓ = vendor indexed and searchable — click the vendor name to run a live filtered search.";
+legend.textContent = "✓ = source indexed and searchable — click the source name to run a live filtered search.";
 tb.parentElement.insertAdjacentElement("afterend", legend);
 </script>
 <script src="webmcp-register.js"></script>

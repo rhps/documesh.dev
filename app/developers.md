@@ -5,7 +5,7 @@ Federated developer documentation search across 47 vendors. Open API — no keys
 ## Quickstart
 
 ```bash
-# Search across vendors (versioned path)
+# Search across sources (versioned path)
 curl "https://documesh.selatan.org/v1/search?q=edge+functions+env+vars&limit=5"
 
 # Unversioned alias of /v1/search
@@ -14,7 +14,7 @@ curl "https://documesh.selatan.org/search?q=edge+functions&limit=5"
 # Match an error to docs
 curl "https://documesh.selatan.org/v1/explain?error=CrashLoopBackOff+in+pod+docs-api"
 
-# Vendor registry
+# Source registry
 curl "https://documesh.selatan.org/v1/vendors"
 
 # MCP handshake

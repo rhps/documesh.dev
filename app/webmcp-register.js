@@ -58,7 +58,7 @@ async function registerWebMCP() {
         type: "object",
         properties: {
           query: { type: "string", description: "Search query, e.g. 'edge functions environment variables'" },
-          vendors: { type: "array", items: { type: "string", enum: TOOL_VENDORS }, description: "Optional vendor filter" },
+          vendors: { type: "array", items: { type: "string", enum: TOOL_VENDORS }, description: "Optional source filter (accepts the legacy 'vendors' name; each value is a documentation source id)" },
           limit: { type: "number", description: "Max results (default 5)" }
         },
         required: ["query"]
@@ -81,7 +81,7 @@ async function registerWebMCP() {
 
     ctx.registerTool({
       name: "explain_error",
-      description: "Given a log excerpt or error message, find the closest matching documentation sections across mesh vendors. Returns version-cited sections and a disclaimer — not a diagnosis.",
+      description: "Given a log excerpt or error message, find the closest matching documentation sections across mesh sources. Returns version-cited sections and a disclaimer — not a diagnosis.",
       inputSchema: {
         type: "object",
         properties: {
@@ -100,7 +100,7 @@ async function registerWebMCP() {
 
     ctx.registerTool({
       name: "list_vendors",
-      description: "List the documentation vendors in the mesh with their license and attribution requirements.",
+      description: "List the documentation sources in the mesh with their license and attribution requirements.",
       inputSchema: { type: "object", properties: {} },
       execute: async (_input, options = {}) => await fetch("/vendors", { signal: options.signal ?? signal }).then(r => r.json())
     }, { signal });

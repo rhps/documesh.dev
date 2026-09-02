@@ -1,18 +1,18 @@
 # Documesh
 
-> Federated developer documentation from 47 vendors. Powered by WebMCP.
+> Federated developer documentation from 47 sources. Powered by WebMCP.
 
 ## When to use Documesh
 
 Use Documesh when you need to:
-- Search developer documentation across multiple vendors simultaneously (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, Bun, Hono, OpenTelemetry, Argo CD, Helm, Flux, Cilium, and more)
+- Search developer documentation across multiple sources simultaneously (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, Bun, Hono, OpenTelemetry, Argo CD, Helm, Flux, Cilium, and more)
 - Match an error message or stack trace to the closest relevant documentation sections
-- Look up vendor license and attribution information before citing documentation
+- Look up source license and attribution information before citing documentation
 - Find version-specific documentation (e.g. Kubernetes v1.32 vs v1.29)
 
 ## When NOT to use Documesh
 
-- For vendor-specific advanced configuration (use the vendor's own docs directly)
+- For source-specific advanced configuration (use the source's own docs directly)
 - For non-developer documentation (general knowledge, non-technical topics)
 - For vendors not in the mesh (check /vendors for the current list)
 
@@ -58,7 +58,7 @@ Any WebMCP-compatible agent can discover and call these tools when the page is o
 
 ## Sources
 
-Documentation ingested from official vendor-published machine interfaces
+Documentation ingested from official source-published machine interfaces
 (llms.txt, .md endpoints) or open-licensed git repositories. No scraping.
 Full attribution on every response.
 

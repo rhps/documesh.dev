@@ -4,9 +4,9 @@
 
 ## API surface
 
-- GET /health — service health and vendor count
+- GET /health — service health and source count
 - GET /search?q=&vendors=&limit=&cursor= — federated documentation search (cursor pagination)
-- POST /search {"query", "vendors", "limit"} — same, JSON body; safe retries via Idempotency-Key header
+- POST /search {"query", "sources", "limit"} — same, JSON body; safe retries via Idempotency-Key header
 - GET /explain?error=&vendor= — error/log excerpt → closest documentation sections
 - GET /vendors?cursor=&limit= — vendor registry with licenses
 - POST /v1/submit-vendors — async vendor submission (returns 202 + job_id)

@@ -8,6 +8,8 @@
  *     next_cursor: string|null, total: number }
  */
 
+import { withSource } from "./result-shape.js";
+
 const FTS_COLS_WEIGHTED = "bm25(chunks_fts, 3.0, 2.0, 1.0)"; // title, heading_path, content — mirrors legacy title-boost
 
 /**
@@ -93,7 +95,7 @@ export async function searchD1(env, query, opts = {}) {
   const next_cursor = hasMore && last ? encodeCursor(last.score, last.rowid) : null;
 
   return {
-    results: page.map((r) => ({
+    results: page.map((r) => withSource({
       chunk_id: r.chunk_id,
       vendor: r.vendor,
       version: r.version,

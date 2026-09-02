@@ -6,6 +6,7 @@
  */
 import { VENDOR_META, tokenize } from "./search-core-lite.js";
 import { handleMCPServer } from "./mcp-server.js";
+import { withSource, withSourceAll } from "./result-shape.js";
 
 const VENDOR_IDS = Object.keys(VENDOR_META);
 const API_VERSION = "v1";
@@ -275,12 +276,12 @@ async function runExplain(env, err, vendor) {
     const docToks = new Set(tokenize(d.title + " " + d.heading_path));
     let covered = 0;
     for (const t of toks) if (docToks.has(t)) covered++;
-    ranked.push({
+    ranked.push(withSource({
       chunk_id: d.chunk_id, vendor: v, version: d.version,
       title: d.title, heading_path: d.heading_path, path: d.path,
       source_url: d.source_url, license: d.license, attribution: d.attribution,
       last_updated: d.last_updated, score: +(score * (1 + covered / toks.length)).toFixed(4),
-    });
+    }));
   }
   ranked.sort((a, b) => b.score - a.score);
 
@@ -330,7 +331,8 @@ async function unifiedSearch(env, query, opts = {}) {
   }
   const vendors = opts.vendors || VENDOR_IDS;
   const loaded = await loadVendors(env, vendors);
-  return { backend: "shards", ...searchAcross(loaded, query, opts) };
+  const shardOut = searchAcross(loaded, query, opts);
+  return { backend: "shards", ...shardOut, results: withSourceAll(shardOut.results) };
 }
 
 // ─── Main handler ────────────────────────────────────────────────────────────
@@ -531,14 +533,14 @@ export default {
     if (path === "/.well-known/mcp/server-card.json" || path === "/.well-known/mcp/server-card") {
       return json({
         name: "Documesh MCP Server",
-        description: "Federated developer documentation search across 47 vendors",
+        description: "Federated developer documentation search across 47 documentation sources",
         version: "0.2.0",
         serverUrl: `${url.origin}/mcp`,
         transport: "streamable-http",
         tools: [
           { name: "search_docs_across", description: "Federated documentation search" },
           { name: "explain_error", description: "Error-to-docs matching" },
-          { name: "list_vendors", description: "Vendor registry" }
+          { name: "list_vendors", description: "Documentation source registry (sources formerly called vendors)" }
         ]
       });
     }
@@ -570,8 +572,8 @@ export default {
         endpoint: `${url.origin}/mcp`,
         transport: "streamable-http",
         protocolVersion: "2025-03-26",
-        description: "Federated developer documentation search across 47 vendors",
-        instructions: "Call search_docs_across for documentation queries across vendors, explain_error to match error messages or stack traces to docs, list_vendors for the source registry with licenses. POST JSON-RPC 2.0 to /mcp; initialize first.",
+        description: "Federated developer documentation search across 47 documentation sources",
+        instructions: "Call search_docs_across for documentation queries across documentation sources, explain_error to match error messages or stack traces to docs, list_vendors for the source registry with licenses. POST JSON-RPC 2.0 to /mcp; initialize first.",
         serverInfo: { name: "documesh", version: "0.2.0", title: "Documesh", instructions: "Call search_docs_across for documentation queries, explain_error to match error messages to docs, list_vendors for the source registry." },
         server_card: `${url.origin}/.well-known/mcp/server-card.json`,
         tools: ["search_docs_across", "explain_error", "list_vendors"],
@@ -658,7 +660,8 @@ export default {
           return { content: [{ type: "text", text: JSON.stringify({ ...out, disclaimer: "These are the closest documentation sections, not a diagnosis." }) }] };
         }
         if (toolName === "list_vendors") {
-          return { content: [{ type: "text", text: JSON.stringify({ vendors: VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id] })) }) }] };
+          const sources = VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id] }));
+          return { content: [{ type: "text", text: JSON.stringify({ vendors: sources, sources }) }] };
         }
         return { content: [{ type: "text", text: JSON.stringify({ error: `unknown tool: ${toolName}` }) }], isError: true };
       });
@@ -769,7 +772,8 @@ export default {
       return response;
     }
 
-    // Vendors with cursor pagination
+    // Vendors with cursor pagination (response carries additive `sources`
+    // key; `vendors` kept as deprecated alias for existing consumers)
     if (path === "/vendors") {
       const cursor = url.searchParams.get("cursor");
       const limit = Math.min(parseInt(url.searchParams.get("limit") || String(VENDOR_IDS.length)), VENDOR_IDS.length);
@@ -777,7 +781,7 @@ export default {
       const start = cursor ? parseInt(b64uDecode(cursor)) || 0 : 0;
       const page = all.slice(start, start + limit);
       const next_cursor = start + limit < all.length ? b64uEncode(String(start + limit)) : null;
-      return json({ vendors: page, total: all.length, next_cursor, pagination: { style: "cursor", cursor_param: "cursor", limit_param: "limit" } }, 200, apiEntry ? url.origin : null);
+      return json({ vendors: page, sources: page, total: all.length, next_cursor, pagination: { style: "cursor", cursor_param: "cursor", limit_param: "limit" } }, 200, apiEntry ? url.origin : null);
     }
 
     // Search — GET and POST (POST accepts Idempotency-Key for safe retries)
@@ -935,7 +939,7 @@ export default {
     if (path === "/" && url.searchParams.get("mode") === "agent") {
       return json({
         name: "Documesh",
-        description: "Federated developer documentation search across 47 vendors",
+        description: "Federated developer documentation search across 47 documentation sources",
         version: API_VERSION,
         api_base: url.origin,
         capabilities: {
