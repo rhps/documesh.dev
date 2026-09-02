@@ -81,7 +81,7 @@ jobs:
         run: |
           if [ -z "$D1_DATABASE_ID" ]; then echo "❌ could not resolve $DB_NAME id"; exit 1; fi
           echo "backfilling $DB_NAME ($D1_DATABASE_ID)"
-          python3 indexer/load_d1.py --remote
+          python3 indexer/load_d1.py
 
       - name: Verify counts
         if: inputs.action == 'verify'
