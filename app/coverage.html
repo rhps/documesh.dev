@@ -279,9 +279,12 @@ try {
   const snap = await fetch(API + "/search?q=the&limit=1").then(r => r.json()); // placeholder
 } catch {}
 
-// One call to /stats: live chunk counts per source + catalog totals for the
-// sync-coverage percentage (catalog data from the committed coverage audit).
-const data = await fetch(API + "/stats").then(r => r.json());
+// Two calls: /stats (coverage) + /vendors (authoritative names/licenses for all 47)
+const [data, vendorData] = await Promise.all([
+  fetch(API + "/stats").then(r => r.json()),
+  fetch(API + "/vendors").then(r => r.json()).catch(() => ({})),
+]);
+data.vendors = vendorData.vendors || [];
 const tb = document.getElementById("covered-tbody");
 tb.innerHTML = "";
 
@@ -298,14 +301,18 @@ function coverageBadge(s) {
 }
 
 for (const s of data.sources) {
-  const meta = VENDOR_META[s.id] || { name: s.id, license: "—", origin: "" };
+  // /vendors carries the authoritative license for all 47 sources — the
+  // static VENDOR_META map below only covers the original 18 (fallback).
+  const v = data.vendors?.find(x => x.id === s.id) || {};
+  const name = v.name || VENDOR_META[s.id]?.name || s.id;
+  const license = v.license || VENDOR_META[s.id]?.license || "—";
   const tr = document.createElement("tr");
   tr.className = "hover:bg-slate-50";
   tr.innerHTML = `
     <td class="px-5 py-3 font-medium">
-      <a href="app.html?q=docs&vendors=${s.id}" class="hover:text-[#4b5320]">${meta.name}</a>
+      <a href="app.html?q=docs&vendors=${s.id}" class="hover:text-[#4b5320]">${name}</a>
     </td>
-    <td class="px-5 py-3 text-slate-600">${meta.license}</td>
+    <td class="px-5 py-3 text-slate-600">${license}</td>
     <td class="px-5 py-3 text-right">${coverageBadge(s)}</td>`;
   tb.appendChild(tr);
 }
