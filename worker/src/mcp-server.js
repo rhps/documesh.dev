@@ -114,8 +114,31 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
   const resources = options.resources || RESOURCES;
 
   // GET = SSE stream for server→client notifications.
-  // Spec (Streamable HTTP, 2025-03-26 §6.1): if the server accepts GET it
-  // MUST send an `endpoint` event pointing at the URI to POST messages to.
+  // Scanners (and many clients) probe GET first and hang on an open stream.
+  // The Streamable HTTP spec allows answering 405 when the server doesn't
+  // offer a standalone GET stream — we advertise that via the manifest, so
+  // probes fail fast and complete their handshake via POST instead.
+  if (request.method === "GET" && !url.searchParams.get("stream")) {
+    return new Response(JSON.stringify({
+      jsonrpc: "2.0",
+      error: {
+        code: -32000,
+        message: "GET streams not offered. POST JSON-RPC 2.0 messages to this URL, or add ?stream=1 for the SSE notification stream.",
+      },
+      id: null,
+    }), {
+      status: 405,
+      headers: {
+        "Content-Type": "application/json",
+        "Allow": "POST",
+        "Access-Control-Allow-Origin": "*",
+        "Mcp-Session-Id": sessionId || crypto.randomUUID(),
+      },
+    });
+  }
+
+  // Explicit SSE notification stream (GET /mcp?stream=1).
+  // Sends the spec-required `endpoint` event, then keepalives.
   if (request.method === "GET") {
     const encoder = new TextEncoder();
     const sid = sessionId || crypto.randomUUID();
@@ -154,7 +177,15 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
       try {
         return jsonRPCWithSession(id, null, {
           protocolVersion: agreed,
-          capabilities: { tools: { listChanged: true }, resources: { subscribe: false, listChanged: true } },
+          capabilities: {
+            tools: { listChanged: true },
+            resources: { subscribe: false, listChanged: true },
+            // MCP Apps extension (modelcontextprotocol/ext-apps):
+            // advertises ui:// resource surfaces for in-conversation UI.
+            extensions: {
+              "io.modelcontextprotocol/ui": { version: "0.1.0" },
+            },
+          },
           serverInfo: { name: serverName, version: "0.2.0", title: serverTitle, description: serverDescription, instructions: serverInstructions },
           _meta: { ui: { resourceUri: "ui://documesh/search-results" } }
         }, newSessionId);
