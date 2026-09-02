@@ -118,7 +118,7 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
   // The Streamable HTTP spec allows answering 405 when the server doesn't
   // offer a standalone GET stream — we advertise that via the manifest, so
   // probes fail fast and complete their handshake via POST instead.
-  if (request.method === "GET" && !url.searchParams.get("stream")) {
+  if (request.method === "GET" && !new URL(request.url).searchParams.get("stream")) {
     return new Response(JSON.stringify({
       jsonrpc: "2.0",
       error: {
