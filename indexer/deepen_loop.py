@@ -206,6 +206,37 @@ def report_table(counts, title):
     print(f"\nTotal: {total:,} chunks across {len(counts)} vendors\n")
 
 
+def acquire_lock():
+    """Prevent concurrent instances (double-fetch protection).
+
+    PID lockfile: stale locks (crashed process) are auto-detected via
+    /proc (Linux) or `ps` fallback and broken. A live instance blocks startup.
+    """
+    lock_path = BASE / "indexer" / ".deepen_loop.lock"
+    if lock_path.exists():
+        try:
+            old_pid = int(lock_path.read_text().strip())
+        except ValueError:
+            old_pid = 0
+        alive = False
+        if old_pid:
+            if Path(f"/proc/{old_pid}").exists():          # Linux
+                alive = True
+            else:                                           # macOS fallback
+                alive = subprocess.run(
+                    ["pgrep", "-p", str(old_pid)],
+                    capture_output=True).returncode == 0
+        if alive:
+            print(f"another deepen_loop is already running (pid {old_pid}). Exiting.")
+            sys.exit(0)
+        print(f"removing stale lock (pid {old_pid} not running)")
+    lock_path.write_text(str(os.getpid()))
+
+    import atexit
+    atexit.register(lambda: lock_path.unlink(missing_ok=True))
+    return lock_path
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--max-cycles", type=int, default=0, help="0 = loop forever")
@@ -216,6 +247,9 @@ def main():
     if not args.dry and (not TOKEN or not ACCOUNT_ID):
         print("need CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID")
         sys.exit(1)
+
+    if not args.dry:
+        acquire_lock()
 
     cycle = 0
     while True:
