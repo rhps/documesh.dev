@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "documesh": {
+      "type": "streamable-http",
+      "url": "https://documesh.selatan.org/mcp"
+    }
+  }
+}
