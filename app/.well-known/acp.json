@@ -1,0 +1,52 @@
+{
+  "protocol": {
+    "name": "acp",
+    "version": "1.0"
+  },
+  "api_base_url": "https://documesh.selatan.org",
+  "transports": ["rest", "mcp"],
+  "capabilities": {
+    "services": [
+      {
+        "id": "docs-search",
+        "name": "Federated Documentation Search",
+        "description": "Search developer documentation across 38 vendors; results carry vendor, version, license, and canonical source URL.",
+        "endpoint": "/v1/search",
+        "transport": "rest",
+        "pricing": { "model": "free", "amount": 0, "currency": "USD", "payment_required": false }
+      },
+      {
+        "id": "error-docs-matching",
+        "name": "Error to Docs Matching",
+        "description": "Match an error message or stack trace to the closest official documentation sections, with disclaimer.",
+        "endpoint": "/v1/explain",
+        "transport": "rest",
+        "pricing": { "model": "free", "amount": 0, "currency": "USD", "payment_required": false }
+      },
+      {
+        "id": "vendor-license-lookup",
+        "name": "Source License Lookup",
+        "description": "License and attribution information for every documentation source in the mesh.",
+        "endpoint": "/v1/vendors",
+        "transport": "rest",
+        "pricing": { "model": "free", "amount": 0, "currency": "USD", "payment_required": false }
+      },
+      {
+        "id": "docs-mcp",
+        "name": "Documesh MCP Server",
+        "description": "The same documentation services over MCP Streamable HTTP with 3 typed tools and MCP Apps UI resources.",
+        "endpoint": "/mcp",
+        "transport": "mcp",
+        "pricing": { "model": "free", "amount": 0, "currency": "USD", "payment_required": false }
+      }
+    ],
+    "checkout": { "supported": false },
+    "payments": { "supported": false, "note": "Documesh is a free open API. No checkout, billing, or payment flows are offered; all services are free of charge." }
+  },
+  "authentication": { "type": "none" },
+  "links": {
+    "openapi": "https://documesh.selatan.org/openapi.json",
+    "developer_portal": "https://documesh.selatan.org/developers.html",
+    "contact": "https://documesh.selatan.org/contact.html"
+  }
+}
