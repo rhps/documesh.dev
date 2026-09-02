@@ -1,7 +1,6 @@
 /**
  * Documesh MCP Server — Streamable HTTP transport
- * Exposes Documesh capabilities as MCP tools for Claude, ChatGPT, and other agents.
- * Also includes MCP Apps (ui:// resources) for in-agent UI rendering.
+ * Session management, tools, resources (ui://), and notifications.
  */
 
 const TOOLS = [
@@ -17,9 +16,7 @@ const TOOLS = [
       },
       required: ["query"]
     },
-    _meta: {
-      ui: { resourceUri: "ui://documesh/search-results" }
-    }
+    _meta: { ui: { resourceUri: "ui://documesh/search-results" } }
   },
   {
     name: "explain_error",
@@ -32,9 +29,7 @@ const TOOLS = [
       },
       required: ["log_excerpt"]
     },
-    _meta: {
-      ui: { resourceUri: "ui://documesh/error-match" }
-    }
+    _meta: { ui: { resourceUri: "ui://documesh/error-match" } }
   },
   {
     name: "list_vendors",
@@ -52,92 +47,30 @@ const RESOURCES = [
   },
   {
     uri: "ui://documesh/error-match",
-    name: "Error Match View",
+    name: "Error Match Card",
     description: "Error analysis results with matched documentation sections",
+    mimeType: "text/html"
+  },
+  {
+    uri: "ui://documesh/vendor-grid",
+    name: "Vendor Grid",
+    description: "Grid of all 38 vendors with license badges",
     mimeType: "text/html"
   }
 ];
 
-export function handleMCPServer(request, env, handleToolCall) {
-  return handleStreamableHTTP(request, env, handleToolCall);
+const sessions = new Map();
+
+function createSession() {
+  const id = crypto.randomUUID();
+  sessions.set(id, { createdAt: Date.now(), lastActivity: Date.now() });
+  return id;
 }
 
-async function handleStreamableHTTP(request, env, handleToolCall) {
-  // Parse JSON-RPC
-  let body;
-  try {
-    body = await request.json();
-  } catch {
-    return jsonRPC(null, { code: -32700, message: "Parse error" }, null);
-  }
-
-  const { id, method, params } = body;
-
-  try {
-    let result;
-
-    switch (method) {
-      case "initialize":
-        result = {
-          protocolVersion: "2025-03-26",
-          capabilities: {
-            tools: { listChanged: true },
-            resources: { subscribe: false, listChanged: true }
-          },
-          serverInfo: {
-            name: "documesh",
-            version: "0.2.0",
-            description: "Federated developer documentation search across 18 vendors"
-          }
-        };
-        break;
-
-      case "notifications/initialized":
-        return new Response(null, { status: 204 });
-
-      case "tools/list":
-        result = { tools: TOOLS };
-        break;
-
-      case "tools/call": {
-        const toolName = params?.name;
-        const toolArgs = params?.arguments || {};
-        result = await handleToolCall(toolName, toolArgs, env);
-        break;
-      }
-
-      case "resources/list":
-        result = { resources: RESOURCES };
-        break;
-
-      case "resources/read": {
-        const uri = params?.uri;
-        const resource = RESOURCES.find(r => r.uri === uri);
-        if (!resource) {
-          return jsonRPC(id, null, { code: -32602, message: `Resource not found: ${uri}` });
-        }
-        result = {
-          contents: [{
-            uri,
-            mimeType: "text/html",
-            text: "<html><body><p>Documesh UI resource</p></body></html>"
-          }]
-        };
-        break;
-      }
-
-      case "ping":
-        result = {};
-        break;
-
-      default:
-        return jsonRPC(id, { code: -32601, message: `Method not found: ${method}` }, id);
-    }
-
-    return jsonRPC(id, null, result);
-  } catch (e) {
-    return jsonRPC(id, { code: -32603, message: e.message }, null);
-  }
+function getSession(id) {
+  const s = sessions.get(id);
+  if (s) s.lastActivity = Date.now();
+  return s;
 }
 
 function jsonRPC(id, error, result) {
@@ -148,4 +81,127 @@ function jsonRPC(id, error, result) {
     status: 200,
     headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
   });
+}
+
+export function handleMCPServer(request, env, handleToolCall) {
+  const sessionId = request.headers.get("Mcp-Session-Id");
+
+  // GET = SSE stream for server→client notifications
+  if (request.method === "GET") {
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(encoder.encode(": keepalive\n\n"));
+        const interval = setInterval(() => {
+          try { controller.enqueue(encoder.encode(": keepalive\n\n")); } catch {}
+        }, 15000);
+        request.signal.addEventListener("abort", () => clearInterval(interval));
+      }
+    });
+    return new Response(stream, {
+      headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+
+  // POST = JSON-RPC messages
+  return request.json().then(body => {
+    const { id, method, params } = body;
+
+    // Track session
+    if (method === "initialize") {
+      const newSessionId = crypto.randomUUID();
+      try {
+        return jsonRPCWithSession(id, null, {
+          protocolVersion: "2025-03-26",
+          capabilities: { tools: { listChanged: true }, resources: { subscribe: false, listChanged: true } },
+          serverInfo: { name: "documesh", version: "0.2.0", description: "Federated developer documentation search across 18 vendors" }
+        }, newSessionId);
+      } catch (e) {
+        return jsonRPC(id, { code: -32603, message: e.message }, null);
+      }
+    }
+
+    // Validate session for non-initialize requests
+    if (sessionId && !getSession(sessionId)) {
+      return jsonRPC(id, { code: -32001, message: "Session not found or expired" }, null);
+    }
+
+    try {
+      let result;
+      switch (method) {
+        case "tools/list":
+          result = { tools: TOOLS };
+          break;
+        case "tools/call": {
+          const toolName = params?.name;
+          const toolArgs = params?.arguments || {};
+          result = handleToolCall(toolName, toolArgs, env);
+          break;
+        }
+        case "resources/list":
+          result = { resources: RESOURCES };
+          break;
+        case "resources/read": {
+          const uri = params?.uri;
+          const resource = RESOURCES.find(r => r.uri === uri);
+          if (!resource) {
+            return jsonRPC(id, null, { code: -32602, message: `Resource not found: ${uri}` });
+          }
+          result = {
+            contents: [{
+              uri,
+              mimeType: "text/html",
+              text: generateResourceHTML(uri, params)
+            }]
+          };
+          break;
+        }
+        case "ping":
+          result = {};
+          break;
+        default:
+          return jsonRPC(id, { code: -32601, message: `Method not found: ${method}` }, id);
+      }
+
+      // Attach session header to responses when session exists
+      const response = jsonRPC(id, null, result);
+      if (sessionId) {
+        const headers = new Headers(response.headers);
+        headers.set("Mcp-Session-Id", sessionId);
+        return new Response(response.body, { status: response.status, headers });
+      }
+      return response;
+    } catch (e) {
+      return jsonRPC(id, { code: -32603, message: e.message }, null);
+    }
+  }).catch(e => jsonRPC(null, { code: -32700, message: "Parse error" }, null));
+}
+
+function jsonRPCWithSession(id, error, result, sessionId) {
+  const body = { jsonrpc: "2.0", id };
+  if (error) body.error = error;
+  else body.result = result;
+  return new Response(JSON.stringify(body), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Mcp-Session-Id": sessionId
+    }
+  });
+}
+function generateResourceHTML(uri, params) {
+  if (uri === "ui://documesh/search-results") {
+    const results = params?.results || [];
+    return `<div class="documesh-results"><h3>🔍 Search Results</h3>${results.map(r =>
+      `<div class="result"><span class="badge">${r.vendor}</span> <a href="${r.source_url}">${r.title}</a> <span class="lic">${r.license}</span></div>`
+    ).join("")}</div>`;
+  }
+  if (uri === "ui://documesh/error-match") {
+    const matches = params?.matches || [];
+    return `<div class="documesh-error"><h3>🩺 Error Analysis</h3>${matches.map(m =>
+      `<div class="match"><span class="badge">${m.vendor}</span> <a href="${m.source_url}">${m.title}</a></div>`
+    ).join("")}<p class="disclaimer">⚠️ Closest matches, not a diagnosis.</p></div>`;
+  }
+  return "<p>Documesh UI resource</p>";
 }
