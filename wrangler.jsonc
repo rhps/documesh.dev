@@ -14,7 +14,7 @@
 //
 // Search backend (Option C, see docs/PLAN_D1_VECTORIZE.md):
 //   DB  — D1 database "documesh-search" (FTS5). Active when
-//         SEARCH_BACKEND=d1 (worker var/secret); default backend is shards.
+//         SEARCH_BACKEND=d1 — D1 FTS5 is the live search backend (shards = fallback).
 {
   "name": "documesh-api",
   "main": "worker/src/index.js",
@@ -32,7 +32,7 @@
     }
   ],
   "vars": {
-    "SEARCH_BACKEND": "shards"
+    "SEARCH_BACKEND": "d1"
   },
   "env": {
     "staging": {
@@ -50,7 +50,7 @@
         }
       ],
       "vars": {
-        "SEARCH_BACKEND": "shards"
+        "SEARCH_BACKEND": "d1"
       },
       "routes": [
         { "pattern": "documesh.selatan.org", "custom_domain": true }
@@ -71,7 +71,7 @@
         }
       ],
       "vars": {
-        "SEARCH_BACKEND": "shards"
+        "SEARCH_BACKEND": "d1"
       },
       "routes": [
         { "pattern": "documesh.selatan.org", "custom_domain": true },
