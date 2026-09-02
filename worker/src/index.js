@@ -857,12 +857,43 @@ export default {
           llms_api: "/api/llms.txt",
           llms_developers: "/developers/llms.txt",
         },
-        authentication: "none (open API)",
+        authentication: {
+          type: "none",
+          description: "Open API — no keys, tokens, or registration required for read-only access",
+          protected_resource_metadata: "/.well-known/oauth-protected-resource",
+          authorization_server_metadata: "/.well-known/oauth-authorization-server",
+          agent_registration: "/auth.md",
+          identity_endpoint: "/agent/identity",
+        },
         rate_limit: { requests_per_minute: 100, headers: "RateLimit-Limit / RateLimit-Remaining / RateLimit-Reset" },
         versioning: "URL path /v1/; unversioned paths are aliases; Deprecation + Sunset headers on deprecation",
         sandbox: "https://documesh-beta.selatan.org",
-        sdks: { npm: "documesh (SDK + CLI)" },
+        sdks: { npm: "documesh (SDK + CLI)", install: "npm install documesh", cli: "documesh search <query>" },
+        tools: {
+          mcp_tools: ["search_docs_across", "explain_error", "list_vendors"],
+          product_mcp_tools: ["service_status", "submit_vendor", "list_api_surface"],
+          mcp_apps_ui: true,
+          ui_resources: ["ui://documesh/search-results", "ui://documesh/error-match", "ui://documesh/vendor-grid"],
+        },
+        schemas: {
+          openapi: "/openapi.json",
+          response_schemas: "All operations return typed JSON matching OpenAPI components.schemas",
+          error_schema: '{"error":{"code","message","status","resolution"}}',
+        },
+        security: {
+          tls: true,
+          authentication_required: false,
+          data_practices: "/privacy.html",
+          contact: "/contact.html",
+        },
+        docs: {
+          developer_portal: "/developers.html",
+          quickstart: "/developers.md",
+          webmcp_tools_reference: "/webmcp.html",
+          coverage_licenses: "/coverage.html",
+        },
         webmcp_tools: ["search_docs_across", "explain_error", "list_vendors"],
+        a2a: { agent_card: "/.well-known/agent-card.json", endpoint: "/a2a" },
       });
     }
 
