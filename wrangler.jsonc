@@ -11,6 +11,10 @@
 //
 // Both envs share the same custom domain: staging keeps the site live on
 // every merge; production is the tagged promotion of the same code.
+//
+// Search backend (Option C, see docs/PLAN_D1_VECTORIZE.md):
+//   DB  — D1 database "documesh-search" (FTS5). Active when
+//         SEARCH_BACKEND=d1 (worker var/secret); default backend is shards.
 {
   "name": "documesh-api",
   "main": "worker/src/index.js",
@@ -20,6 +24,16 @@
     "directory": "./app",
     "run_worker_first": true
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "documesh-search",
+      "database_id": "0a83a2f0-86c3-49ff-b98c-a7856d3a0d8b"
+    }
+  ],
+  "vars": {
+    "SEARCH_BACKEND": "shards"
+  },
   "env": {
     "staging": {
       "name": "documesh-api",
@@ -27,6 +41,16 @@
         "binding": "ASSETS",
         "directory": "./app",
         "run_worker_first": true
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "documesh-search",
+          "database_id": "0a83a2f0-86c3-49ff-b98c-a7856d3a0d8b"
+        }
+      ],
+      "vars": {
+        "SEARCH_BACKEND": "shards"
       },
       "routes": [
         { "pattern": "documesh.selatan.org", "custom_domain": true }
@@ -38,6 +62,16 @@
         "binding": "ASSETS",
         "directory": "./app",
         "run_worker_first": true
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "documesh-search",
+          "database_id": "0a83a2f0-86c3-49ff-b98c-a7856d3a0d8b"
+        }
+      ],
+      "vars": {
+        "SEARCH_BACKEND": "shards"
       },
       "routes": [
         { "pattern": "documesh.selatan.org", "custom_domain": true },

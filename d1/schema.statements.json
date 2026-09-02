@@ -1,0 +1,14 @@
+[
+ "DROP TRIGGER IF EXISTS chunks_au",
+ "DROP TRIGGER IF EXISTS chunks_ad",
+ "DROP TRIGGER IF EXISTS chunks_ai",
+ "DROP TABLE IF EXISTS chunks_fts",
+ "DROP TABLE IF EXISTS chunks",
+ "CREATE TABLE chunks (\n  id           INTEGER PRIMARY KEY,\n  chunk_id     TEXT UNIQUE NOT NULL,\n  vendor       TEXT NOT NULL,\n  version      TEXT NOT NULL DEFAULT 'latest',\n  title        TEXT NOT NULL,\n  heading_path TEXT,\n  path         TEXT,\n  source_url   TEXT NOT NULL,\n  license      TEXT NOT NULL,\n  attribution  TEXT,\n  last_updated TEXT,\n  snippet      TEXT,\n  content      TEXT NOT NULL\n)",
+ "CREATE INDEX idx_chunks_vendor ON chunks(vendor)",
+ "CREATE INDEX idx_chunks_chunkid ON chunks(chunk_id)",
+ "CREATE VIRTUAL TABLE chunks_fts USING fts5(\n  title,\n  heading_path,\n  content,\n  content='chunks',\n  content_rowid='id',\n  tokenize='porter unicode61'\n)",
+ "CREATE TRIGGER chunks_ai AFTER INSERT ON chunks BEGIN\n  INSERT INTO chunks_fts(rowid, title, heading_path, content)\n  VALUES (new.id, new.title, new.heading_path, new.content);\nEND",
+ "CREATE TRIGGER chunks_ad AFTER DELETE ON chunks BEGIN\n  INSERT INTO chunks_fts(chunks_fts, rowid, title, heading_path, content)\n  VALUES ('delete', old.id, old.title, old.heading_path, old.content);\nEND",
+ "CREATE TRIGGER chunks_au AFTER UPDATE ON chunks BEGIN\n  INSERT INTO chunks_fts(chunks_fts, rowid, title, heading_path, content)\n  VALUES ('delete', old.id, old.title, old.heading_path, old.content);\n  INSERT INTO chunks_fts(rowid, title, heading_path, content)\n  VALUES (new.id, new.title, new.heading_path, new.content);\nEND"
+]

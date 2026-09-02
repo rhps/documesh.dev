@@ -237,9 +237,19 @@ function extractSignaturesFromLog(logExcerpt) {
 }
 
 async function runExplain(env, err, vendor) {
+  const sigs = extractSignaturesFromLog(err);
+  // D1 backend: search with the raw excerpt (FTS5 handles the text); keep
+  // extracted signatures in the response for contract parity.
+  if ((env.SEARCH_BACKEND || "shards") === "d1" && env.DB) {
+    try {
+      const out = await explainD1(env, [err.slice(0, 400), ...sigs].join(" "), vendor);
+      return { extracted_signatures: sigs.slice(0, 6), matches: out.matches, backend: "d1" };
+    } catch (e) {
+      console.error("d1 explain failed, falling back to shards:", e.message);
+    }
+  }
   const priority = vendor ? [vendor] : ["cloudflare", "netlify", "vercel", "kubernetes", "nodejs"];
   const loaded = await loadVendors(env, priority);
-  const sigs = extractSignaturesFromLog(err);
   const searchText = [err.slice(0, 400), ...sigs].join(" ");
   const toks = tokenize(searchText);
 
@@ -291,6 +301,37 @@ const idempotencyCache = new Map();
 // ─── Async-job store (per-isolate; submit → poll pattern) ────────────────────
 
 const jobs = new Map();
+
+// ─── Search backend dispatch (guardrail) ─────────────────────────────────────
+// env.SEARCH_BACKEND: "shards" (legacy, default) | "d1" (D1 FTS5).
+// Flip via wrangler secret/var — instant rollback, no code change.
+// Contract: both backends return { results[], next_cursor, ...extras }.
+import { searchD1, explainD1, toMatchQuery } from "./search-d1.js";
+
+async function unifiedSearch(env, query, opts = {}) {
+  if ((env.SEARCH_BACKEND || "shards") === "d1" && env.DB) {
+    try {
+      const out = await searchD1(env, query, opts);
+      // legacy shape extras (absent in d1 path — null-safe for consumers)
+      return {
+        matched_terms: [],
+        unmatched_terms: [],
+        coverage: null,
+        confidence: null,
+        answerable: true,
+        suggestions: [],
+        backend: "d1",
+        ...out,
+      };
+    } catch (e) {
+      console.error("d1 search failed, falling back to shards:", e.message);
+      // fall through to shards on any D1 error — never hard-fail search
+    }
+  }
+  const vendors = opts.vendors || VENDOR_IDS;
+  const loaded = await loadVendors(env, vendors);
+  return { backend: "shards", ...searchAcross(loaded, query, opts) };
+}
 
 // ─── Main handler ────────────────────────────────────────────────────────────
 
@@ -608,8 +649,8 @@ export default {
     if (path === "/mcp" || path === "/.well-known/mcp") {
       return handleMCPServer(request, env, async (toolName, args) => {
         if (toolName === "search_docs_across") {
-          const loaded = await loadVendors(env, args.vendors?.length ? args.vendors : VENDOR_IDS);
-          return { content: [{ type: "text", text: JSON.stringify({ query: args.query, ...searchAcross(loaded, args.query, { limit: args.limit || 5 }) }) }] };
+          const out = await unifiedSearch(env, args.query, { vendors: args.vendors?.length ? args.vendors : undefined, limit: args.limit || 5 });
+          return { content: [{ type: "text", text: JSON.stringify({ query: args.query, ...out }) }] };
         }
         if (toolName === "explain_error") {
           const err = args.log_excerpt || args.error || "";
@@ -709,14 +750,16 @@ export default {
       if (!Array.isArray(ops) || !ops.length) {
         return apiError(400, "MISSING_OPERATIONS", 'Body must be {"operations": [{"q": "..."}]} with 1-20 operations.', "Each operation: {op_id?, q, vendors?, limit?}.");
       }
-      const loaded = await loadVendors(env, VENDOR_IDS);
-      const results = ops.slice(0, 20).map((op, i) => {
+      const results = [];
+      for (const [i, op] of ops.slice(0, 20).entries()) {
         const opId = op.op_id ?? String(i);
         if (!op.q || !String(op.q).trim()) {
-          return { op_id: opId, status: "error", error: { code: "MISSING_QUERY", message: "Each operation requires a non-empty 'q'.", status: 400 } };
+          results.push({ op_id: opId, status: "error", error: { code: "MISSING_QUERY", message: "Each operation requires a non-empty 'q'.", status: 400 } });
+          continue;
         }
-        return { op_id: opId, status: "ok", query: op.q, results: searchAcross(loaded, op.q, { limit: op.limit || 5 }).results };
-      });
+        const out = await unifiedSearch(env, op.q, { limit: op.limit || 5 });
+        results.push({ op_id: opId, status: "ok", query: op.q, results: out.results });
+      }
       const response = json({ results });
       idempotencyCache.set(idemKey, { status: response.status, body: await response.clone().text(), headers: response.headers });
       return response;
@@ -760,10 +803,10 @@ export default {
         headers.set("Idempotency-Replayed", "true");
         return new Response(cached.body, { status: cached.status, headers });
       }
-      const loaded = await loadVendors(env, vendors || VENDOR_IDS);
       const start = Date.now();
-      const { results, next_cursor, total } = searchAcross(loaded, q, { limit, cursor });
-      const response = json({ query: q, results, total, next_cursor, took_ms: Date.now() - start }, 200, apiEntry ? url.origin : null);
+      const out = await unifiedSearch(env, q, { vendors: vendors || undefined, limit, cursor });
+      const { results, next_cursor, total } = out;
+      const response = json({ query: q, results, total, next_cursor, took_ms: Date.now() - start, backend: out.backend }, 200, apiEntry ? url.origin : null);
       if (idemKey && request.method === "POST") {
         idempotencyCache.set(idemKey, { status: response.status, body: await response.clone().text(), headers: response.headers });
       }
@@ -833,8 +876,8 @@ export default {
       if (!q) {
         return apiError(400, "MISSING_QUERY", "Required 'query' is missing.", "POST JSON {\"query\": \"...\"} or GET /ask?q=...");
       }
-      const loaded = await loadVendors(env, VENDOR_IDS);
-      const { results } = searchAcross(loaded, q, { limit: 5 });
+      const out = await unifiedSearch(env, q, { limit: 5 });
+      const { results } = out;
       if (!stream) {
         return json({
           _meta: { response_type: "search_results", version: API_VERSION },

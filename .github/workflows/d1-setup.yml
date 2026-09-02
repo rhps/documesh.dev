@@ -1,0 +1,68 @@
+name: D1 Setup & Backfill
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "schema (create tables) | backfill (load chunks) | verify (counts)"
+        required: true
+        type: choice
+        default: verify
+        options:
+          - schema
+          - backfill
+          - verify
+
+concurrency:
+  group: d1-setup
+  cancel-in-progress: false
+
+jobs:
+  d1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Create D1 database (idempotent; ignores "already exists")
+        if: inputs.action == 'schema'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler d1 create documesh-search 2>&1 | tee /tmp/create.log || true
+          grep -q "already exists" /tmp/create.log && echo "database already exists — ok"
+
+      - name: Apply schema
+        if: inputs.action == 'schema'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler d1 execute documesh-search --remote --file d1/schema.sql -y
+
+      - name: Backfill chunks from data/chunks
+        if: inputs.action == 'backfill'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          python3 indexer/load_d1.py --remote
+
+      - name: Verify counts
+        if: inputs.action == 'verify'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler d1 execute documesh-search --remote --command \
+            "SELECT vendor, COUNT(*) AS n FROM chunks GROUP BY vendor ORDER BY n DESC" -y
+          npx wrangler d1 execute documesh-search --remote --command \
+            "SELECT COUNT(*) AS total FROM chunks" -y
