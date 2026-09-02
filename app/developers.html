@@ -6,7 +6,8 @@
 <title>Developer Portal — Documesh</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="webmcp-register.js"></script>
-<style>body{font-family:ui-sans-serif,system-ui,sans-serif}pre{font-family:ui-monospace,Menlo,monospace}</style>
+<link rel="alternate" type="text/markdown" href="developers.md"/>
+<style>body{font-family:ui-sans-serif,system-ui,-apple-system,sans-serif}pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
 </head>
 <body class="bg-white text-slate-900">
 <nav class="border-b border-slate-100 px-6 py-3 flex items-center gap-6">
@@ -14,47 +15,102 @@
   <a href="app.html" class="text-sm text-slate-600">App</a>
   <a href="developers.html" class="text-sm text-[#4b5320] font-medium">Developers</a>
   <a href="coverage.html" class="text-sm text-slate-600">Coverage</a>
+  <a href="submit.html" class="text-sm text-slate-600">Submit</a>
 </nav>
 
 <main class="max-w-4xl mx-auto px-6 py-12">
+
 <h1 class="text-4xl font-bold tracking-tight">Developer Portal</h1>
-<p class="mt-4 text-slate-600">Everything you need to integrate Documesh into your application or agent.</p>
+<p class="mt-4 text-slate-600 text-lg">Everything you need to integrate Documesh into your application or agent. No API key required — the API is fully open for read-only access.</p>
 
-<h2 class="text-2xl font-bold mt-12 mb-4">Quickstart</h2>
-<p class="text-slate-600 mb-4">Search documentation with a single HTTP request — no API key required.</p>
-<pre class="bg-slate-900 text-slate-100 rounded-xl p-5 text-sm overflow-x-auto"><code>curl "https://documesh.selatan.org/search?q=edge+functions+env+vars"</code></pre>
+<!-- Quickstart -->
+<section class="mt-12">
+  <h2 class="text-2xl font-bold mb-4">Quickstart</h2>
+  <p class="text-slate-600 mb-4">Search documentation with a single HTTP request:</p>
+  <pre class="bg-slate-900 text-slate-100 rounded-xl p-5 text-sm overflow-x-auto"><code>curl "https://documesh.selatan.org/search?q=edge+functions+env+vars"</code></pre>
+  <p class="mt-3 text-sm text-slate-500">Returns ranked results with vendor, version, license, and canonical source URL for every match.</p>
+</section>
 
-<h2 class="text-2xl font-bold mt-12 mb-4">API Reference</h2>
+<!-- API Reference -->
+<section class="mt-12">
+  <h2 class="text-2xl font-bold mb-4">API Reference</h2>
+  <table class="w-full text-sm border-collapse">
+    <thead><tr class="bg-slate-50 text-left"><th class="px-4 py-2 border border-slate-200">Endpoint</th><th class="px-4 py-2 border border-slate-200">Method</th><th class="px-4 py-2 border border-slate-200">Description</th></tr></thead>
+    <tbody class="divide-y divide-slate-100">
+      <tr><td class="px-4 py-2 border border-slate-200"><code>/health</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">Service health and version</td></tr>
+      <tr><td class="px-4 py-2 border border-slate-200"><code>/search</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">Federated search across 38 vendors. Params: <code>q</code> (required), <code>vendors</code> (comma-separated), <code>limit</code> (default 5)</td></tr>
+      <tr><td class="px-4 py-2 border border-slate-200"><code>/explain</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">Error-to-docs matching. Params: <code>error</code> (required), <code>vendor</code> (optional)</td></tr>
+      <tr><td class="px-4 py-2 border border-slate-200"><code>/vendors</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">Vendor registry with licenses</td></tr>
+      <tr><td class="px-4 py-2 border border-slate-200"><code>/ask?q=</code></td><td class="px-4 py-2 border border-slate-200">GET or POST</td><td class="px-4 py-2 border border-slate-200">NLWeb natural language query endpoint</td></tr>
+      <tr><td class="px-4 py-2 border border-slate-200"><code>/mcp</code></td><td class="px-4 py-2 border border-slate-200">POST</td><td class="px-4 py-2 border border-slate-200">MCP Streamable HTTP (JSON-RPC 2.0)</td></tr>
+      <tr><td class="px-4 py-2 border border-slate-200"><code>/openapi.json</code></td><td class="px-4 py-2 border border-slate-200">GET</td><td class="px-4 py-2 border border-slate-200">OpenAPI 3.0 specification with typed schemas</td></tr>
+    </tbody>
+  </table>
 
-<table class="w-full text-sm border-collapse">
-  <thead><tr class="bg-slate-50 text-left"><th class="px-4 py-2 border border-slate-200">Endpoint</th><th class="px-4 py-2 border border-slate-200">Description</th></tr></thead>
-  <tbody class="divide-y divide-slate-100">
-    <tr><td class="px-4 py-2 border border-slate-200"><a href="/openapi.json" class="text-orange-600 underline">openapi.json</a></td><td class="px-4 py-2 border border-slate-200">OpenAPI 3.0 specification</td></tr>
-    <tr><td class="px-4 py-2 border border-slate-200"><code>GET /health</code></td><td class="px-4 py-2 border border-slate-200">Health check</td></tr>
-    <tr><td class="px-4 py-2 border border-slate-200"><code>GET /search?q=&vendors=&limit=</code></td><td class="px-4 py-2 border border-slate-200">Federated search across 38 vendors</td></tr>
-    <tr><td class="px-4 py-2 border border-slate-200"><code>GET /explain?error=&vendor=</code></td><td class="px-4 py-2 border border-slate-200">Error-to-docs matching</td></tr>
-    <tr><td class="px-4 py-2 border border-slate-200"><code>GET /vendors</code></td><td class="px-4 py-2 border border-slate-200">Vendor registry with licenses</td></tr>
-    <tr><td class="px-4 py-2 border border-slate-200"><code>GET /ask?q=</code></td><td class="px-4 py-2 border border-slate-200">NLWeb natural language query</td></tr>
-  </tbody>
-</table>
+  <h3 class="text-lg font-semibold mt-6 mb-2">Example response</h3>
+  <pre class="bg-slate-900 text-slate-100 rounded-xl p-5 text-sm overflow-x-auto"><code>{
+  "query": "edge functions env vars",
+  "results": [{
+    "vendor": "netlify",
+    "version": "latest",
+    "title": "Environment variables at Netlify",
+    "heading_path": "Build > Environment variables > Overview",
+    "source_url": "https://docs.netlify.com/build/environment-variables/overview/",
+    "license": "Netlify Docs (llms.txt agent-permitted)",
+    "last_updated": "2026-08-30",
+    "score": 274.66
+  }],
+  "took_ms": 12
+}</code></pre>
+</section>
 
-<h2 class="text-2xl font-bold mt-12 mb-4">Agent Mode</h2>
-<p class="text-slate-600 mb-4">Add <code>?mode=agent</code> to the root URL for a machine-readable view of all capabilities.</p>
-<pre class="bg-slate-900 text-slate-100 rounded-xl p-5 text-sm overflow-x-auto"><code>curl "https://documesh.selatan.org/?mode=agent"</code></pre>
+<!-- Agent Mode -->
+<section class="mt-12">
+  <h2 class="text-2xl font-bold mb-4">Agent Mode</h2>
+  <p class="text-slate-600 mb-4">Add <code>?mode=agent</code> to the root URL for a machine-readable view of all capabilities, endpoints, and vendors.</p>
+  <pre class="bg-slate-900 text-slate-100 rounded-xl p-5 text-sm overflow-x-auto"><code>curl "https://documesh.selatan.org/?mode=agent"</code></pre>
+</section>
 
-<h2 class="text-2xl font-bold mt-12 mb-4">WebMCP Tools</h2>
-<p class="text-slate-600">Available via <code>document.modelContext.registerTool()</code> when any page is open in a WebMCP-compatible browser.</p>
-<ul class="mt-3 space-y-2 text-sm text-slate-600 list-disc pl-5">
-  <li><code>search_docs_across</code> — federated search across all 38 vendors</li>
-  <li><code>explain_error</code> — error message → closest doc sections</li>
-  <li><code>list_vendors</code> — vendor registry with licenses</li>
-</ul>
+<!-- Sandbox -->
+<section class="mt-12">
+  <h2 class="text-2xl font-bold mb-4">Sandbox / Test Environment</h2>
+  <p class="text-slate-600">A staging environment is available at <a href="https://documesh-beta.selatan.org" class="text-orange-600 underline">documesh-beta.selatan.org</a> for testing integrations without affecting production data. The staging environment mirrors production and uses the same API surface.</p>
+  <pre class="bg-slate-900 text-slate-100 rounded-xl p-5 text-sm overflow-x-auto"><code>curl "https://documesh-beta.selatan.org/search?q=test+query"</code></pre>
+</section>
 
-<h2 class="text-2xl font-bold mt-12 mb-4">Rate Limits</h2>
-<p class="text-slate-600">100 requests/hour per IP. Rate limit headers (<code>X-RateLimit-*</code>) included on all responses.</p>
+<!-- SDKs -->
+<section class="mt-12">
+  <h2 class="text-2xl font-bold mb-4">SDKs & CLI</h2>
+  <p class="text-slate-600">Official SDK packages are planned for Q4 2026. In the meantime, the API is REST-based and works with any HTTP client. Use the <a href="/openapi.json" class="text-orange-600 underline">OpenAPI spec</a> with <a href="https://openapi-generator.tech" class="text-orange-600 underline">openapi-generator</a> to auto-generate client libraries in your language of choice.</p>
+</section>
 
-<h2 class="text-2xl font-bold mt-12 mb-4">OpenAPI Spec</h2>
-<p class="text-slate-600">Full machine-readable API specification at <a href="/openapi.json" class="text-orange-600 underline">/openapi.json</a>.</p>
+<!-- Rate Limits -->
+<section class="mt-12">
+  <h2 class="text-2xl font-bold mb-4">Rate Limits</h2>
+  <table class="w-full text-sm border-collapse">
+    <thead><tr class="bg-slate-50 text-left"><th class="px-4 py-2 border border-slate-200">Plan</th><th class="px-4 py-2 border border-slate-200">Limit</th><th class="px-4 py-2 border border-slate-200">Window</th></tr></thead>
+    <tbody><tr><td class="px-4 py-2 border border-slate-200">Free (default)</td><td class="px-4 py-2 border border-slate-200">100 requests/hour</td></tr></tbody>
+  </table>
+  <p class="text-sm text-slate-500 mt-2">Rate limit headers (<code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code>, <code>X-RateLimit-Reset</code>) are included on all responses.</p>
+</section>
+
+<!-- WebMCP Tools -->
+<section class="mt-12">
+  <h2 class="text-2xl font-bold mb-4">WebMCP Tools</h2>
+  <p class="text-slate-600">Available via <code>document.modelContext.registerTool()</code> when any page is open in a WebMCP-compatible browser. See the <a href="webmcp.html" class="text-orange-600 underline">tool reference</a> for full inputSchema and examples.</p>
+</section>
+
+<!-- Support -->
+<section class="mt-12">
+  <h2 class="text-2xl font-bold mb-4">Support</h2>
+  <p class="text-slate-600">GitHub Issues: <a href="https://github.com/rhps/documesh.dev/issues" class="text-orange-600 underline">rhps/documesh.dev/issues</a></p>
+  <p class="text-slate-600 mt-2">Organization: <a href="https://selatan.org" class="text-orange-600 underline">selatan.org</a></p>
+</section>
+
 </main>
+
+<footer class="border-t border-slate-100 py-4 text-center text-xs text-slate-400">
+  🕸 <a href="index.html" class="hover:text-slate-600">Documesh</a> — powered by WebMCP · Built with ❤️ by <a href="https://selatan.org" target="_blank" class="hover:text-orange-600">selatan.org</a>
+</footer>
 </body>
 </html>
