@@ -13,7 +13,7 @@
 ## Quickstart
 
 ```bash
-# Search across vendors
+# Search across sources
 curl "https://documesh.selatan.org/v1/search?q=edge+functions+env+vars&limit=5"
 
 # Match an error to docs

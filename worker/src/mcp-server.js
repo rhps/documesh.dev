@@ -6,7 +6,7 @@
 const TOOLS = [
   {
     name: "search_docs_across",
-    description: "Search federated developer documentation across 47 vendors (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more). Returns ranked excerpts (snippet, version, license, canonical source URL, per-result coverage/confidence). Response includes matched_terms, unmatched_terms, coverage, answerable, and suggestions — use suggestions to refine the query when answerable is false. For multi-part questions (e.g. 'run Postgres on Workers with Terraform-managed DNS'), issue one sub-query per part instead of one combined query.",
+    description: "Search federated developer documentation across 47 sources (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more). Every result carries a 'source' field (the documentation origin; legacy name: 'vendor'). Returns ranked excerpts (snippet, version, license, canonical source URL, per-result coverage/confidence). Response includes matched_terms, unmatched_terms, coverage, answerable, and suggestions — use suggestions to refine the query when answerable is false. For multi-part questions (e.g. 'run Postgres on Workers with Terraform-managed DNS'), issue one sub-query per part instead of one combined query.",
     inputSchema: {
       type: "object",
       properties: {
@@ -27,7 +27,7 @@ const TOOLS = [
   },
   {
     name: "explain_error",
-    description: "Match an error message to the closest documentation sections across vendors.",
+    description: "Match an error message to the closest documentation sections across documentation sources.",
     inputSchema: {
       type: "object",
       properties: {
@@ -47,7 +47,7 @@ const TOOLS = [
   },
   {
     name: "list_vendors",
-    description: "List all vendors in the mesh with license and attribution requirements.",
+    description: "List all documentation sources in the mesh with license and attribution requirements. Each entry is one documentation origin (e.g. Cloudflare docs, React docs).",
     inputSchema: { type: "object", properties: {} },
     annotations: {
       title: "Vendor registry",
@@ -75,7 +75,7 @@ const RESOURCES = [
   {
     uri: "ui://documesh/vendor-grid",
     name: "Vendor Grid",
-    description: "Grid of all 47 vendors with license badges",
+    description: "Grid of all 47 documentation sources with license badges",
     mimeType: "text/html;profile=mcp-app"
   }
 ];
@@ -108,8 +108,8 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
   const sessionId = request.headers.get("Mcp-Session-Id");
   const serverName = options.serverName || "documesh";
   const serverTitle = options.serverTitle || "Documesh";
-  const serverDescription = options.serverDescription || "Federated developer documentation search across 47 vendors";
-  const serverInstructions = options.serverInstructions || "Call search_docs_across for documentation queries, explain_error to match error messages to docs, list_vendors for the source registry.";
+  const serverDescription = options.serverDescription || "Federated developer documentation search across 47 documentation sources";
+  const serverInstructions = options.serverInstructions || "Call search_docs_across for documentation queries, explain_error to match error messages to docs, list_vendors for the documentation-source registry.";
   const tools = options.tools || TOOLS;
   const resources = options.resources || RESOURCES;
 

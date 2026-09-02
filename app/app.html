@@ -7,12 +7,12 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://documesh.selatan.org/app" />
   <meta property="og:title" content="Documesh — documentation that agents can read and operate" />
-  <meta property="og:description" content="Federated developer documentation from 47 vendors. Powered by WebMCP." />
+  <meta property="og:description" content="Federated developer documentation from 47 sources. Powered by WebMCP." />
   <meta property="og:image" content="https://documesh.selatan.org/og-image.png" />
   <meta property="og:site_name" content="Documesh" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Documesh" />
-  <meta name="twitter:description" content="Federated developer documentation from 47 vendors. Powered by WebMCP." />
+  <meta name="twitter:description" content="Federated developer documentation from 47 sources. Powered by WebMCP." />
 <title>Documesh App — chat with federated docs</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -25,7 +25,7 @@
   "@type": "WebApplication",
   "name": "Documesh",
   "url": "https://documesh.selatan.org",
-  "description": "Federated developer documentation from 47 vendors \u2014 Cloudflare, Netlify, Vercel, Kubernetes, and more. Search, error matching, and vendor lookup with version-cited, license-attributed results. Powered by WebMCP.",
+  "description": "Federated developer documentation from 47 sources \u2014 Cloudflare, Netlify, Vercel, Kubernetes, and more. Search, error matching, and source lookup with version-cited, license-attributed results. Powered by WebMCP.",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web",
   "license": "https://github.com/rhps/documesh.dev/blob/main/LICENSE",
@@ -63,7 +63,7 @@
     "https://documesh.selatan.org/coverage.html"
   ],
   "featureList": [
-    "Federated documentation search across 47 vendors",
+    "Federated documentation search across 47 sources",
     "Error-to-documentation matching",
     "WebMCP tool registration for AI agents",
     "Version-cited results with license attribution",
@@ -163,7 +163,7 @@ async function registerWebMCP() {
 
     ctx.registerTool({
       name: "explain_error",
-      description: "Given a log excerpt or error message, find the closest matching documentation sections across all mesh vendors. Returns version-cited sections and a disclaimer — not a diagnosis.",
+      description: "Given a log excerpt or error message, find the closest matching documentation sections across all mesh sources. Returns version-cited sections and a disclaimer — not a diagnosis.",
       inputSchema: {
         type: "object",
         properties: {
@@ -183,7 +183,7 @@ async function registerWebMCP() {
 
     ctx.registerTool({
       name: "list_vendors",
-      description: "List the documentation vendors in the mesh with their license and attribution requirements.",
+      description: "List the documentation sources in the mesh with their license and attribution requirements.",
       inputSchema: { type: "object", properties: {} },
       execute: async () => await api("/vendors")
     });
@@ -257,14 +257,14 @@ function resultCard(r) {
 
 function renderResults(data, query) {
   addMsg("assistant", `
-    <div class="font-medium">🔍 Searched all vendors for "<em>${query}</em>"</div>
+    <div class="font-medium">🔍 Searched all sources for "<em>${query}</em>"</div>
     <div class="text-xs text-slate-400">${data.results.length} results · snapshot ${data.snapshot_date} · ${data.took_ms}ms</div>
     ${data.results.map(resultCard).join("")}
   `);
   viewer.innerHTML = `
     <h3 class="font-bold mb-3">Results for "${query}"</h3>
     ${data.results.map(resultCard).join("<hr class='my-3 border-slate-100'/>")}
-    <p class="text-[11px] text-slate-400 mt-4">All excerpts link to canonical vendor pages. Licenses: Cloudflare CC-BY-4.0 · Kubernetes CC-BY-4.0 · Netlify, Vercel, Stripe, Sentry, Turso, Upstash — official llms.txt agent interfaces · Bun, Hono, Nuxt, SolidJS, ElysiaJS — MIT.</p>`;
+    <p class="text-[11px] text-slate-400 mt-4">All excerpts link to canonical source pages. Licenses: Cloudflare CC-BY-4.0 · Kubernetes CC-BY-4.0 · Netlify, Vercel, Stripe, Sentry, Turso, Upstash — official llms.txt agent interfaces · Bun, Hono, Nuxt, SolidJS, ElysiaJS — MIT.</p>`;
 }
 
 function renderExplain(data) {

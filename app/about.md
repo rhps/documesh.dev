@@ -1,6 +1,6 @@
 # About Documesh
 
-Documesh is a federated developer documentation search engine. It indexes official, openly licensed documentation from 38 software vendors — including Cloudflare, Netlify, Vercel, Kubernetes, Bun, Stripe, Sentry, React, PyTorch, Node.js, Godot, and Neovim — roughly 17,000 indexed sections, and serves it to both human developers and AI agents through one contract.
+Documesh is a federated developer documentation search engine. It indexes official, openly licensed documentation from 38 software sources — including Cloudflare, Netlify, Vercel, Kubernetes, Bun, Stripe, Sentry, React, PyTorch, Node.js, Godot, and Neovim — roughly 17,000 indexed sections, and serves it to both human developers and AI agents through one contract.
 
 ## Why Documesh exists
 
@@ -9,7 +9,7 @@ Today an AI agent that wants to use your documentation must scrape HTML, guess a
 ## How it works
 
 - **Ingestion:** every source is ingested via official agent interfaces (llms.txt-permitted origins, `.md` endpoints) or open-licensed git repositories. No scraping, ever. BUSL and strong-copyleft sources are deliberately excluded.
-- **Indexing:** content is chunked by heading structure, each chunk carrying vendor, version, license, attribution, and canonical source URL.
+- **Indexing:** content is chunked by heading structure, each chunk carrying source, version, license, attribution, and canonical source URL.
 - **Serving:** three WebMCP tools (`search_docs_across`, `explain_error`, `list_vendors`) are registered on the web app via `document.modelContext.registerTool()`, and a REST API plus an MCP server (Streamable HTTP at `/mcp`) expose the same capability to non-browser agents.
 
 ## Licensing stance

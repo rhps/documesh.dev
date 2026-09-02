@@ -1,6 +1,6 @@
 ---
 title: Documesh
-description: Federated developer documentation search across 47 vendors. Powered by WebMCP.
+description: Federated developer documentation search across 47 sources. Powered by WebMCP.
 canonical: https://documesh.selatan.org/
 last-updated: 2026-09-01
 ---
@@ -10,9 +10,9 @@ last-updated: 2026-09-01
 Documentation that agents can not only read, but operate.
 
 Documesh is an application powered by WebMCP — federated developer documentation
-from 47 vendors, with version-cited, license-attributed answers.
+from 47 sources, with version-cited, license-attributed answers.
 
-## Vendors in the mesh
+## Sources in the mesh
 
 Cloudflare (CC-BY-4.0) · Netlify (llms.txt) · Vercel (llms.txt) · Kubernetes (CC-BY-4.0) ·
 Bun (MIT) · ElysiaJS (MIT) · Turso (llms.txt) · Upstash (llms.txt) · Sentry (llms.txt) ·
@@ -25,7 +25,7 @@ Moby (Apache-2.0) · Elasticsearch (Apache-2.0) · Svelte (MIT) · Vue (MIT) · 
 
 ## WebMCP Tools
 
-- `search_docs_across` — federated search across all vendors
+- `search_docs_across` — federated search across all sources
 - `explain_error` — log excerpt → closest doc sections
 - `list_vendors` — vendor registry with licenses
 

@@ -23,7 +23,7 @@ Documesh is a **fully open, read-only API**. No API keys, no tokens, no registra
 | Method | When to use |
 |--------|-------------|
 | `anonymous` | Everything. All endpoints are open for read-only use — no credentials needed. |
-| `service_auth` | Reserved for future write operations (vendor submission API). Not yet issued; see the async submission endpoint for the current flow. |
+| `service_auth` | Reserved for future write operations (source submission API). Not yet issued; see the async submission endpoint for the current flow. |
 
 ## Register
 

@@ -1,15 +1,15 @@
 ---
 title: Documesh Coverage
-description: Vendors, licenses, legal exclusions
+description: Sources, licenses, legal exclusions
 canonical: https://documesh.selatan.org/coverage.html
 last-updated: 2026-09-02
 ---
 
 # Documesh Coverage
 
-47 vendors covered. Full license attribution on every result.
+47 sources covered. Full license attribution on every result.
 
-## Covered vendors
+## Covered sources
 
 Cloudflare (CC-BY-4.0), Netlify (llms.txt), Vercel (llms.txt), Kubernetes (CC-BY-4.0),
 Bun (MIT), ElysiaJS (MIT), Turso (llms.txt), Upstash (llms.txt), Sentry (llms.txt),

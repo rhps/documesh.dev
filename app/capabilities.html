@@ -7,14 +7,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://documesh.selatan.org/capabilities" />
   <meta property="og:title" content="Documesh — documentation that agents can read and operate" />
-  <meta property="og:description" content="Federated developer documentation from 47 vendors. Powered by WebMCP." />
+  <meta property="og:description" content="Federated developer documentation from 47 sources. Powered by WebMCP." />
   <meta property="og:image" content="https://documesh.selatan.org/og-image.png" />
   <meta property="og:site_name" content="Documesh" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Documesh" />
-  <meta name="twitter:description" content="Federated developer documentation from 47 vendors. Powered by WebMCP." />
+  <meta name="twitter:description" content="Federated developer documentation from 47 sources. Powered by WebMCP." />
 <title>Documesh Capabilities — Federated Docs Search API, Error Matching, MCP Tools</title>
-<meta name="description" content="What the Documesh API can do: federated documentation search across vendors, error-to-docs matching, license-aware vendor registry, MCP server tools, and NLWeb query endpoint."/>
+<meta name="description" content="What the Documesh API can do: federated documentation search across sources, error-to-docs matching, license-aware source registry, MCP server tools, and NLWeb query endpoint."/>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
@@ -27,7 +27,7 @@
   "@type": "WebApplication",
   "name": "Documesh",
   "url": "https://documesh.selatan.org",
-  "description": "Federated developer documentation from 47 vendors \u2014 Cloudflare, Netlify, Vercel, Kubernetes, and more. Search, error matching, and vendor lookup with version-cited, license-attributed results. Powered by WebMCP.",
+  "description": "Federated developer documentation from 47 sources \u2014 Cloudflare, Netlify, Vercel, Kubernetes, and more. Search, error matching, and source lookup with version-cited, license-attributed results. Powered by WebMCP.",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web",
   "license": "https://github.com/rhps/documesh.dev/blob/main/LICENSE",
@@ -65,7 +65,7 @@
     "https://documesh.selatan.org/coverage.html"
   ],
   "featureList": [
-    "Federated documentation search across 47 vendors",
+    "Federated documentation search across 47 sources",
     "Error-to-documentation matching",
     "WebMCP tool registration for AI agents",
     "Version-cited results with license attribution",
@@ -113,21 +113,21 @@
     </div>
     <h2 class="text-2xl font-bold mt-3">🔍 Federated documentation search</h2>
     <p class="mt-3 text-slate-600 leading-relaxed">
-      One query, fifteen vendors. The mesh fans your query out across every source in parallel,
+      One query, fifteen sources. The mesh fans your query out across every source in parallel,
       merges the results by relevance, and returns them with the full provenance trail:
-      which vendor, which version, the canonical URL, the license, and when it was last updated.
-      Filter by vendor when you already know whose docs you need.
+      which source, which version, the canonical URL, the license, and when it was last updated.
+      Filter by source when you already know whose docs you need.
     </p>
     <div class="mt-5 grid md:grid-cols-2 gap-4">
       <div class="border border-slate-100 rounded-xl p-5">
         <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Input</div>
         <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{ "query": "edge functions env vars",
-  "vendors": ["netlify", "vercel"],
+  "sources": ["netlify", "vercel"],
   "limit": 5 }</pre>
       </div>
       <div class="border border-slate-100 rounded-xl p-5">
         <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Output (per result)</div>
-        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{ "vendor": "netlify",
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{ "source": "netlify",
   "title": "Environment variables",
   "heading_path": "Build > …",
   "source_url": "https://docs.netlify.com/…",
@@ -139,7 +139,7 @@
     <div class="mt-4 flex gap-3 text-sm">
       <a href="app.html?q=edge%20functions%20environment%20variables" class="text-[#4b5320] hover:text-[#6a7337]">Try it live →</a>
       <span class="text-slate-300">|</span>
-      <span class="text-slate-400">Indexed sections: 4,186 across 47 vendors</span>
+      <span class="text-slate-400">Indexed sections: 4,186 across 47 sources</span>
     </div>
   </section>
 
@@ -214,9 +214,9 @@ kubernetes v1.29 → "Container restart policy"   score 236.4
     </div>
     <h2 class="text-2xl font-bold mt-3">⚖️ License-aware ingestion</h2>
     <p class="mt-3 text-slate-600 leading-relaxed">
-      Ingestion is gated on legality, not convenience. Vendors enter the mesh only via
+      Ingestion is gated on legality, not convenience. Sources enter the mesh only via
       (a) permissive licenses (CC-BY-4.0, MIT, Apache-2.0) or (b) official agent interfaces
-      (llms.txt, `.md` endpoints) that explicitly permit machine consumption. Vendors with
+      (llms.txt, `.md` endpoints) that explicitly permit machine consumption. Sources with
       unclear or restrictive terms — Terraform (BUSL), Grafana (AGPL) — are deliberately
       excluded. Every single response names its license; the
       <a href="coverage.html" class="text-[#4b5320] hover:text-[#6a7337]">coverage page</a>

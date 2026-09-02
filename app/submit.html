@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Submit a Vendor — Documesh</title>
+<title>Submit a Source — Documesh</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
@@ -83,7 +83,7 @@
       <a href="coverage.html" class="hover:text-slate-900">Coverage</a>
       <a href="developers.html" class="hover:text-slate-900">Developers</a>
       <a href="submit.html" class="hover:text-slate-900">Submit</a>
-      <a href="submit.html" class="text-[#4b5320] font-medium">Submit Vendor</a>
+      <a href="submit.html" class="text-[#4b5320] font-medium">Submit Source</a>
     </div>
   </div>
 </nav>
@@ -91,9 +91,9 @@
 <main class="max-w-4xl mx-auto px-6 py-12">
 
 <header class="mb-10">
-  <h1 class="text-3xl font-bold tracking-tight">Submit a Vendor</h1>
+  <h1 class="text-3xl font-bold tracking-tight">Submit a Source</h1>
   <p class="mt-3 text-slate-600 leading-relaxed max-w-2xl">
-    Request documentation ingestion for an open-source project or vendor.
+    Request documentation ingestion for an open-source project or source.
     We check legality, detect the best ingestion pattern (P1–P4), and — if it passes —
     queue it for the next batch. No scraping, ever.
   </p>
@@ -104,8 +104,8 @@
   <div class="bg-white border border-slate-200 rounded-2xl p-8 space-y-6">
 
     <div>
-      <label class="block text-sm font-medium text-slate-700 mb-1">Vendor / Project name <span class="text-red-500">*</span></label>
-      <input id="vendor-name" type="text" placeholder="e.g. Kubernetes, Helm, Grafana"
+      <label class="block text-sm font-medium text-slate-700 mb-1">Source / Project name <span class="text-red-500">*</span></label>
+      <input id="source-name" type="text" placeholder="e.g. Kubernetes, Helm, Grafana"
              class="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[#4b5320]" />
     </div>
 
@@ -122,7 +122,7 @@
       Every response in the mesh attributes the source.
     </div>
 
-    <button id="submit-btn" onclick="checkVendor()"
+    <button id="submit-btn" onclick="checkSource()"
             class="w-full bg-[#4b5320] hover:bg-[#6a7337] text-white px-6 py-3 rounded-xl font-medium transition-colors">
       Request
     </button>
@@ -191,7 +191,7 @@
     <div class="text-4xl mb-4">🎉</div>
     <h2 class="text-2xl font-bold text-green-800">Queued for next batch!</h2>
     <p id="queued-detail" class="mt-3 text-slate-600 max-w-md mx-auto"></p>
-    <p class="mt-4 text-xs text-slate-400">The ingestion pipeline will process this vendor in the next scheduled batch. You'll see it appear on the coverage page once ingested.</p>
+    <p class="mt-4 text-xs text-slate-400">The ingestion pipeline will process this source in the next scheduled batch. You'll see it appear on the coverage page once ingested.</p>
   </div>
 </section>
 
