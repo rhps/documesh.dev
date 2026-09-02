@@ -5,6 +5,7 @@
     "current": "/v1",
     "stable-since": "2026-09-01",
     "deprecation-policy": "Breaking changes ship under a new /vN path. Deprecated endpoints return a Deprecation header the day of decision and an RFC 8594 Sunset header at least 90 days before removal. Additive changes may occur within a version without notice.",
+    "policy-url": "https://documesh.selatan.org/deprecation.md",
     "note": "Unversioned paths (e.g. /search) are live aliases of /v1 and will remain supported through at least 2027-09-01."
   },
   "info": {

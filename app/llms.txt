@@ -45,6 +45,7 @@ Any WebMCP-compatible agent can discover and call these tools when the page is o
 
 ## Pages
 
+- [Versioning & Deprecation Policy](https://documesh.selatan.org/deprecation.md): API versioning strategy, Deprecation/Sunset header signaling, removal rules
 - [Developer Resources](https://documesh.selatan.org/resources.html): one-page index of all API docs, OpenAPI, MCP, auth, SDK, and sandbox links
 - [Home](https://documesh.selatan.org/): Overview and stats
 - [App](https://documesh.selatan.org/app.html): Chat interface with WebMCP tools

@@ -731,6 +731,14 @@ export default {
       return json({ jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${method}. Supported: message/send, tasks/get.` } });
     }
 
+    // Versioning & deprecation policy (machine + human readable)
+    if (path === "/deprecation.md" || path === "/deprecation" || path === "/versioning" || path === "/policy") {
+      const md = await env.ASSETS.fetch(new URL("/deprecation.md", url.origin));
+      if (md.status !== 404) return md;
+      // fallback: serve from static assets failed — build minimal policy response
+      return markdown(`# Documesh API Versioning & Deprecation Policy\n\nCurrent version: v1 (stable since 2026-09-01). URL path versioning (/v1/). Unversioned paths are permanent aliases. Deprecations are signaled with Deprecation + Sunset (RFC 8594) headers at least 90 days before removal. Nothing is removed silently.\n`);
+    }
+
     // Health (also /v1/health)
     if (path === "/health") {
       return json({
