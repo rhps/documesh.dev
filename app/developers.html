@@ -69,6 +69,12 @@
   <p class="mt-3 text-sm text-slate-500">Returns ranked results with source, version, license, and canonical source URL for every match.</p>
 </section>
 
+<!-- Authentication -->
+<section class="mt-12">
+  <h2 class="text-2xl font-bold mb-4">Authentication</h2>
+  <p class="text-slate-600"><strong>None required.</strong> The API is fully open for read-only use — no API keys, tokens, or registration. Rate limits apply (100 requests/hour per IP), declared via <code>RateLimit-*</code> response headers. See the <a href="auth.md" class="text-orange-600 underline">auth docs</a> and the <a href="deprecation.md" class="text-orange-600 underline">versioning &amp; deprecation policy</a> for details.</p>
+</section>
+
 <!-- API Reference -->
 <section class="mt-12">
   <h2 class="text-2xl font-bold mb-4">API Reference</h2>
@@ -119,7 +125,7 @@
 <!-- SDKs -->
 <section class="mt-12">
   <h2 class="text-2xl font-bold mb-4">SDKs & CLI</h2>
-  <p class="text-slate-600">Official SDK packages are planned for Q4 2026. In the meantime, the API is REST-based and works with any HTTP client. Use the <a href="/openapi.json" class="text-orange-600 underline">OpenAPI spec</a> with <a href="https://openapi-generator.tech" class="text-orange-600 underline">openapi-generator</a> to auto-generate client libraries in your language of choice.</p>
+  <p class="text-slate-600">Official SDK + CLI: <code>npm install documesh</code> — <a href="https://www.npmjs.com/package/documesh" class="text-orange-600 underline">documesh on npm</a>. The API is also plain REST and works with any HTTP client; use the <a href="/openapi.json" class="text-orange-600 underline">OpenAPI spec</a> with <a href="https://openapi-generator.tech" class="text-orange-600 underline">openapi-generator</a> to generate clients in other languages.</p>
 </section>
 
 <!-- Rate Limits -->
@@ -129,7 +135,7 @@
     <thead><tr class="bg-slate-50 text-left"><th class="px-4 py-2 border border-slate-200">Plan</th><th class="px-4 py-2 border border-slate-200">Limit</th><th class="px-4 py-2 border border-slate-200">Window</th></tr></thead>
     <tbody><tr><td class="px-4 py-2 border border-slate-200">Free (default)</td><td class="px-4 py-2 border border-slate-200">100 requests/hour</td></tr></tbody>
   </table>
-  <p class="text-sm text-slate-500 mt-2">Rate limit headers (<code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code>, <code>X-RateLimit-Reset</code>) are included on all responses.</p>
+  <p class="text-sm text-slate-500 mt-2">IETF RateLimit headers (<code>RateLimit-Limit</code>, <code>RateLimit-Remaining</code>, <code>RateLimit-Reset</code>) are included on all responses.</p>
 </section>
 
 <!-- WebMCP Tools -->
