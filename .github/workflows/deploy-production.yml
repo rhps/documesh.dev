@@ -132,7 +132,7 @@ jobs:
       - name: Smoke test production
         run: |
           HOST="https://documesh.dev"
-          ALT="https://docs-mesh-api.${{ vars.CF_SUBDOMAIN }}.workers.dev"
+          ALT="https://documesh-api-prod.${{ vars.CF_SUBDOMAIN }}.workers.dev"
           for i in 1 2 3 4 5 6; do
             CODE=$(curl -s -o /tmp/health.json -w "%{http_code}" "$HOST/health" || true)
             [ "$CODE" = "200" ] && { echo "✅ production healthy ($HOST):"; cat /tmp/health.json; exit 0; }
@@ -154,7 +154,7 @@ jobs:
             --title "Docs Mesh $TAG" \
             --notes "Production deploy ($MODE mode) by @${{ github.actor }}.
 
-          🌐 https://docs-mesh-api.${{ vars.CF_SUBDOMAIN }}.workers.dev
+          🌐 https://documesh-api-prod.${{ vars.CF_SUBDOMAIN }}.workers.dev
           📸 Snapshot: $(python3 -c "import json; print(json.load(open('data/snapshot.json'))['built_at'])")
 
           Judging notes: WebMCP tools available in ChatGPT in-app browser and Chrome 149+ with \`chrome://flags/#enable-webmcp-testing\`."
@@ -164,7 +164,7 @@ jobs:
           {
             echo "## 🏆 Production deployed (${{ steps.resolve.outputs.tag }})"
             echo ""
-            echo "- URL: https://docs-mesh-api.${{ vars.CF_SUBDOMAIN }}.workers.dev"
+            echo "- URL: https://documesh-api-prod.${{ vars.CF_SUBDOMAIN }}.workers.dev"
             echo "- Mode: ${{ steps.resolve.outputs.mode }}"
             echo "- Promoted by: @${{ github.actor }}"
           } >> "$GITHUB_STEP_SUMMARY"
