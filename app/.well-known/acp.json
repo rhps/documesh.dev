@@ -3,10 +3,23 @@
     "name": "acp",
     "version": "1.0"
   },
+  "version": "1.0",
   "api_base_url": "https://documesh.selatan.org",
   "transports": ["rest", "mcp"],
+  "services": [
+    "docs-search",
+    "error-docs-matching",
+    "vendor-license-lookup",
+    "docs-mcp"
+  ],
   "capabilities": {
     "services": [
+      "docs-search",
+      "error-docs-matching",
+      "vendor-license-lookup",
+      "docs-mcp"
+    ],
+    "service_details": [
       {
         "id": "docs-search",
         "name": "Federated Documentation Search",
