@@ -11,6 +11,10 @@ const VENDOR_IDS = Object.keys(VENDOR_META);
 const API_VERSION = "v1";
 const API_VERSION_DATE = "2026-09-01";
 
+// base64url helpers — the Workers runtime has no global Buffer without nodejs_compat
+const b64uEncode = (s) => btoa(String.fromCharCode(...new TextEncoder().encode(s))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const b64uDecode = (s) => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0)));
+
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -128,10 +132,10 @@ function searchAcross(loaded, query, opts = {}) {
   }
   results.sort((a, b) => b.score - a.score);
   // Cursor-based pagination: opaque cursor = score rank offset
-  const start = cursor ? parseInt(Buffer.from(cursor, "base64url").toString()) || 0 : 0;
+  const start = cursor ? parseInt(b64uDecode(cursor)) || 0 : 0;
   const page = results.slice(start, start + limit);
   const next_cursor = start + limit < results.length
-    ? Buffer.from(String(start + limit)).toString("base64url")
+    ? b64uEncode(String(start + limit))
     : null;
   return { results: page, next_cursor, total: results.length };
 }
@@ -345,14 +349,44 @@ export default {
       return json({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION });
     }
 
+    // Batch search — one request, many queries (Idempotency-Key required)
+    if (path === "/batch" && request.method === "POST") {
+      const idemKey = request.headers.get("Idempotency-Key");
+      if (!idemKey) {
+        return apiError(400, "MISSING_IDEMPOTENCY_KEY", "The Idempotency-Key header is required on POST /batch.", "Generate a UUID per logical batch and reuse it on retries.");
+      }
+      if (idempotencyCache.has(idemKey)) {
+        const cached = idempotencyCache.get(idemKey);
+        const headers = new Headers(cached.headers);
+        headers.set("Idempotency-Replayed", "true");
+        return new Response(cached.body, { status: cached.status, headers });
+      }
+      let ops = [];
+      try { ops = (await request.json())?.operations || []; } catch {}
+      if (!Array.isArray(ops) || !ops.length) {
+        return apiError(400, "MISSING_OPERATIONS", 'Body must be {"operations": [{"q": "..."}]} with 1-20 operations.', "Each operation: {op_id?, q, vendors?, limit?}.");
+      }
+      const loaded = await loadVendors(env, VENDOR_IDS);
+      const results = ops.slice(0, 20).map((op, i) => {
+        const opId = op.op_id ?? String(i);
+        if (!op.q || !String(op.q).trim()) {
+          return { op_id: opId, status: "error", error: { code: "MISSING_QUERY", message: "Each operation requires a non-empty 'q'.", status: 400 } };
+        }
+        return { op_id: opId, status: "ok", query: op.q, results: searchAcross(loaded, op.q, { limit: op.limit || 5 }).results };
+      });
+      const response = json({ results });
+      idempotencyCache.set(idemKey, { status: response.status, body: await response.clone().text(), headers: response.headers });
+      return response;
+    }
+
     // Vendors with cursor pagination
     if (path === "/vendors") {
       const cursor = url.searchParams.get("cursor");
       const limit = Math.min(parseInt(url.searchParams.get("limit") || String(VENDOR_IDS.length)), VENDOR_IDS.length);
       const all = VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id] }));
-      const start = cursor ? parseInt(Buffer.from(cursor, "base64url").toString()) || 0 : 0;
+      const start = cursor ? parseInt(b64uDecode(cursor)) || 0 : 0;
       const page = all.slice(start, start + limit);
-      const next_cursor = start + limit < all.length ? Buffer.from(String(start + limit)).toString("base64url") : null;
+      const next_cursor = start + limit < all.length ? b64uEncode(String(start + limit)) : null;
       return json({ vendors: page, total: all.length, next_cursor, pagination: { style: "cursor", cursor_param: "cursor", limit_param: "limit" } });
     }
 
