@@ -6,7 +6,7 @@
 const TOOLS = [
   {
     name: "search_docs_across",
-    description: "Search federated developer documentation across 38 vendors (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more). Returns ranked excerpts with version, license, and canonical source URL.",
+    description: "Search federated developer documentation across 38 vendors (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more). Returns ranked excerpts (snippet, version, license, canonical source URL, per-result coverage/confidence). Response includes matched_terms, unmatched_terms, coverage, answerable, and suggestions — use suggestions to refine the query when answerable is false. For multi-part questions (e.g. 'run Postgres on Workers with Terraform-managed DNS'), issue one sub-query per part instead of one combined query.",
     inputSchema: {
       type: "object",
       properties: {

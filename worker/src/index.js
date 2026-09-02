@@ -106,20 +106,66 @@ async function loadVendors(env, vendors) {
 function searchAcross(loaded, query, opts = {}) {
   const { limit = 5, cursor } = opts;
   const toks = tokenize(query);
-  if (!toks.length) return { results: [], next_cursor: null };
-  const scores = new Map();
+  if (!toks.length) return { results: [], next_cursor: null, matched_terms: [], unmatched_terms: [], coverage: 0, confidence: "none", answerable: false, suggestions: [] };
+
+  // Pass 1: score docs AND track per-token stats. Posting weights are
+  // tf*idf from the indexer, so a token's max weight is an idf proxy —
+  // rare tokens (hyperdrive, postgres) carry far more mass than generic
+  // ones (cloudflare, dns). This lets us measure how much of the query's
+  // *rare-token mass* a doc actually covers instead of being fooled by
+  // generic-token matches.
+  const scores = new Map(); // key -> { raw, toks:Set }
+  const tokenMaxW = new Map(); // token -> max posting weight (idf proxy)
   for (const [vendor, index] of Object.entries(loaded)) {
     for (const tok of toks) {
       const pl = index.postings.get(tok);
       if (!pl) continue;
+      let mw = tokenMaxW.get(tok) || 0;
       for (const [docIdx, w] of pl) {
+        if (w > mw) mw = w;
         const key = `${vendor}:${docIdx}`;
-        scores.set(key, (scores.get(key) || 0) + w);
+        const e = scores.get(key);
+        if (e) { e.raw += w; e.toks.add(tok); }
+        else scores.set(key, { raw: w, toks: new Set([tok]) });
       }
+      tokenMaxW.set(tok, mw);
     }
   }
+
+  const matched = toks.filter(t => tokenMaxW.has(t));
+  const unmatched = [...new Set(toks.filter(t => !tokenMaxW.has(t)))];
+  const totalMass = toks.reduce((s, t) => s + (tokenMaxW.get(t) || 0), 0) || 1;
+
+  // Suggestions: for unmatched tokens, find vocabulary neighbors (e.g.
+  // postgres → postgresql, d1) so the calling agent can refine in one
+  // extra call instead of guessing related terms from its own memory.
+  let suggestions = [];
+  if (unmatched.length) {
+    const want = new Set();
+    for (const u of unmatched) {
+      if (u.length >= 4) want.add(u.slice(0, Math.max(4, Math.floor(u.length * 0.6))));
+    }
+    const seen = new Set();
+    scan: for (const index of Object.values(loaded)) {
+      for (const term of index.postings.keys()) {
+        if (seen.size >= 20000) break scan;
+        seen.add(term);
+        if (tokenMaxW.has(term)) continue;
+        for (const u of unmatched) {
+          if (term === u) continue;
+          if ((term.includes(u) || u.includes(term)) ||
+              (u.length >= 5 && term.startsWith(u.slice(0, 5)))) {
+            suggestions.push(term);
+            if (suggestions.length >= 6) break scan;
+          }
+        }
+      }
+    }
+    suggestions = [...new Set(suggestions)].slice(0, 6);
+  }
+
   let results = [];
-  for (const [key, score] of scores) {
+  for (const [key, entry] of scores) {
     const [vendor, docIdxStr] = key.split(":");
     const index = loaded[vendor];
     if (!index) continue;
@@ -128,12 +174,31 @@ function searchAcross(loaded, query, opts = {}) {
     const docToks = new Set(tokenize(d.title + " " + d.heading_path));
     let covered = 0;
     for (const t of toks) if (docToks.has(t)) covered++;
+    // Rare-token mass this doc covers (over ALL query tokens — unmatched
+    // mass counts against coverage, which is the honest signal).
+    let docMass = 0;
+    for (const t of entry.toks) docMass += tokenMaxW.get(t) || 0;
+    const coverage = +(docMass / totalMass).toFixed(3);
+    // Bigram bonus: adjacent query tokens appearing together in the title
+    // path (cheap phrase proxy, big precision win for compound questions).
+    let bigramBonus = 0;
+    for (let i = 0; i < toks.length - 1; i++) {
+      if (docToks.has(toks[i]) && docToks.has(toks[i + 1])) {
+        bigramBonus += 0.5 * Math.min(tokenMaxW.get(toks[i]) || 0, tokenMaxW.get(toks[i + 1]) || 0);
+      }
+    }
+    // Rerank: down-weight low-coverage docs so a 2-generic-token match
+    // can't outrank a doc covering the query's rare mass.
+    const finalScore = (entry.raw + bigramBonus) * (1 + covered / toks.length) * (0.6 + 0.4 * coverage);
     results.push({
       chunk_id: d.chunk_id, vendor: d.vendor, version: d.version,
       title: d.title, heading_path: d.heading_path, path: d.path,
       source_url: d.source_url, license: d.license, attribution: d.attribution,
       last_updated: d.last_updated,
-      score: +(score * (1 + covered / toks.length)).toFixed(4),
+      snippet: d.snippet || "",
+      matched_terms: [...entry.toks],
+      coverage, score: +finalScore.toFixed(4),
+      confidence: coverage >= 0.7 ? "high" : coverage >= 0.4 ? "medium" : "low",
     });
   }
   results.sort((a, b) => b.score - a.score);
@@ -143,7 +208,15 @@ function searchAcross(loaded, query, opts = {}) {
   const next_cursor = start + limit < results.length
     ? b64uEncode(String(start + limit))
     : null;
-  return { results: page, next_cursor, total: results.length };
+  const coverageOverall = +(toks.reduce((s, t) => s + (tokenMaxW.get(t) ? 1 : 0), 0) / toks.length).toFixed(3);
+  return {
+    results: page, next_cursor, total: results.length,
+    matched_terms: [...new Set(matched)], unmatched_terms: unmatched,
+    coverage: coverageOverall,
+    confidence: coverageOverall >= 0.7 ? "high" : coverageOverall >= 0.4 ? "medium" : "low",
+    answerable: coverageOverall >= 0.6,
+    suggestions,
+  };
 }
 
 function extractSignaturesFromLog(logExcerpt) {
@@ -542,7 +615,7 @@ export default {
       return handleMCPServer(request, env, async (toolName, args) => {
         if (toolName === "search_docs_across") {
           const loaded = await loadVendors(env, args.vendors?.length ? args.vendors : VENDOR_IDS);
-          return { content: [{ type: "text", text: JSON.stringify({ results: searchAcross(loaded, args.query, { limit: args.limit || 5 }).results }) }] };
+          return { content: [{ type: "text", text: JSON.stringify({ query: args.query, ...searchAcross(loaded, args.query, { limit: args.limit || 5 }) }) }] };
         }
         if (toolName === "explain_error") {
           const err = args.log_excerpt || args.error || "";

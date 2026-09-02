@@ -309,7 +309,11 @@
           "license": { "type": "string", "description": "License of the source documentation" },
           "attribution": { "type": "string", "description": "Attribution text for this source" },
           "last_updated": { "type": "string", "format": "date", "description": "Last updated date" },
-          "score": { "type": "number", "description": "Relevance score" }
+          "score": { "type": "number", "description": "Relevance score" },
+          "snippet": { "type": "string", "description": "Short quotable plaintext excerpt (~280 chars) from the section" },
+          "matched_terms": { "type": "array", "items": { "type": "string" }, "description": "Query terms matched by this result" },
+          "coverage": { "type": "number", "description": "Fraction (0-1) of the query's rare-token mass this result covers" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"], "description": "Relevance confidence derived from coverage" }
         }
       },
       "SearchResponse": {
@@ -328,7 +332,13 @@
               "next_cursor": { "type": "string", "nullable": true, "description": "Opaque cursor; null when no more results" },
               "has_more": { "type": "boolean" }
             }
-          }
+          },
+          "matched_terms": { "type": "array", "items": { "type": "string" } },
+          "unmatched_terms": { "type": "array", "items": { "type": "string" }, "description": "Query terms with zero postings in the mesh — candidates for query refinement" },
+          "coverage": { "type": "number", "description": "Fraction (0-1) of query terms found in the mesh" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low", "none"] },
+          "answerable": { "type": "boolean", "description": "True when coverage >= 0.6 — the mesh likely contains sections answering the query" },
+          "suggestions": { "type": "array", "items": { "type": "string" }, "description": "Vocabulary-neighbor terms for unmatched query terms (e.g. postgres -> postgresql). Use to refine" }
         }
       },
       "NLWebResponse": {
