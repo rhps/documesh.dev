@@ -371,7 +371,7 @@ export default {
         resources: ["ui://documesh/search-results", "ui://documesh/error-match", "ui://documesh/vendor-grid"],
       });
     }
-    if (path === "/mcp" && (request.method === "POST" || request.method === "GET")) {
+    if ((path === "/mcp" || path === "/.well-known/mcp") && request.method === "POST") {
       return handleMCPServer(request, env, async (toolName, args) => {
         if (toolName === "search_docs_across") {
           const loaded = await loadVendors(env, args.vendors?.length ? args.vendors : VENDOR_IDS);
