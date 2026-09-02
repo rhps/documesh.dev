@@ -127,10 +127,11 @@ export function handleMCPServer(request, env, handleToolCall) {
       }
     }
 
-    // Validate session for non-initialize requests
-    if (sessionId && !getSession(sessionId)) {
-      return jsonRPC(id, { code: -32001, message: "Session not found or expired" }, null);
-    }
+    // Track session activity if we know this session. We do NOT reject
+    // unknown sessions: Workers isolates are ephemeral and per-isolate Maps
+    // cannot share state, so a session minted in another isolate would be
+    // wrongly rejected. The API is read-only/open, so permissiveness is safe.
+    if (sessionId) getSession(sessionId);
 
     try {
       let result;
