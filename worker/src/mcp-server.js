@@ -163,7 +163,7 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
   }
 
   // POST = JSON-RPC messages
-  return request.json().then(body => {
+  return request.json().then(async body => {
     const { id, method, params } = body;
 
     // Track session
@@ -232,7 +232,9 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
           if (params?.arguments !== undefined && typeof params.arguments !== "object") {
             return jsonRPC(id, { code: -32602, message: "Invalid params: 'arguments' must be an object." }, null);
           }
-          result = handleToolCall(toolName, toolArgs, env);
+          // Handler is async (may fetch vendor data) — must await or the
+          // Promise serializes to {} in the JSON-RPC result.
+          result = await handleToolCall(toolName, toolArgs, env);
           break;
         }
         case "resources/list":
