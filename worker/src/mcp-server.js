@@ -169,6 +169,13 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
     // wrongly rejected. The API is read-only/open, so permissiveness is safe.
     if (sessionId) getSession(sessionId);
 
+    // Notifications (no id) must be accepted with 202 and no body —
+    // a JSON-RPC error response to a notification violates the spec and
+    // makes strict clients abort the handshake right after initialize.
+    if (method === "notifications/initialized" || method?.startsWith("notifications/") || id === undefined) {
+      return new Response(null, { status: 202, headers: { "Access-Control-Allow-Origin": "*" } });
+    }
+
     try {
       let result;
       switch (method) {
@@ -219,7 +226,7 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
           result = {};
           break;
         default:
-          return jsonRPC(id, { code: -32601, message: `Method not found: ${method}` }, id);
+          return jsonRPC(id, { code: -32601, message: `Method not found: ${method}` }, null);
       }
 
       // Attach session header to responses when session exists
