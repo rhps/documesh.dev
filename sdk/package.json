@@ -1,0 +1,50 @@
+{
+  "name": "documesh",
+  "version": "0.2.0",
+  "description": "Official SDK and CLI for Documesh — federated developer documentation search across 38 vendors (Cloudflare, Netlify, Vercel, Kubernetes, React, PyTorch, Stripe, Sentry, and more). Version-cited, license-attributed results via REST API and MCP.",
+  "keywords": [
+    "documesh",
+    "documentation",
+    "search",
+    "federated-search",
+    "developer-docs",
+    "mcp",
+    "webmcp",
+    "cli",
+    "sdk",
+    "api-client"
+  ],
+  "homepage": "https://documesh.selatan.org",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhps/documesh.dev.git",
+    "directory": "sdk"
+  },
+  "bugs": {
+    "url": "https://documesh.selatan.org/contact.html"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "selatan.org",
+    "url": "https://selatan.org"
+  },
+  "type": "module",
+  "main": "./documesh-sdk.js",
+  "module": "./documesh-sdk.js",
+  "exports": {
+    ".": "./documesh-sdk.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "documesh": "./bin/documesh.js"
+  },
+  "files": [
+    "documesh-sdk.js",
+    "bin/documesh.js",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false
+}
