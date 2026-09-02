@@ -174,5 +174,9 @@
  "kubernetes": {
   "catalog": null,
   "pct": null
+ },
+ "vercel": {
+  "catalog": 1277,
+  "pct": 4.6
  }
 }
