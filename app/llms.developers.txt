@@ -1,0 +1,34 @@
+# Documesh Developers — llms.txt
+
+> Scoped agent context for Documesh developer resources: docs, SDKs, portal.
+
+## Developer portal
+
+- [Developer Portal](https://documesh.selatan.org/developers.html) — quickstart, endpoint reference, rate limits, SDK list, support
+- [OpenAPI Spec](https://documesh.selatan.org/openapi.json) — machine-readable contract (typed responses, Idempotency-Key, async-job pattern)
+- [API as Markdown](https://documesh.selatan.org/openapi.json.md) — OpenAPI rendered as markdown for agents
+- [Authentication](https://documesh.selatan.org/auth.md) — open API, no keys; agent auth discovery metadata
+- [Coverage & Licensing](https://documesh.selatan.org/coverage.html) — per-source license and attribution table
+
+## Quickstart
+
+```bash
+# Search across vendors
+curl "https://documesh.selatan.org/v1/search?q=edge+functions+env+vars&limit=5"
+
+# Match an error to docs
+curl "https://documesh.selatan.org/v1/explain?error=CrashLoopBackOff+in+pod+docs"
+
+# MCP handshake
+curl -X POST https://documesh.selatan.org/mcp -H 'Content-Type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"me","version":"1"}}}'
+```
+
+## Rate limits
+
+100 requests/minute per IP, advertised via IETF RateLimit-Limit / RateLimit-Remaining / RateLimit-Reset headers.
+
+## Related indexes
+
+- API surface: /llms.api.txt
+- Full site index: /llms.txt

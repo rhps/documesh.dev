@@ -60,6 +60,11 @@ Documentation ingested from official vendor-published machine interfaces
 (llms.txt, .md endpoints) or open-licensed git repositories. No scraping.
 Full attribution on every response.
 
+## Modular llms.txt per product area
+
+- [API area](https://documesh.selatan.org/llms.api.txt): REST + MCP surface, versioning, errors, auth
+- [Developers area](https://documesh.selatan.org/llms.developers.txt): portal, quickstart, rate limits, SDKs
+
 ## License
 
 MIT — see LICENSE in the repository.

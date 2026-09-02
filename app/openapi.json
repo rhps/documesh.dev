@@ -1,5 +1,12 @@
 {
   "openapi": "3.0.3",
+  "x-api-versioning": {
+    "strategy": "url-path",
+    "current": "/v1",
+    "stable-since": "2026-09-01",
+    "deprecation-policy": "Breaking changes ship under a new /vN path. Deprecated endpoints return a Deprecation header the day of decision and an RFC 8594 Sunset header at least 90 days before removal. Additive changes may occur within a version without notice.",
+    "note": "Unversioned paths (e.g. /search) are live aliases of /v1 and will remain supported through at least 2027-09-01."
+  },
   "info": {
     "title": "Documesh API",
     "description": "Federated developer documentation search across 18 vendors. Every result carries vendor, version, license, and canonical source URL.",
@@ -17,7 +24,16 @@
     { "name": "registry", "description": "Vendor and license registry" },
     { "name": "system", "description": "System operations" }
   ],
+  "x-versioned-servers": [
+    { "url": "https://documesh.selatan.org/v1", "description": "Production v1 (preferred)" },
+    { "url": "https://documesh.selatan.org", "description": "Production (unversioned alias of v1)" },
+    { "url": "https://documesh-beta.selatan.org", "description": "Staging / sandbox (beta)" }
+  ],
   "paths": {
+    "/v1/search": { "$ref": "#/paths/~1search" },
+    "/v1/explain": { "$ref": "#/paths/~1explain" },
+    "/v1/vendors": { "$ref": "#/paths/~1vendors" },
+    "/v1/health": { "$ref": "#/paths/~1health" },
     "/health": {
       "get": {
         "operationId": "healthCheck",
@@ -107,6 +123,162 @@
         }
       }
     },
+    "/ask": {
+      "post": {
+        "operationId": "askQuestion",
+        "tags": ["system"],
+        "summary": "NLWeb natural-language query (supports async + idempotent retries)",
+        "description": "Accepts a natural-language query. Long-running executions return 202 with a job reference to poll; supply Idempotency-Key to make retries safe.",
+        "parameters": [
+          { "name": "Idempotency-Key", "in": "header", "required": false,
+            "schema": { "type": "string", "format": "uuid" },
+            "description": "Unique key per logical operation. Retrying with the same key returns the original result instead of duplicating work." }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["query"],
+                "properties": {
+                  "query": { "type": "string", "description": "Natural-language question" },
+                  "prefer": {
+                    "type": "object",
+                    "properties": { "streaming": { "type": "boolean", "default": false } }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Query answered synchronously",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/NLWebResponse" } } }
+          },
+          "202": {
+            "description": "Accepted — poll the job for the result (async-job pattern)",
+            "headers": {
+              "Location": { "schema": { "type": "string" }, "description": "Poll URL: /jobs/{job_id}" }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["job_id", "status"],
+                  "properties": {
+                    "job_id": { "type": "string" },
+                    "status": { "type": "string", "enum": ["pending", "running"] },
+                    "poll": { "type": "string", "description": "Relative poll URL" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jobs/{job_id}": {
+      "get": {
+        "operationId": "getJobStatus",
+        "tags": ["system"],
+        "summary": "Poll an async job",
+        "parameters": [
+          { "name": "job_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job status; completed jobs embed the result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["job_id", "status"],
+                  "properties": {
+                    "job_id": { "type": "string" },
+                    "status": { "type": "string", "enum": ["pending", "running", "completed", "failed"] },
+                    "result": { "$ref": "#/components/schemas/NLWebResponse" },
+                    "error": { "$ref": "#/components/schemas/ErrorResponse" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Unknown job", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/batch": {
+      "post": {
+        "operationId": "batchSearch",
+        "tags": ["search"],
+        "summary": "Batch multiple searches in one request",
+        "description": "Accepts an array of search operations and returns results per operation. Requires Idempotency-Key so agent retries never duplicate a batch.",
+        "parameters": [
+          { "name": "Idempotency-Key", "in": "header", "required": true,
+            "schema": { "type": "string", "format": "uuid" },
+            "description": "Unique key per logical batch. Same key → same response, no duplication." }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["operations"],
+                "properties": {
+                  "operations": {
+                    "type": "array",
+                    "maxItems": 20,
+                    "items": {
+                      "type": "object",
+                      "required": ["q"],
+                      "properties": {
+                        "op_id": { "type": "string", "description": "Caller-chosen id echoed back for correlation" },
+                        "q": { "type": "string" },
+                        "vendors": { "type": "string" },
+                        "limit": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Per-operation results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["results"],
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["op_id", "status"],
+                        "properties": {
+                          "op_id": { "type": "string" },
+                          "status": { "type": "string", "enum": ["ok", "error"] },
+                          "query": { "type": "string" },
+                          "results": { "type": "array", "items": { "$ref": "#/components/schemas/SearchResult" } },
+                          "error": { "$ref": "#/components/schemas/ErrorResponse" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Missing Idempotency-Key or malformed body", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
     "/health": {
       "get": {
         "operationId": "healthCheck",
@@ -147,7 +319,32 @@
           "query": { "type": "string" },
           "results": { "type": "array", "items": { "$ref": "#/components/schemas/SearchResult" } },
           "took_ms": { "type": "integer" },
-          "snapshot_date": { "type": "string", "format": "date" }
+          "snapshot_date": { "type": "string", "format": "date" },
+          "pagination": {
+            "type": "object",
+            "description": "Cursor-based pagination. Pass cursor as the ?cursor= query param on the next request.",
+            "required": ["next_cursor", "has_more"],
+            "properties": {
+              "next_cursor": { "type": "string", "nullable": true, "description": "Opaque cursor; null when no more results" },
+              "has_more": { "type": "boolean" }
+            }
+          }
+        }
+      },
+      "NLWebResponse": {
+        "type": "object",
+        "required": ["_meta", "query", "results"],
+        "properties": {
+          "_meta": {
+            "type": "object",
+            "required": ["response_type", "version"],
+            "properties": {
+              "response_type": { "type": "string" },
+              "version": { "type": "string" }
+            }
+          },
+          "query": { "type": "string" },
+          "results": { "type": "array", "items": { "$ref": "#/components/schemas/SearchResult" } }
         }
       },
       "ExplainResponse": {

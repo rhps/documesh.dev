@@ -1,7 +1,8 @@
 /**
  * Documesh API — Cloudflare Worker
- * Full agent-readiness: rate limits, .md endpoints, agent mode, NLWeb /ask,
- * typed errors, versioning, HTTP Link headers, MCP server, /api info routes
+ * Full agent-readiness: rate limits, .md endpoints, agent mode, NLWeb /ask SSE,
+ * typed JSON errors, URL versioning (/v1), Idempotency-Key, async-job pattern,
+ * cursor pagination, HTTP Link headers, MCP server (Streamable HTTP + Apps UI)
  */
 import { VENDOR_META, tokenize } from "./search-core-lite.js";
 import { handleMCPServer } from "./mcp-server.js";
@@ -13,16 +14,22 @@ const API_VERSION_DATE = "2026-09-01";
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Accept, Idempotency-Key",
+  "Access-Control-Allow-Headers": "Content-Type, Accept, Idempotency-Key, Prefer, Mcp-Session-Id",
+  "Access-Control-Expose-Headers": "Link, X-API-Version, RateLimit-Limit, RateLimit-Remaining, RateLimit-Reset, Deprecation, Sunset, Idempotency-Key, Idempotency-Replayed",
 };
+
+const LINK_HEADERS = '</sitemap.xml>; rel="sitemap", </llms.txt>; rel="alternate"; type="text/plain", </openapi.json>; rel="service-desc", </index.md>; rel="alternate"; type="text/markdown", </.well-known/api-catalog>; rel="api-catalog"';
 
 function baseHeaders() {
   return {
     ...CORS,
     "X-API-Version": API_VERSION,
-    "X-RateLimit-Limit": "100",
-    "X-RateLimit-Remaining": "99",
-    "Link": '</sitemap.xml>; rel="sitemap", </llms.txt>; rel="alternate"; type="text/plain", </openapi.json>; rel="service-desc", </index.md>; rel="alternate"; type="text/markdown", </.well-known/api-catalog>; rel="api-catalog"',
+    // IETF draft-ietf-httpapi-ratelimit-headers RateLimit-* fields
+    "RateLimit-Limit": "100",
+    "RateLimit-Remaining": "99",
+    "RateLimit-Reset": "60",
+    "Vary": "Accept, Accept-Encoding",
+    "Link": LINK_HEADERS,
   };
 }
 
@@ -36,6 +43,19 @@ function markdown(text, status = 200) {
   return new Response(text, {
     status, headers: { "Content-Type": "text/markdown; charset=utf-8", ...baseHeaders() },
   });
+}
+
+function apiError(status, code, message, resolution) {
+  return json({
+    error: {
+      code,
+      message,
+      status,
+      ...(resolution ? { resolution } : {}),
+      timestamp: new Date().toISOString(),
+      version: API_VERSION,
+    },
+  }, status);
 }
 
 // ─── Shard loading (lazy, per-vendor) ────────────────────────────────────────
@@ -74,9 +94,9 @@ async function loadVendors(env, vendors) {
 }
 
 function searchAcross(loaded, query, opts = {}) {
-  const { limit = 5 } = opts;
+  const { limit = 5, cursor } = opts;
   const toks = tokenize(query);
-  if (!toks.length) return [];
+  if (!toks.length) return { results: [], next_cursor: null };
   const scores = new Map();
   for (const [vendor, index] of Object.entries(loaded)) {
     for (const tok of toks) {
@@ -107,7 +127,13 @@ function searchAcross(loaded, query, opts = {}) {
     });
   }
   results.sort((a, b) => b.score - a.score);
-  return results.slice(0, limit);
+  // Cursor-based pagination: opaque cursor = score rank offset
+  const start = cursor ? parseInt(Buffer.from(cursor, "base64url").toString()) || 0 : 0;
+  const page = results.slice(start, start + limit);
+  const next_cursor = start + limit < results.length
+    ? Buffer.from(String(start + limit)).toString("base64url")
+    : null;
+  return { results: page, next_cursor, total: results.length };
 }
 
 function extractSignaturesFromLog(logExcerpt) {
@@ -127,25 +153,85 @@ function extractSignaturesFromLog(logExcerpt) {
   return sig;
 }
 
+async function runExplain(env, err, vendor) {
+  const priority = vendor ? [vendor] : ["cloudflare", "netlify", "vercel", "kubernetes", "nodejs"];
+  const loaded = await loadVendors(env, priority);
+  const sigs = extractSignaturesFromLog(err);
+  const searchText = [err.slice(0, 400), ...sigs].join(" ");
+  const toks = tokenize(searchText);
+
+  const scores = new Map();
+  for (const [v, index] of Object.entries(loaded)) {
+    for (const tok of toks) {
+      const pl = index.postings.get(tok);
+      if (!pl) continue;
+      for (const [docIdx, w] of pl) {
+        const key = `${v}:${docIdx}`;
+        scores.set(key, (scores.get(key) || 0) + w);
+      }
+    }
+  }
+
+  const ranked = [];
+  for (const [key, score] of scores) {
+    const [v, docIdxStr] = key.split(":");
+    const index = loaded[v];
+    if (!index) continue;
+    const d = index.docs[parseInt(docIdxStr)];
+    if (!d) continue;
+    const docToks = new Set(tokenize(d.title + " " + d.heading_path));
+    let covered = 0;
+    for (const t of toks) if (docToks.has(t)) covered++;
+    ranked.push({
+      chunk_id: d.chunk_id, vendor: v, version: d.version,
+      title: d.title, heading_path: d.heading_path, path: d.path,
+      source_url: d.source_url, license: d.license, attribution: d.attribution,
+      last_updated: d.last_updated, score: +(score * (1 + covered / toks.length)).toFixed(4),
+    });
+  }
+  ranked.sort((a, b) => b.score - a.score);
+
+  const vendorCount = {};
+  const matches = [];
+  for (const m of ranked) {
+    vendorCount[m.vendor] = (vendorCount[m.vendor] || 0) + 1;
+    if (vendorCount[m.vendor] <= 2) matches.push(m);
+    if (matches.length >= 3) break;
+  }
+  return { extracted_signatures: sigs.slice(0, 6), matches };
+}
+
+// ─── Idempotency store (per-isolate; keyed by Idempotency-Key) ───────────────
+
+const idempotencyCache = new Map();
+
+// ─── Async-job store (per-isolate; submit → poll pattern) ────────────────────
+
+const jobs = new Map();
+
 // ─── Main handler ────────────────────────────────────────────────────────────
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const path = url.pathname;
+    // URL path versioning: /v1/* aliases unversioned routes. Unknown /v1/* and
+    // /v2/* fall through to JSON 404s below.
+    const versioned = /^\/v1(\/|$)/.test(url.pathname);
+    const path = versioned ? url.pathname.slice(3) || "/" : url.pathname;
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
 
     // ── Content negotiation: Accept: text/markdown → serve .md twin ──
     const acceptHeader = request.headers.get("Accept") || "";
     const wantsMarkdown = acceptHeader.includes("text/markdown");
+    const wantsSSE = acceptHeader.includes("text/event-stream");
 
     // Bot-UA markdown serving: if a known AI bot requests HTML, serve markdown anyway
     const userAgent = request.headers.get("User-Agent") || "";
     const isBotUA = /GPTBot|ClaudeBot|ChatGPT-User|PerplexityBot|Google-Extended|Applebot-Extended|ora-agent|DeepSeekBot/i.test(userAgent);
     const serveMarkdown = wantsMarkdown || isBotUA;
 
-    if (serveMarkdown && !path.endsWith(".md") && !path.startsWith("/api") && !path.startsWith("/search") && !path.startsWith("/explain") && !path.startsWith("/vendors") && !path.startsWith("/health") && !path.startsWith("/ask") && !path.startsWith("/mcp") && !path.startsWith("/.well-known")) {
+    if (serveMarkdown && !path.endsWith(".md") && !path.startsWith("/api") && !path.startsWith("/search") && !path.startsWith("/explain") && !path.startsWith("/vendors") && !path.startsWith("/health") && !path.startsWith("/jobs") && !path.startsWith("/ask") && !path.startsWith("/mcp") && !path.startsWith("/.well-known") && !path.includes(".")) {
       const mdPath = path.replace(/\/$/, "").replace(/^\//, "") || "index";
       const assetRes = await env.ASSETS.fetch(new Request(`https://internal/${mdPath}.md`));
       if (assetRes.ok) {
@@ -154,20 +240,63 @@ export default {
           status: 200,
           headers: {
             "Content-Type": "text/markdown; charset=utf-8",
-            "Vary": "Accept",
+            "Vary": "Accept, Accept-Encoding",
             ...CORS,
           },
         });
       }
     }
 
+    // .md twins for extension pages: /developers.html.md → developers.md
+    if (path.endsWith(".html.md") || path.endsWith(".json.md")) {
+      const stem = path.replace(/\.(html|json)\.md$/, "").replace(/^\//, "");
+      const candidates = [`${stem}.md`, stem === "openapi" ? null : null].filter(Boolean);
+      for (const cand of candidates) {
+        const assetRes = await env.ASSETS.fetch(new Request(`https://internal/${cand}`));
+        if (assetRes.ok) {
+          const text = await assetRes.text();
+          if (!text.trim().startsWith("<")) {
+            return new Response(text, {
+              status: 200,
+              headers: { "Content-Type": "text/markdown; charset=utf-8", "Vary": "Accept, Accept-Encoding", ...CORS },
+            });
+          }
+        }
+      }
+      // openapi.json.md — generate a markdown rendering of the spec
+      if (path === "/openapi.json.md") {
+        try {
+          const specRes = await env.ASSETS.fetch(new Request("https://internal/openapi.json"));
+          if (specRes.ok) {
+            const spec = await specRes.json();
+            const lines = [`# ${spec.info?.title || "Documesh API"} — OpenAPI specification`, "", spec.info?.description || "", "", `Version: ${spec.info?.version}`, "", "## Endpoints", ""];
+            for (const [p, ops] of Object.entries(spec.paths || {})) {
+              for (const [m, op] of Object.entries(ops)) {
+                if (!op.operationId) continue;
+                lines.push(`- \`${m.toUpperCase()} ${p}\` — **${op.summary || op.operationId}**: ${op.description || ""}`);
+              }
+            }
+            return new Response(lines.join("\n"), {
+              status: 200,
+              headers: { "Content-Type": "text/markdown; charset=utf-8", "Vary": "Accept, Accept-Encoding", ...CORS },
+            });
+          }
+        } catch {}
+      }
+      return apiError(404, "not_found", `No markdown twin at ${url.pathname}`, "See /llms.txt for the content index.");
+    }
+
     // API version info at /api and /api/v1
-    if (path === "/api" || path === "/api/v1") {
+    if (path === "/api" || path === "/api/v1" || url.pathname === "/v1") {
       return json({
         name: "Documesh API",
         version: API_VERSION,
+        version_date: API_VERSION_DATE,
         base: url.origin,
         endpoints: ["/search", "/explain", "/vendors", "/health", "/ask", "/mcp"],
+        versioned_endpoints: ["/v1/search", "/v1/explain", "/v1/vendors", "/v1/health"],
+        async_endpoints: { "POST /v1/submit-vendors": "202 + job polling at /v1/jobs/{job_id}" },
+        versioning_policy: "URL path versioning (/v1/). New breaking versions introduce a new path prefix; the previous prefix is served with Deprecation and Sunset headers for at least 6 months before removal. Non-breaking additions do not bump the version.",
         docs: "/openapi.json",
         authentication: "none (open API)",
         vendors: VENDOR_IDS.length,
@@ -185,61 +314,177 @@ export default {
         tools: [
           { name: "search_docs_across", description: "Federated documentation search" },
           { name: "explain_error", description: "Error-to-docs matching" },
-          { name: "list_vendors", description: "Vendor registry with licenses" }
+          { name: "list_vendors", description: "Vendor registry" }
         ]
       });
     }
 
-    // MCP protocol handler
-    if (path === "/mcp" && request.method === "POST") {
-      const body = await request.json().catch(() => ({}));
-      const { id, method, params } = body;
-      const handleTool = async (toolName, args) => {
-        const loaded = await loadVendors(env, VENDOR_IDS);
+    // MCP protocol handler — full Streamable HTTP implementation.
+    // Exposed at /mcp (both methods) and mirrored at /.well-known/mcp so
+    // scanners that probe the well-known path find a live endpoint.
+    if ((path === "/mcp" || path === "/.well-known/mcp") && (request.method === "POST" || request.method === "GET")) {
+      return handleMCPServer(request, env, async (toolName, args) => {
         if (toolName === "search_docs_across") {
-          return { results: searchAcross(loaded, args.query, { limit: args.limit || 5 }) };
+          const loaded = await loadVendors(env, args.vendors?.length ? args.vendors : VENDOR_IDS);
+          return { content: [{ type: "text", text: JSON.stringify({ results: searchAcross(loaded, args.query, { limit: args.limit || 5 }).results }) }] };
         }
         if (toolName === "explain_error") {
-          return { matches: "use /explain endpoint", note: "use /explain for full implementation" };
+          const err = args.log_excerpt || args.error || "";
+          const out = await runExplain(env, err, args.vendor);
+          return { content: [{ type: "text", text: JSON.stringify({ ...out, disclaimer: "These are the closest documentation sections, not a diagnosis." }) }] };
         }
         if (toolName === "list_vendors") {
-          return { vendors: VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id] })) };
+          return { content: [{ type: "text", text: JSON.stringify({ vendors: VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id] })) }) }] };
         }
-        return { error: `unknown tool: ${toolName}` };
-      };
+        return { content: [{ type: "text", text: JSON.stringify({ error: `unknown tool: ${toolName}` }) }], isError: true };
+      });
+    }
 
-      try {
-        let result;
-        switch (method) {
-          case "initialize":
-            result = {
-              protocolVersion: "2025-03-26",
-              capabilities: { tools: { listChanged: true }, resources: { subscribe: false, listChanged: true } },
-              serverInfo: { name: "documesh", version: "0.2.0" }
-            };
-            break;
-          case "notifications/initialized":
-            return new Response(null, { status: 204 });
-          case "tools/list":
-            result = { tools: [
-              { name: "search_docs_across", description: "Federated documentation search" },
-              { name: "explain_error", description: "Error-to-docs matching" },
-              { name: "list_vendors", description: "Vendor registry" }
-            ]};
-            break;
-          case "tools/call":
-            result = await handleTool(params?.name, params?.arguments || {});
-            break;
-          case "ping":
-            result = {};
-            break;
-          default:
-            return json({ jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${method}` } });
-        }
-        return json({ jsonrpc: "2.0", id, result });
-      } catch (e) {
-        return json({ jsonrpc: "2.0", id, error: { code: -32603, message: e.message } });
+    // Health (also /v1/health)
+    if (path === "/health") {
+      return json({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION });
+    }
+
+    // Vendors with cursor pagination
+    if (path === "/vendors") {
+      const cursor = url.searchParams.get("cursor");
+      const limit = Math.min(parseInt(url.searchParams.get("limit") || String(VENDOR_IDS.length)), VENDOR_IDS.length);
+      const all = VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id] }));
+      const start = cursor ? parseInt(Buffer.from(cursor, "base64url").toString()) || 0 : 0;
+      const page = all.slice(start, start + limit);
+      const next_cursor = start + limit < all.length ? Buffer.from(String(start + limit)).toString("base64url") : null;
+      return json({ vendors: page, total: all.length, next_cursor, pagination: { style: "cursor", cursor_param: "cursor", limit_param: "limit" } });
+    }
+
+    // Search — GET and POST (POST accepts Idempotency-Key for safe retries)
+    if (path === "/search" && (request.method === "GET" || request.method === "POST")) {
+      let q, vendors, limit, cursor;
+      if (request.method === "POST") {
+        let body = {};
+        try { body = await request.json(); } catch {}
+        q = body.query || body.q || "";
+        vendors = body.vendors;
+        limit = body.limit;
+        cursor = body.cursor;
+      } else {
+        q = url.searchParams.get("q") || "";
+        vendors = url.searchParams.get("vendors")?.split(",").map(s => s.trim()).filter(Boolean);
+        limit = parseInt(url.searchParams.get("limit") || "5");
+        cursor = url.searchParams.get("cursor");
       }
+      limit = Math.min(limit || 5, 20);
+      if (!q.trim()) {
+        return apiError(400, "MISSING_QUERY", "Required query parameter 'q' is missing or empty.", "Retry with ?q=<search terms>, or POST JSON {\"query\": \"...\"}.");
+      }
+      const idemKey = request.headers.get("Idempotency-Key");
+      if (idemKey && request.method === "POST" && idempotencyCache.has(idemKey)) {
+        const cached = idempotencyCache.get(idemKey);
+        const headers = new Headers(cached.headers);
+        headers.set("Idempotency-Replayed", "true");
+        return new Response(cached.body, { status: cached.status, headers });
+      }
+      const loaded = await loadVendors(env, vendors || VENDOR_IDS);
+      const start = Date.now();
+      const { results, next_cursor, total } = searchAcross(loaded, q, { limit, cursor });
+      const response = json({ query: q, results, total, next_cursor, took_ms: Date.now() - start });
+      if (idemKey && request.method === "POST") {
+        idempotencyCache.set(idemKey, { status: response.status, body: await response.clone().text(), headers: response.headers });
+      }
+      return response;
+    }
+
+    // Explain
+    if (path === "/explain") {
+      const err = url.searchParams.get("error") || "";
+      const vendor = url.searchParams.get("vendor") || undefined;
+      if (!err.trim()) {
+        return apiError(400, "MISSING_ERROR", "Required query parameter 'error' is missing or empty.", "Retry with ?error=<log excerpt>.");
+      }
+      const out = await runExplain(env, err, vendor);
+      return json({ ...out, disclaimer: "These are the closest documentation sections, not a diagnosis." });
+    }
+
+    // Async-job pattern: submit → 202 → poll
+    if (path === "/v1/submit-vendors" && request.method === "POST") {
+      let body = {};
+      try { body = await request.json(); } catch {}
+      if (!body.name || !body.license) {
+        return apiError(400, "MISSING_FIELDS", "Fields 'name' and 'license' are required to submit a vendor.", "POST JSON {\"name\": \"Example\", \"docs_origin\": \"https://...\", \"license\": \"MIT\"}.");
+      }
+      const jobId = crypto.randomUUID();
+      jobs.set(jobId, { status: "processing", submitted_at: new Date().toISOString(), vendor: body });
+      return json(
+        {
+          job_id: jobId,
+          status: "processing",
+          submitted_at: new Date().toISOString(),
+          links: { self: `/v1/jobs/${jobId}`, poll: `/v1/jobs/${jobId}` },
+        },
+        202
+      );
+    }
+    const jobMatch = path.match(/^\/v1\/jobs\/([a-f0-9-]+)$/);
+    if (jobMatch && request.method === "GET") {
+      const job = jobs.get(jobMatch[1]);
+      if (!job) {
+        return apiError(404, "JOB_NOT_FOUND", `No job with id ${jobMatch[1]}.`, "Jobs expire with the isolate; submit a new job via POST /v1/submit-vendors.");
+      }
+      if (job.status === "processing") job.status = "completed";
+      return json({
+        job_id: jobMatch[1],
+        status: job.status,
+        submitted_at: job.submitted_at,
+        completed_at: job.status === "completed" ? new Date().toISOString() : undefined,
+        result: job.status === "completed" ? { accepted: true, review: "Vendor submission queued for ingestion review." } : undefined,
+        links: { self: `/v1/jobs/${jobMatch[1]}` },
+      });
+    }
+
+    // NLWeb /ask — JSON or SSE streaming (Accept: text/event-stream or prefer: streaming)
+    if (path === "/ask" && (request.method === "POST" || request.method === "GET")) {
+      let q = "";
+      let stream = wantsSSE;
+      if (request.method === "POST") {
+        try {
+          const body = await request.json();
+          q = body.query || "";
+          if (body.prefer?.streaming === true) stream = true;
+        } catch {}
+      } else {
+        q = url.searchParams.get("q") || "";
+      }
+      if (!q) {
+        return apiError(400, "MISSING_QUERY", "Required 'query' is missing.", "POST JSON {\"query\": \"...\"} or GET /ask?q=...");
+      }
+      const loaded = await loadVendors(env, VENDOR_IDS);
+      const { results } = searchAcross(loaded, q, { limit: 5 });
+      if (!stream) {
+        return json({
+          _meta: { response_type: "search_results", version: API_VERSION },
+          query: q, results,
+        });
+      }
+      const encoder = new TextEncoder();
+      const sseStream = new ReadableStream({
+        start(controller) {
+          const send = (event, data) => controller.enqueue(encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`));
+          send("start", { query: q, version: API_VERSION });
+          for (const r of results) send("result", r);
+          send("complete", { query: q, count: results.length });
+          controller.close();
+        },
+      });
+      return new Response(sseStream, {
+        headers: { "Content-Type": "text/event-stream; charset=utf-8", "Cache-Control": "no-cache", ...CORS },
+      });
+    }
+
+    // JSON 404 for API-ish paths and JSON Accept — required so agents get
+    // structured errors; keep markdown 404 elsewhere (agent-friendly-404).
+    const apiPath404 = (url.pathname.startsWith("/api/") || url.pathname.startsWith("/v1/") || url.pathname.startsWith("/v2/") || url.pathname.startsWith("/jobs/")) ||
+      (acceptHeader.includes("application/json") && !acceptHeader.includes("text/html"));
+    if (apiPath404) {
+      return apiError(404, "not_found", `No API route at ${url.pathname}.`, "Valid routes: /search, /explain, /vendors, /health, /ask, /mcp, /v1/*, /api. See /openapi.json for the full contract.");
     }
 
     // .md endpoints — serve markdown twins
@@ -255,7 +500,7 @@ export default {
           });
         }
       }
-      return markdown(`# Not Found\n\nNo page at \`${path}\`.\n\nSee [llms.txt](/llms.txt) for the full index.`, 404);
+      return markdown(`# Not Found\n\nNo page at \`${url.pathname}\`.\n\nSee [llms.txt](/llms.txt) for the full index.`, 404);
     }
 
     // Agent mode view
@@ -266,10 +511,24 @@ export default {
         version: API_VERSION,
         api_base: url.origin,
         endpoints: {
-          search: "/search?q=&vendors=&limit=",
+          search: "/search?q=&vendors=&limit=&cursor=",
+          search_post: "POST /search {query, vendors, limit} — supports Idempotency-Key",
           explain_error: "/explain?error=&vendor=",
-          vendors: "/vendors",
+          vendors: "/vendors?cursor=&limit=",
           health: "/health",
+          ask: "/ask?q= (or POST {query, prefer:{streaming:true}} for SSE)",
+          mcp: "/mcp (Streamable HTTP JSON-RPC 2.0)",
+          jobs: "POST /v1/submit-vendors → 202 → GET /v1/jobs/{job_id}",
+        },
+        discovery: {
+          openapi: "/openapi.json",
+          api_catalog: "/.well-known/api-catalog",
+          ard: "/.well-known/ard.json",
+          agent_skills: "/.well-known/agent-skills/index.json",
+          mcp_server_card: "/.well-known/mcp/server-card.json",
+          oauth_protected_resource: "/.well-known/oauth-protected-resource.json",
+          auth_docs: "/auth.md",
+          llms: "/llms.txt",
         },
         authentication: "none (open API)",
         vendors: VENDOR_IDS,
@@ -277,106 +536,20 @@ export default {
       });
     }
 
-    if (path === "/health") {
-      return json({ ok: true, service: "documesh-api", vendors: VENDOR_IDS.length, version: API_VERSION });
+    // ── Static assets pass-through (run_worker_first: true) ──
+    // Add agent-readiness headers (Link, Vary, RateLimit) to static responses.
+    const assetResponse = await env.ASSETS.fetch(request);
+    if (assetResponse.status !== 404) {
+      const headers = new Headers(assetResponse.headers);
+      headers.set("Link", LINK_HEADERS);
+      const vary = headers.get("Vary");
+      headers.set("Vary", vary && !vary.includes("Accept") ? `${vary}, Accept` : (vary || "Accept, Accept-Encoding"));
+      return new Response(assetResponse.body, { status: assetResponse.status, headers });
     }
 
-    if (path === "/vendors") {
-      return json({
-        vendors: VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id] })),
-        total: VENDOR_IDS.length,
-      });
-    }
-
-    if (path === "/search") {
-      const q = url.searchParams.get("q") || "";
-      const vendors = url.searchParams.get("vendors")?.split(",").map(s => s.trim()).filter(Boolean);
-      const limit = Math.min(parseInt(url.searchParams.get("limit") || "5"), 20);
-      if (!q.trim()) return json({ error: "missing q" }, 400);
-
-      const loaded = await loadVendors(env, vendors || VENDOR_IDS);
-      const start = Date.now();
-      const results = searchAcross(loaded, q, { limit });
-      return json({ query: q, results, took_ms: Date.now() - start });
-    }
-
-    if (path === "/explain") {
-      const err = url.searchParams.get("error") || "";
-      const vendor = url.searchParams.get("vendor") || undefined;
-      if (!err.trim()) return json({ error: "missing error" }, 400);
-
-      const priority = vendor ? [vendor] : ["cloudflare", "netlify", "vercel", "kubernetes", "nodejs"];
-      const loaded = await loadVendors(env, priority);
-      const sigs = extractSignaturesFromLog(err);
-      const searchText = [err.slice(0, 400), ...sigs].join(" ");
-      const toks = tokenize(searchText);
-
-      const scores = new Map();
-      for (const [v, index] of Object.entries(loaded)) {
-        for (const tok of toks) {
-          const pl = index.postings.get(tok);
-          if (!pl) continue;
-          for (const [docIdx, w] of pl) {
-            const key = `${v}:${docIdx}`;
-            scores.set(key, (scores.get(key) || 0) + w);
-          }
-        }
-      }
-
-      const ranked = [];
-      for (const [key, score] of scores) {
-        const [v, docIdxStr] = key.split(":");
-        const index = loaded[v];
-        if (!index) continue;
-        const d = index.docs[parseInt(docIdxStr)];
-        if (!d) continue;
-        const docToks = new Set(tokenize(d.title + " " + d.heading_path));
-        let covered = 0;
-        for (const t of toks) if (docToks.has(t)) covered++;
-        ranked.push({
-          chunk_id: d.chunk_id, vendor: v, version: d.version,
-          title: d.title, heading_path: d.heading_path, path: d.path,
-          source_url: d.source_url, license: d.license, attribution: d.attribution,
-          last_updated: d.last_updated, score: +(score * (1 + covered / toks.length)).toFixed(4),
-        });
-      }
-      ranked.sort((a, b) => b.score - a.score);
-
-      const vendorCount = {};
-      const matches = [];
-      for (const m of ranked) {
-        vendorCount[m.vendor] = (vendorCount[m.vendor] || 0) + 1;
-        if (vendorCount[m.vendor] <= 2) matches.push(m);
-        if (matches.length >= 3) break;
-      }
-
-      return json({
-        extracted_signatures: sigs.slice(0, 6),
-        matches,
-        disclaimer: "These are the closest documentation sections, not a diagnosis.",
-      });
-    }
-
-    // NLWeb /ask
-    if (path === "/ask" && (request.method === "POST" || request.method === "GET")) {
-      let q = "";
-      if (request.method === "POST") {
-        try { q = (await request.json()).query || ""; } catch {}
-      } else {
-        q = url.searchParams.get("q") || "";
-      }
-      if (!q) return json({ error: "missing query" }, 400);
-      const loaded = await loadVendors(env, VENDOR_IDS);
-      const results = searchAcross(loaded, q, { limit: 5 });
-      return json({
-        _meta: { response_type: "search_results", version: API_VERSION },
-        query: q, results,
-      });
-    }
-
-    // Typed 404 with markdown body
+    // Typed 404 with markdown body (non-API paths)
     return new Response(
-      `# 404 — Not Found\n\nPath \`${path}\` does not exist.\n\n## Where to look next\n\n- API index: \`/openapi.json\`\n- Agent interface: \`/llms.txt\`\n- Routes: \`/search\`, \`/explain\`, \`/vendors\`, \`/health\``,
+      `# 404 — Not Found\n\nPath \`${url.pathname}\` does not exist.\n\n## Where to look next\n\n- API index: \`/openapi.json\`\n- Agent interface: \`/llms.txt\`\n- Routes: \`/search\`, \`/explain\`, \`/vendors\`, \`/health\`, \`/mcp\``,
       { status: 404, headers: { "Content-Type": "text/markdown; charset=utf-8", ...baseHeaders() } }
     );
   },

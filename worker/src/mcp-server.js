@@ -43,19 +43,19 @@ const RESOURCES = [
     uri: "ui://documesh/search-results",
     name: "Search Results View",
     description: "Interactive search results with vendor badges, license info, and source links",
-    mimeType: "text/html"
+    mimeType: "text/html;profile=mcp-app"
   },
   {
     uri: "ui://documesh/error-match",
     name: "Error Match Card",
     description: "Error analysis results with matched documentation sections",
-    mimeType: "text/html"
+    mimeType: "text/html;profile=mcp-app"
   },
   {
     uri: "ui://documesh/vendor-grid",
     name: "Vendor Grid",
     description: "Grid of all 38 vendors with license badges",
-    mimeType: "text/html"
+    mimeType: "text/html;profile=mcp-app"
   }
 ];
 
@@ -191,17 +191,34 @@ function jsonRPCWithSession(id, error, result, sessionId) {
   });
 }
 function generateResourceHTML(uri, params) {
+  const wrap = (title, body) => `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; frame-ancestors https://chatgpt.com https://claude.ai https://chat.openai.com;">
+<title>${title}</title>
+<style>body{font-family:system-ui,sans-serif;margin:1rem;background:transparent;color:inherit}.badge{background:#3b82f6;color:#fff;border-radius:4px;padding:1px 6px;font-size:.8em}.lic{color:#888;font-size:.85em;margin-left:.5em}a{color:#3b82f6}</style>
+</head>
+<body>${body}</body>
+</html>`;
   if (uri === "ui://documesh/search-results") {
     const results = params?.results || [];
-    return `<div class="documesh-results"><h3>🔍 Search Results</h3>${results.map(r =>
+    return wrap("Documesh — Search Results", `<div class="documesh-results"><h3>🔍 Search Results</h3>${results.map(r =>
       `<div class="result"><span class="badge">${r.vendor}</span> <a href="${r.source_url}">${r.title}</a> <span class="lic">${r.license}</span></div>`
-    ).join("")}</div>`;
+    ).join("")}</div>`);
   }
   if (uri === "ui://documesh/error-match") {
     const matches = params?.matches || [];
-    return `<div class="documesh-error"><h3>🩺 Error Analysis</h3>${matches.map(m =>
+    return wrap("Documesh — Error Analysis", `<div class="documesh-error"><h3>🩺 Error Analysis</h3>${matches.map(m =>
       `<div class="match"><span class="badge">${m.vendor}</span> <a href="${m.source_url}">${m.title}</a></div>`
-    ).join("")}<p class="disclaimer">⚠️ Closest matches, not a diagnosis.</p></div>`;
+    ).join("")}<p class="disclaimer">⚠️ Closest matches, not a diagnosis.</p></div>`);
   }
-  return "<p>Documesh UI resource</p>";
+  if (uri === "ui://documesh/vendor-grid") {
+    const vendors = params?.vendors || [];
+    return wrap("Documesh — Vendor Grid", `<div class="documesh-vendors"><h3>📦 Vendors in the mesh</h3>${vendors.map(v =>
+      `<div class="vendor"><span class="badge">${v.id || v}</span> <span class="lic">${v.license || ""}</span></div>`
+    ).join("")}</div>`);
+  }
+  return wrap("Documesh", "<p>Documesh UI resource</p>");
 }
