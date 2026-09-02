@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "search-docs",
+      "type": "skill-md",
+      "description": "Search developer documentation across 18 vendors simultaneously",
+      "url": "https://documesh.selatan.org/.well-known/agent-skills/search-docs-SKILL.md",
+      "digest": "sha256:placeholder-computed-at-deploy"
+    },
+    {
+      "name": "explain-error",
+      "type": "skill-md",
+      "description": "Match error messages to closest documentation sections",
+      "url": "https://documesh.selatan.org/.well-known/agent-skills/explain-error-SKILL.md",
+      "digest": "sha256:placeholder-computed-at-deploy"
+    },
+    {
+      "name": "list-vendors",
+      "type": "skill-md",
+      "description": "List all documentation vendors with license info",
+      "url": "https://documesh.selatan.org/.well-known/agent-skills/list-vendors-SKILL.md",
+      "digest": "sha256:placeholder-computed-at-deploy"
+    }
+  ]
+}
