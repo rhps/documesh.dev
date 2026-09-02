@@ -12,14 +12,26 @@ on:
           - schema
           - backfill
           - verify
+      environment:
+        description: "Which isolated database to operate on"
+        required: true
+        type: choice
+        default: staging
+        options:
+          - staging
+          - production
 
 concurrency:
-  group: d1-setup
+  group: d1-setup-${{ inputs.environment }}
   cancel-in-progress: false
 
 jobs:
   d1:
     runs-on: ubuntu-latest
+    env:
+      # staging and production each own their own D1 database (no sharing)
+      DB_NAME: ${{ inputs.environment == 'production' && 'documesh-search' || 'documesh-search-staging' }}
+      CF_ENV_FLAG: ${{ inputs.environment == 'production' && '--env production' || '--env staging' }}
     steps:
       - uses: actions/checkout@v7
 
@@ -31,14 +43,26 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Resolve database id
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler d1 info "$DB_NAME" 2>/dev/null | tee /tmp/info.log || true
+          ID=$(grep -oE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' /tmp/info.log | head -1 || true)
+          echo "D1_DATABASE_ID=$ID" >> "$GITHUB_ENV"
+          if [ -z "$ID" ]; then echo "database $DB_NAME does not exist yet (schema action will create it)"; fi
+
       - name: Create D1 database (idempotent; ignores "already exists")
         if: inputs.action == 'schema'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          npx wrangler d1 create documesh-search 2>&1 | tee /tmp/create.log || true
+          npx wrangler d1 create "$DB_NAME" 2>&1 | tee /tmp/create.log || true
           grep -q "already exists" /tmp/create.log && echo "database already exists — ok"
+          ID=$(grep -oE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' /tmp/create.log | head -1 || true)
+          if [ -n "$ID" ]; then echo "D1_DATABASE_ID=$ID" >> "$GITHUB_ENV"; echo "created $DB_NAME -> $ID"; fi
 
       - name: Apply schema
         if: inputs.action == 'schema'
@@ -46,15 +70,18 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          npx wrangler d1 execute documesh-search --remote --file d1/schema.sql -y
+          npx wrangler d1 execute "$DB_NAME" --remote --file d1/schema.sql -y
 
       - name: Backfill chunks from data/chunks
         if: inputs.action == 'backfill'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          D1_DATABASE_ID: ${{ env.D1_DATABASE_ID }}
         run: |
-          python3 indexer/load_d1.py --remote
+          if [ -z "$D1_DATABASE_ID" ]; then echo "❌ could not resolve $DB_NAME id"; exit 1; fi
+          echo "backfilling $DB_NAME ($D1_DATABASE_ID)"
+          python3 indexer/load_d1.py
 
       - name: Verify counts
         if: inputs.action == 'verify'
@@ -62,7 +89,9 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          npx wrangler d1 execute documesh-search --remote --command \
+          if [ -z "$D1_DATABASE_ID" ]; then echo "❌ could not resolve $DB_NAME id"; exit 1; fi
+          echo "== $DB_NAME ($D1_DATABASE_ID) =="
+          npx wrangler d1 execute "$DB_NAME" --remote --command \
             "SELECT vendor, COUNT(*) AS n FROM chunks GROUP BY vendor ORDER BY n DESC" -y
-          npx wrangler d1 execute documesh-search --remote --command \
+          npx wrangler d1 execute "$DB_NAME" --remote --command \
             "SELECT COUNT(*) AS total FROM chunks" -y
