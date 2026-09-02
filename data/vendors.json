@@ -1,0 +1,10 @@
+{
+ "pulumi": {
+  "name": "Pulumi",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "P4:git-repo",
+  "attribution_required": true,
+  "added": "2026-09-02"
+ }
+}
