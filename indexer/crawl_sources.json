@@ -31,7 +31,8 @@
     "name": "LangChain",
     "repo": "langchain-ai/langchain",
     "docs_path": "docs",
-    "license": "MIT"
+    "license": "MIT",
+    "branch": "master"
   },
   "vercel": {
     "name": "Vercel",
@@ -42,7 +43,8 @@
     "name": "Hugo",
     "repo": "gohugoio/hugoDocs",
     "docs_path": "content/en",
-    "license": "Apache-2.0"
+    "license": "Apache-2.0",
+    "branch": "master"
   },
   "docusaurus": {
     "name": "Docusaurus",
@@ -64,7 +66,8 @@
     "name": "TensorFlow",
     "repo": "tensorflow/docs",
     "docs_path": "site/en",
-    "license": "Apache-2.0"
+    "license": "Apache-2.0",
+    "branch": "master"
   },
   "clickhouse": {
     "name": "ClickHouse",
@@ -74,7 +77,7 @@
   },
   "nuxt": {
     "name": "Nuxt",
-    "llms": "https://nuxt.com/docs/llms.txt",
+    "llms": "https://nuxt.com/llms.txt",
     "license": "MIT"
   },
   "solid": {
@@ -105,13 +108,15 @@
     "name": "Argo CD",
     "repo": "argoproj/argo-cd",
     "docs_path": "docs",
-    "license": "Apache-2.0"
+    "license": "Apache-2.0",
+    "branch": "master"
   },
   "moby": {
     "name": "Docker (Moby)",
     "repo": "moby/moby",
     "docs_path": "docs",
-    "license": "Apache-2.0"
+    "license": "Apache-2.0",
+    "branch": "master"
   },
   "helm": {
     "name": "Helm",
@@ -150,7 +155,8 @@
     "name": "Neovim",
     "repo": "neovim/neovim",
     "docs_path": "runtime/doc",
-    "license": "Apache-2.0"
+    "license": "Apache-2.0",
+    "branch": "master"
   },
   "netlify": {
     "name": "Netlify",
@@ -166,7 +172,8 @@
     "name": "Godot",
     "repo": "godotengine/godot-docs",
     "docs_path": "",
-    "license": "MIT"
+    "license": "MIT",
+    "branch": "master"
   },
   "electron": {
     "name": "Electron",
