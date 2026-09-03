@@ -1,182 +1,190 @@
 {
- "netlify": {
-  "catalog": 105,
-  "pct": 99.0
- },
- "aws": {
-  "catalog": 1289,
-  "pct": 0.6
- },
- "digitalocean": {
-  "catalog": 293,
-  "pct": 26.6
- },
- "ibmcloud": {
-  "catalog": 197,
-  "pct": 15.7
- },
  "anthropic": {
-  "catalog": 679,
-  "pct": 1.9
- },
- "neon": {
-  "catalog": 246,
-  "pct": 7.7
- },
- "clerk": {
-  "catalog": 2489,
-  "pct": 4.3
- },
- "pulumi": {
-  "catalog": 33,
-  "pct": 0.0
- },
- "temporal": {
-  "catalog": 105,
-  "pct": 9.5
- },
- "kong": {
-  "catalog": 2354,
-  "pct": 0.5
- },
- "elysia": {
-  "catalog": 89,
-  "pct": 7.9
- },
- "turso": {
-  "catalog": 286,
-  "pct": 10.5
- },
- "sentry": {
-  "catalog": 125,
-  "pct": 12.8
- },
- "stripe": {
-  "catalog": 463,
-  "pct": 1.1
- },
- "bun": {
-  "catalog": null,
-  "pct": null
- },
- "upstash": {
-  "catalog": null,
-  "pct": null
- },
- "hono": {
-  "catalog": 89,
-  "pct": 30.3
- },
- "cloudflare": {
-  "catalog": 3062,
-  "pct": 12.4
- },
- "react": {
-  "catalog": null,
-  "pct": null
- },
- "pytorch": {
-  "catalog": null,
-  "pct": null
- },
- "tensorflow": {
-  "catalog": null,
-  "pct": null
- },
- "ollama": {
-  "catalog": null,
-  "pct": null
- },
- "electron": {
-  "catalog": null,
-  "pct": null
- },
- "hugo": {
-  "catalog": null,
-  "pct": null
- },
- "pytest": {
-  "catalog": null,
-  "pct": null
- },
- "nodejs": {
-  "catalog": null,
-  "pct": null
- },
- "godot": {
-  "catalog": null,
-  "pct": null
- },
- "neovim": {
-  "catalog": null,
-  "pct": null
- },
- "terragrunt": {
-  "catalog": null,
-  "pct": null
- },
- "moby": {
-  "catalog": null,
-  "pct": null
- },
- "elasticsearch": {
-  "catalog": null,
-  "pct": null
- },
- "opentelemetry": {
-  "catalog": null,
-  "pct": null
+  "catalog": 700,
+  "pct": 45.1
  },
  "argocd": {
-  "catalog": null,
-  "pct": null
+  "catalog": 700,
+  "pct": 100.0
  },
- "helm": {
-  "catalog": null,
-  "pct": null
+ "aws": {
+  "catalog": 45000,
+  "pct": 2.9
  },
- "flux": {
-  "catalog": null,
-  "pct": null
+ "bun": {
+  "catalog": 350,
+  "pct": 17.1
  },
  "cilium": {
-  "catalog": null,
-  "pct": null
+  "catalog": 1100,
+  "pct": 16.0
  },
- "gitea": {
-  "catalog": null,
-  "pct": null
- },
- "playwright": {
-  "catalog": null,
-  "pct": null
- },
- "docusaurus": {
-  "catalog": null,
-  "pct": null
- },
- "svelte-core": {
-  "catalog": null,
-  "pct": null
- },
- "vue-core-docs": {
-  "catalog": null,
-  "pct": null
- },
- "langchain": {
-  "catalog": null,
-  "pct": null
+ "clerk": {
+  "catalog": 900,
+  "pct": 55.6
  },
  "clickhouse": {
-  "catalog": null,
-  "pct": null
+  "catalog": 2500,
+  "pct": 100.0
+ },
+ "cloudflare": {
+  "catalog": 40000,
+  "pct": 18.9
+ },
+ "digitalocean": {
+  "catalog": 4000,
+  "pct": 100.0
+ },
+ "docusaurus": {
+  "catalog": 400,
+  "pct": 11.0
+ },
+ "elasticsearch": {
+  "catalog": 4000,
+  "pct": 9.5
+ },
+ "electron": {
+  "catalog": 1200,
+  "pct": 85.8
+ },
+ "elysia": {
+  "catalog": 150,
+  "pct": 82.0
+ },
+ "flux": {
+  "catalog": 600,
+  "pct": 53.7
+ },
+ "gitea": {
+  "catalog": 800,
+  "pct": 12.8
+ },
+ "godot": {
+  "catalog": 3000,
+  "pct": 80.6
+ },
+ "helm": {
+  "catalog": 800,
+  "pct": 23.5
+ },
+ "hono": {
+  "catalog": 300,
+  "pct": 94.7
+ },
+ "hugo": {
+  "catalog": 900,
+  "pct": 100.0
+ },
+ "ibmcloud": {
+  "catalog": 10000,
+  "pct": 23.6
+ },
+ "kong": {
+  "catalog": 2000,
+  "pct": 25.2
  },
  "kubernetes": {
-  "catalog": null,
-  "pct": null
+  "catalog": 4500,
+  "pct": 17.6
+ },
+ "langchain": {
+  "catalog": 2500,
+  "pct": 36.0
+ },
+ "moby": {
+  "catalog": 1800,
+  "pct": 4.1
+ },
+ "neon": {
+  "catalog": 500,
+  "pct": 49.2
+ },
+ "neovim": {
+  "catalog": 700,
+  "pct": 88.7
+ },
+ "netlify": {
+  "catalog": 1800,
+  "pct": 84.5
+ },
+ "nodejs": {
+  "catalog": 5000,
+  "pct": 93.6
+ },
+ "nuxt": {
+  "catalog": 1200,
+  "pct": 100.0
+ },
+ "ollama": {
+  "catalog": 80,
+  "pct": 100.0
+ },
+ "opentelemetry": {
+  "catalog": 2000,
+  "pct": 100.0
+ },
+ "playwright": {
+  "catalog": 900,
+  "pct": 92.9
+ },
+ "pulumi": {
+  "catalog": 2000,
+  "pct": 100.0
+ },
+ "pytest": {
+  "catalog": 350,
+  "pct": 32.9
+ },
+ "pytorch": {
+  "catalog": 6000,
+  "pct": 1.2
+ },
+ "react": {
+  "catalog": 1600,
+  "pct": 68.4
+ },
+ "sentry": {
+  "catalog": 1500,
+  "pct": 58.9
+ },
+ "solid": {
+  "catalog": 400,
+  "pct": 15.5
+ },
+ "stripe": {
+  "catalog": 3500,
+  "pct": 18.5
+ },
+ "svelte-core": {
+  "catalog": 1700,
+  "pct": 91.7
+ },
+ "temporal": {
+  "catalog": 800,
+  "pct": 100.0
+ },
+ "tensorflow": {
+  "catalog": 5000,
+  "pct": 24.6
+ },
+ "terragrunt": {
+  "catalog": 450,
+  "pct": 21.6
+ },
+ "turso": {
+  "catalog": 600,
+  "pct": 50.2
+ },
+ "upstash": {
+  "catalog": 700,
+  "pct": 100.0
  },
  "vercel": {
-  "catalog": 1277,
-  "pct": 4.6
+  "catalog": 2500,
+  "pct": 28.8
+ },
+ "vue-core-docs": {
+  "catalog": 1500,
+  "pct": 74.6
  }
 }
