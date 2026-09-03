@@ -13,8 +13,8 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Documesh" />
   <meta name="twitter:description" content="Federated developer documentation from 47 sources. Powered by WebMCP." />
-<title>Documesh MCP Server & WebMCP Tools — search_docs_across, explain_error, list_vendors</title>
-<meta name="description" content="Documesh MCP server reference: Streamable HTTP endpoint at /mcp with 3 typed tools — search_docs_across, explain_error, list_vendors — plus ui:// MCP Apps resources. WebMCP in-browser tools included."/>
+<title>Documesh MCP Server & WebMCP Tools — 9 tools: search, explain, verify_config, compare_configs, health probes, contribution</title>
+<meta name="description" content="Documesh MCP server reference: 9 typed tools — search, explain_error, verify_config, compare_configs, check_service_health, report_issue, submit_source, contribution_stats — on WebMCP, /mcp Streamable HTTP, and the product server."/>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
@@ -119,6 +119,12 @@
           <li><a href="#tool-search-docs-across" class="hover:text-slate-900 block pl-2 border-l border-slate-200">search_docs_across</a></li>
           <li><a href="#tool-explain-error" class="hover:text-slate-900 block pl-2 border-l border-slate-200">explain_error</a></li>
           <li><a href="#tool-list-sources" class="hover:text-slate-900 block pl-2 border-l border-slate-200">list_vendors</a></li>
+          <li><a href="#tool-verify-config" class="hover:text-slate-900 block pl-2 border-l border-slate-200">verify_config</a></li>
+          <li><a href="#tool-compare-configs" class="hover:text-slate-900 block pl-2 border-l border-slate-200">compare_configs</a></li>
+          <li><a href="#tool-check-health" class="hover:text-slate-900 block pl-2 border-l border-slate-200">check_service_health</a></li>
+          <li><a href="#tool-report-issue" class="hover:text-slate-900 block pl-2 border-l border-slate-200">report_issue</a></li>
+          <li><a href="#tool-submit-source" class="hover:text-slate-900 block pl-2 border-l border-slate-200">submit_source</a></li>
+          <li><a href="#tool-contribution-stats" class="hover:text-slate-900 block pl-2 border-l border-slate-200">contribution_stats</a></li>
         </ul>
       </div>
       <div>
@@ -176,7 +182,7 @@
     <section id="design-principles" class="mt-12 scroll-mt-24">
       <h2 class="text-2xl font-bold">Design principles</h2>
       <ul class="mt-4 space-y-3 text-slate-600 leading-relaxed">
-        <li class="flex gap-3"><span class="text-[#6a7337] font-bold">1.</span><span><strong>Risk-typed tools.</strong> Every tool declares its class — <code class="bg-slate-100 px-1 rounded text-sm">answer</code> (read-only), <code class="bg-slate-100 px-1 rounded text-sm">act</code> (mutates app state), <code class="bg-slate-100 px-1 rounded text-sm">transact</code> (guarded). All Documesh tools are read-only today.</span></li>
+        <li class="flex gap-3"><span class="text-[#6a7337] font-bold">1.</span><span><strong>Risk-typed tools.</strong> Every tool declares its class — <code class="bg-slate-100 px-1 rounded text-sm">answer</code> (read-only), <code class="bg-slate-100 px-1 rounded text-sm">act</code> (writes, always queued proposals). Six tools are read-only; the two act tools never mutate the corpus directly — submissions and reports are append-only proposals, reviewed before sync.</span></li>
         <li class="flex gap-3"><span class="text-[#6a7337] font-bold">2.</span><span><strong>Provenance mandatory.</strong> Responses without <code class="bg-slate-100 px-1 rounded text-sm">license</code>, <code class="bg-slate-100 px-1 rounded text-sm">source_url</code> and <code class="bg-slate-100 px-1 rounded text-sm">last_updated</code> fail at the schema level — attribution is structural, not optional.</span></li>
         <li class="flex gap-3"><span class="text-[#6a7337] font-bold">3.</span><span><strong>Honest abstention.</strong> <code class="bg-slate-100 px-1 rounded text-sm">explain_error</code> labels low-confidence results as "closest matches" and never presents a guess as the answer.</span></li>
         <li class="flex gap-3"><span class="text-[#6a7337] font-bold">4.</span><span><strong>One tool per intent.</strong> No near-duplicate tool spam — models lose accuracy on bloated tool lists, so the mesh keeps a minimal canonical surface.</span></li>
@@ -279,6 +285,176 @@
     <span class="k">"attribution_required"</span>: <span class="b">true</span>
   }, <span class="c">/* … 14 more */</span> ],
   <span class="k">"snapshot_date"</span>: <span class="s">"2026-08-30"</span> }</pre>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 4: verify_config ============ -->
+    <section id="tool-verify-config" class="mt-8 scroll-mt-24 border border-slate-100 rounded-2xl overflow-hidden">
+      <div class="p-6">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-[11px] font-bold bg-green-100 text-green-700 px-2 py-1 rounded">answer</span>
+          <span class="text-[11px] text-slate-400">read-only · pure compute · no external auth</span>
+        </div>
+        <h3 class="mt-3 text-xl font-bold font-mono">verify_config</h3>
+        <p class="mt-2 text-slate-600 text-sm leading-relaxed">
+          Diff a user's configuration file against the keys a source actually documents.
+          Returns <code class="bg-slate-100 px-1 rounded">missing_keys</code> (documented but absent from the config — each cited to the exact doc page)
+          and <code class="bg-slate-100 px-1 rounded">unknown_keys</code> (present in the config but never documented — possible typos).
+          Chain after <em>search_docs_across</em> when the user asks "is my config right?".
+        </p>
+      </div>
+      <div class="bg-slate-50 border-t border-slate-100 p-6">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Request</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{
+  <span class="k">"source"</span>: <span class="s">"cloudflare"</span>,
+  <span class="k">"config_text"</span>: <span class="s">"name = my-worker\ncompatibility_date = \"2024-09-23\"\n\n[vars]\nAPI_KEY = \"xyz\""</span>,
+  <span class="k">"config_query"</span>: <span class="s">"wrangler configuration"</span>   <span class="c">// optional — which docs to compare against</span>
+}</pre>
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-4">Response (abridged)</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{
+  <span class="k">"missing_keys"</span>: [{ <span class="k">"key"</span>: <span class="s">"triggers.crons"</span>,
+    <span class="k">"documented_in"</span>: { <span class="k">"title"</span>: <span class="s">"Cron Triggers"</span>, <span class="k">"source_url"</span>: <span class="s">"https://developers.cloudflare.com/…"</span> } }],
+  <span class="k">"unknown_keys"</span>: [<span class="s">"name"</span>, <span class="s">"main"</span>],
+  <span class="k">"disclaimer"</span>: <span class="s">"Heuristic diff — missing ≠ wrong; only documented keys are checked…"</span>
+}</pre>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 5: compare_configs ============ -->
+    <section id="tool-compare-configs" class="mt-8 scroll-mt-24 border border-slate-100 rounded-2xl overflow-hidden">
+      <div class="p-6">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-[11px] font-bold bg-green-100 text-green-700 px-2 py-1 rounded">answer</span>
+          <span class="text-[11px] text-slate-400">read-only · cross-source mapping</span>
+        </div>
+        <h3 class="mt-3 text-xl font-bold font-mono">compare_configs</h3>
+        <p class="mt-2 text-slate-600 text-sm leading-relaxed">
+          "I know Netlify's redirect syntax — what's the Vercel equivalent?"
+          Maps documented config keys between two sources: matched keys (by name or concept overlap) come back with
+          citations on both sides; unmatched keys are listed explicitly as gaps. Heuristic, honest about limits —
+          "no equivalent found" means none documented under a matching name.
+        </p>
+      </div>
+      <div class="bg-slate-50 border-t border-slate-100 p-6">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Request</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{
+  <span class="k">"source_a"</span>: <span class="s">"netlify"</span>,
+  <span class="k">"source_b"</span>: <span class="s">"vercel"</span>,
+  <span class="k">"query_a"</span>: <span class="s">"netlify redirects configuration"</span>,   <span class="c">// optional</span>
+  <span class="k">"query_b"</span>: <span class="s">"vercel redirects configuration"</span>    <span class="c">// optional</span>
+}</pre>
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-4">Response (abridged)</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{
+  <span class="k">"common"</span>:     [{ <span class="k">"key_a"</span>: <span class="s">"redirects"</span>, <span class="k">"key_b"</span>: <span class="s">"redirects"</span>, <span class="k">"match"</span>: <span class="s">"exact"</span>, <span class="c">/* + both citations */</span> }],
+  <span class="k">"only_a"</span>:    [{ <span class="k">"key"</span>: <span class="s">"build.command"</span>, <span class="c">/* + citation */</span> }],
+  <span class="k">"only_b"</span>:    [{ <span class="k">"key"</span>: <span class="s">"headers"</span>, <span class="c">/* + citation */</span> }],
+  <span class="k">"disclaimer"</span>: <span class="s">"Key mapping is heuristic (name + concept overlap), not semantic proof…"</span>
+}</pre>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 6: check_service_health ============ -->
+    <section id="tool-check-health" class="mt-8 scroll-mt-24 border border-slate-100 rounded-2xl overflow-hidden">
+      <div class="p-6">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-[11px] font-bold bg-green-100 text-green-700 px-2 py-1 rounded">answer</span>
+          <span class="text-[11px] text-slate-400">read-only · live status probe</span>
+        </div>
+        <h3 class="mt-3 text-xl font-bold font-mono">check_service_health</h3>
+        <p class="mt-2 text-slate-600 text-sm leading-relaxed">
+          Probe a provider's public status page — cloudflare, github, npm, or sentry.
+          Chain after <em>explain_error</em> to answer the follow-up every developer has:
+          "is the service down, or is it my code?" Read-only, no auth.
+        </p>
+      </div>
+      <div class="bg-slate-50 border-t border-slate-100 p-6">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Request</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{ <span class="k">"provider"</span>: <span class="s">"cloudflare"</span> }</pre>
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-4">Response</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{
+  <span class="k">"provider"</span>: <span class="s">"cloudflare"</span>, <span class="k">"name"</span>: <span class="s">"Cloudflare"</span>,
+  <span class="k">"indicator"</span>: <span class="s">"minor"</span>, <span class="k">"description"</span>: <span class="s">"Minor Service Outage"</span>,
+  <span class="k">"checked_at"</span>: <span class="s">"2026-09-03T17:09:04Z"</span>,
+  <span class="k">"status_url"</span>: <span class="s">"https://www.cloudflarestatus.com/…"</span>
+}</pre>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 7: report_issue ============ -->
+    <section id="tool-report-issue" class="mt-8 scroll-mt-24 border border-slate-100 rounded-2xl overflow-hidden">
+      <div class="p-6">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-[11px] font-bold bg-amber-100 text-amber-700 px-2 py-1 rounded">act</span>
+          <span class="text-[11px] text-slate-400">queued proposal · never mutates the mesh directly</span>
+        </div>
+        <h3 class="mt-3 text-xl font-bold font-mono">report_issue</h3>
+        <p class="mt-2 text-slate-600 text-sm leading-relaxed">
+          Report a documentation problem — outdated, incorrect, misattributed, license-mismatch, or broken-link —
+          against a specific chunk from a search result. Reports are appended to a triage queue and reviewed before
+          the next sync cycle. The corpus itself is never mutated by a report.
+        </p>
+      </div>
+      <div class="bg-slate-50 border-t border-slate-100 p-6">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Request</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{
+  <span class="k">"source_id"</span>: <span class="s">"cloudflare"</span>,
+  <span class="k">"chunk_id"</span>: <span class="s">"cf-workers-cron-007"</span>,      <span class="c">// from a search result</span>
+  <span class="k">"issue_type"</span>: <span class="s">"outdated"</span>,                 <span class="c">// outdated | incorrect | misattributed | license-mismatch | broken-link</span>
+  <span class="k">"detail"</span>: <span class="s">"Screenshot shows the old dashboard UI"</span>,
+  <span class="k">"suggested_fix"</span>: <span class="s">"…"</span>,                     <span class="c">// optional</span>
+  <span class="k">"reporter"</span>: <span class="s">"rio"</span>                        <span class="c">// optional</span>
+}</pre>
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-4">Response</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{ <span class="k">"issue_id"</span>: <span class="s">"5cf8e2cb-…"</span>, <span class="k">"status"</span>: <span class="s">"open"</span>,
+  <span class="k">"poll"</span>: <span class="s">"/v1/issues/5cf8e2cb-…"</span> }</pre>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 8: submit_source ============ -->
+    <section id="tool-submit-source" class="mt-8 scroll-mt-24 border border-slate-100 rounded-2xl overflow-hidden">
+      <div class="p-6">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-[11px] font-bold bg-amber-100 text-amber-700 px-2 py-1 rounded">act</span>
+          <span class="text-[11px] text-slate-400">async job · 202 + polling</span>
+        </div>
+        <h3 class="mt-3 text-xl font-bold font-mono">submit_source</h3>
+        <p class="mt-2 text-slate-600 text-sm leading-relaxed">
+          Submit a documentation source for ingestion review. Requires a name and license;
+          the docs origin is checked against our ingestion policy (official agent interface
+          or permissively-licensed repo — we never scrape). Returns an async job you poll.
+        </p>
+      </div>
+      <div class="bg-slate-50 border-t border-slate-100 p-6">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Request</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{
+  <span class="k">"name"</span>: <span class="s">"Example CLI"</span>,
+  <span class="k">"license"</span>: <span class="s">"MIT"</span>,
+  <span class="k">"docs_origin"</span>: <span class="s">"https://docs.example.com/llms.txt"</span>   <span class="c">// optional</span>
+}</pre>
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-4">Response</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{ <span class="k">"job_id"</span>: <span class="s">"b46aa7d4-…"</span>, <span class="k">"status"</span>: <span class="s">"processing"</span>,
+  <span class="k">"poll"</span>: <span class="s">"/v1/jobs/b46aa7d4-…"</span> }</pre>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 9: contribution_stats ============ -->
+    <section id="tool-contribution-stats" class="mt-8 scroll-mt-24 border border-slate-100 rounded-2xl overflow-hidden">
+      <div class="p-6">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-[11px] font-bold bg-green-100 text-green-700 px-2 py-1 rounded">answer</span>
+          <span class="text-[11px] text-slate-400">read-only · no parameters</span>
+        </div>
+        <h3 class="mt-3 text-xl font-bold font-mono">contribution_stats</h3>
+        <p class="mt-2 text-slate-600 text-sm leading-relaxed">
+          Live mesh counters: source submissions in flight, open and total issue reports,
+          sources indexed, and total chunks. Use it to gauge mesh health or to cite
+          contribution activity.
+        </p>
+      </div>
+      <div class="bg-slate-50 border-t border-slate-100 p-6">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Response</div>
+        <pre class="text-xs bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto">{ <span class="k">"source_submissions"</span>: 0, <span class="k">"issue_reports"</span>: 3, <span class="k">"open_issues"</span>: 3,
+  <span class="k">"sources_indexed"</span>: 47, <span class="k">"total_chunks"</span>: 36217 }</pre>
       </div>
     </section>
 
