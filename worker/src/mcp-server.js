@@ -113,6 +113,8 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
   const serverInstructions = options.serverInstructions || "Call search_docs_across for documentation queries, explain_error to match error messages to docs, list_vendors for the documentation-source registry.";
   const tools = options.tools || TOOLS;
   const resources = options.resources || RESOURCES;
+  // Observability hook (optional): options.onLog(ev) receives MCP-level facts.
+  const onLog = typeof options.onLog === "function" ? options.onLog : null;
 
   // GET = SSE stream for server→client notifications.
   // Scanners (and many clients) probe GET first and hang on an open stream.
@@ -195,6 +197,10 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
       }
     }
 
+    // Track MCP session in the response header so the caller-side logger
+    // can correlate calls to one agent session.
+    if (onLog && sessionId) onLog({ mcpMethod: "session", sessionId });
+
     // Track session activity if we know this session. We do NOT reject
     // unknown sessions: Workers isolates are ephemeral and per-isolate Maps
     // cannot share state, so a session minted in another isolate would be
@@ -210,12 +216,14 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
 
     try {
       let result;
+      let logMeta = { mcpMethod: method };
       switch (method) {
         case "tools/list":
           result = { tools };
           break;
         case "tools/call": {
           const toolName = params?.name;
+          logMeta = { mcpMethod: method, mcpTool: toolName || "" };
           if (!toolName || typeof toolName !== "string") {
             return jsonRPC(id, { code: -32602, message: "Invalid params: 'name' is required and must be a string identifying a tool." }, null);
           }
@@ -265,6 +273,13 @@ export function handleMCPServer(request, env, handleToolCall, options = {}) {
 
       // Attach session header to responses when session exists
       const response = jsonRPC(id, null, result);
+      if (onLog) {
+        try {
+          const resultCount = Array.isArray(result?.content)
+            ? (result.content[0]?.text || "").length : 0;
+          onLog({ ...logMeta, sessionId: sessionId || "", status: 200, resultBytes: resultCount });
+        } catch { /* logging must never break MCP */ }
+      }
       if (sessionId) {
         const headers = new Headers(response.headers);
         headers.set("Mcp-Session-Id", sessionId);

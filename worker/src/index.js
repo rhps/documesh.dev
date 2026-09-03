@@ -6,6 +6,7 @@
  */
 import { VENDOR_META, tokenize } from "./search-core-lite.js";
 import { handleMCPServer } from "./mcp-server.js";
+import { collectRequestEvent, logRequest } from "./logging.js";
 import { withSource, withSourceAll } from "./result-shape.js";
 
 const VENDOR_IDS = Object.keys(VENDOR_META);
@@ -338,8 +339,24 @@ async function unifiedSearch(env, query, opts = {}) {
 // ─── Main handler ────────────────────────────────────────────────────────────
 
 export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
+  async fetch(request, env, ctx) {
+    const __t0 = performance.now();
+    const __url = new URL(request.url);
+    const __response = await handleFetch(request, env, ctx, __url, __t0);
+    try {
+      logRequest(ctx, env, collectRequestEvent(request, __url, __t0), {
+        status: __response.status,
+        backend: __response.headers.get("X-Search-Backend") || "",
+        sessionId: __response.headers.get("Mcp-Session-Id") || "",
+        mcpMethod: __response.headers.get("X-Mcp-Method") || "",
+        mcpTool: __response.headers.get("X-Mcp-Tool") || "",
+      });
+    } catch { /* logging never breaks requests */ }
+    return __response;
+  },
+};
+
+async function handleFetch(request, env, ctx, url, __t0) {
     // URL path versioning: /v1/* aliases unversioned routes. Unknown /v1/* and
     // /v2/* fall through to JSON 404s below.
     const versioned = /^\/v1(\/|$)/.test(url.pathname);
@@ -649,22 +666,34 @@ export default {
       });
     }
     if (path === "/mcp" || path === "/.well-known/mcp") {
-      return handleMCPServer(request, env, async (toolName, args) => {
+      const lastMcpTool = { results: 0 };
+      const response = await handleMCPServer(request, env, async (toolName, args) => {
         if (toolName === "search_docs_across") {
           const out = await unifiedSearch(env, args.query, { vendors: args.vendors?.length ? args.vendors : undefined, limit: args.limit || 5 });
+          lastMcpTool.results = out.results?.length || 0;
           return { content: [{ type: "text", text: JSON.stringify({ query: args.query, ...out }) }] };
         }
         if (toolName === "explain_error") {
           const err = args.log_excerpt || args.error || "";
           const out = await runExplain(env, err, args.vendor);
+          lastMcpTool.results = out.matches?.length || 0;
           return { content: [{ type: "text", text: JSON.stringify({ ...out, disclaimer: "These are the closest documentation sections, not a diagnosis." }) }] };
         }
         if (toolName === "list_vendors") {
           const sources = VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id] }));
+          lastMcpTool.results = sources.length;
           return { content: [{ type: "text", text: JSON.stringify({ vendors: sources, sources }) }] };
         }
         return { content: [{ type: "text", text: JSON.stringify({ error: `unknown tool: ${toolName}` }) }], isError: true };
+      }, {
+        onLog: (ev) => {
+          // Stash MCP facts on the response so the top-level logger records them.
+          response.headers.set("X-Mcp-Method", ev.mcpMethod || "");
+          if (ev.mcpTool) response.headers.set("X-Mcp-Tool", ev.mcpTool);
+          if (ev.sessionId) response.headers.set("X-Mcp-Session", ev.sessionId);
+        },
       });
+      return response;
     }
 
     // ── A2A (Agent2Agent) JSON-RPC endpoint ──
@@ -1082,5 +1111,4 @@ export default {
       `# 404 — Not Found\n\nPath \`${url.pathname}\` does not exist.\n\n## Where to look next\n\n- API index: \`/openapi.json\`\n- Agent interface: \`/llms.txt\`\n- Routes: \`/search\`, \`/explain\`, \`/vendors\`, \`/health\`, \`/mcp\``,
       { status: 404, headers: { "Content-Type": "text/markdown; charset=utf-8", ...baseHeaders() } }
     );
-  },
-};
+}

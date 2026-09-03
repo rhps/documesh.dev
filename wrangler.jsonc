@@ -13,6 +13,11 @@
 //         staging    → documesh-search-staging
 //         production → documesh-search
 //         Active when SEARCH_BACKEND=d1 (shards = automatic fallback).
+//
+// Request logging (see docs/OBSERVABILITY_RESEARCH.md):
+//   AE   — Analytics Engine, hot tier (SQL-queryable, 90d retention)
+//   LOGS — R2 bucket, cold tier (permanent JSONL archive)
+//   Both optional: bindings may not exist locally; logging is best-effort.
 {
   "name": "documesh-api",
   "main": "worker/src/index.js",
@@ -28,6 +33,12 @@
       "database_name": "documesh-search",
       "database_id": "0a83a2f0-86c3-49ff-b98c-a7856d3a0d8b"
     }
+  ],
+  "analytics_engine_datasets": [
+    { "binding": "AE" }
+  ],
+  "r2_buckets": [
+    { "binding": "LOGS", "bucket_name": "documesh-request-logs" }
   ],
   "vars": {
     "SEARCH_BACKEND": "d1"
@@ -46,6 +57,12 @@
           "database_name": "documesh-search-staging",
           "database_id": "ebf178ef-b7c6-4f92-920c-6d95528b9f19"
         }
+      ],
+      "analytics_engine_datasets": [
+        { "binding": "AE" }
+      ],
+      "r2_buckets": [
+        { "binding": "LOGS", "bucket_name": "documesh-request-logs-staging" }
       ],
       "vars": {
         "SEARCH_BACKEND": "d1"
@@ -67,6 +84,12 @@
           "database_name": "documesh-search",
           "database_id": "0a83a2f0-86c3-49ff-b98c-a7856d3a0d8b"
         }
+      ],
+      "analytics_engine_datasets": [
+        { "binding": "AE" }
+      ],
+      "r2_buckets": [
+        { "binding": "LOGS", "bucket_name": "documesh-request-logs" }
       ],
       "vars": {
         "SEARCH_BACKEND": "d1"
