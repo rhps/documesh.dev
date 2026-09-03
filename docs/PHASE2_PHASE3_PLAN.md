@@ -151,6 +151,27 @@ since D1 production traffic) for Vectorize + AI bindings.
 
 ---
 
+## Implementation status — FINAL (2026-09-03 ~02:00 UTC): Phase 3 LIVE, Vectorize-free
+
+Vectorize index creation was blocked (no token scope + dashboard unavailable), so Phase 3
+shipped with a **different semantic engine**: LLM listwise rerank via Workers AI.
+
+| What | Status |
+|---|---|
+| `worker/src/llm-rerank.js` — listwise rerank, `@cf/meta/llama-3.1-8b-instruct-fp8-fast`, temp 0, robust index parsing | ✅ live |
+| AI binding (all envs) | ✅ deployed — needs no resource creation, unlike Vectorize |
+| Semantic branch in `searchD1` | ✅ live — opt-in `?prefer=semantic` / POST `prefer.semantic`; `explain_error` default-on |
+| `reranked: "semantic"\|"keyword"` response field | ✅ live-verified |
+| OR-semantics fallback (strict-AND zero results → OR retry, feeds reranker) | ✅ live-verified: "cors error browser fetch blocked" went 0 → 3 CORS docs |
+| `/admin/rerank-check` diagnostics route | ✅ live (X-Admin-Secret) |
+| Latency | ~500–700 ms semantic (1 LLM call), ~150–200 ms keyword — within the 400 ms-ish target for an opt-in path |
+| Eval gate | ✅ 5/5 before and after |
+
+Latency comparison: keyword 161 ms vs semantic 519 ms (acceptable — semantic is opt-in and
+explain-only by default). Vectorize remains the better end-state at scale (vectors pre-computed,
+~20 ms queries); if the account gains Vectorize access, `search-semantic.js` history in git
+(worker/src/search-semantic.js @ 523c983) plus plan §3 is the full recipe.
+
 ## Implementation status (2026-09-03 ~01:40 UTC)
 
 | Step | Status |
