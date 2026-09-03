@@ -144,16 +144,6 @@ async function registerWebMCP() {
       execute: async (_input, options = {}) => await fetch("/vendors", { signal: options.signal ?? signal }).then(r => r.json())
     }, { signal });
 
-    if (typeof window !== "undefined") {
-      window.__documeshWebMCPReady = true;
-    }
-    console.log("[webmcp] Documesh tools registered (navigator.modelContext)");
-  } catch (e) {
-    console.error("[webmcp] registration failed:", e);
-  }
-}
-
-registerWebMCP();
 
 // ── Act tools (browser surface) — same capabilities as the MCP server ──
 try {
@@ -283,3 +273,14 @@ try {
 } catch (e) {
   console.error("[webmcp] act tool registration failed:", e);
 }
+
+    if (typeof window !== "undefined") {
+      window.__documeshWebMCPReady = true;
+    }
+    console.log("[webmcp] Documesh tools registered (9 tools: 3 core + 6 act)");
+  } catch (e) {
+    console.error("[webmcp] registration failed:", e);
+  }
+}
+
+registerWebMCP();
