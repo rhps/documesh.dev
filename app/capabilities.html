@@ -181,6 +181,35 @@ matches:
 
   <hr class="border-slate-100" />
 
+  <!-- 2b. Act surface -->
+  <section id="act-surface" class="scroll-mt-24">
+    <div class="flex items-center gap-3">
+      <span class="text-xs font-bold bg-[#a9af8b]/30 text-[#4b5320] px-2 py-1 rounded">act</span>
+      <span class="text-xs text-slate-400">tools: verify_config · compare_configs · check_service_health · report_issue · submit_source</span>
+    </div>
+    <h2 class="text-2xl font-bold mt-3">🛠️ Act, Don't Just Search</h2>
+    <p class="mt-3 text-slate-600 leading-relaxed">
+      Agents can act on the mesh, not just query it — with one rule: every write is an
+      <strong>append-only proposal</strong> (queued, reviewed, then applied). Nothing
+      mutates the corpus directly.
+    </p>
+    <ul class="mt-4 space-y-3 text-sm text-slate-600">
+      <li><strong class="text-slate-800">verify_config</strong> — paste a config file; Documesh diffs it against the keys a source documents. Missing keys come back cited to the exact doc pages.</li>
+      <li><strong class="text-slate-800">compare_configs</strong> — "I know Netlify's redirects — what's the Vercel equivalent?" Cross-source key mapping with citations and honest gap lists.</li>
+      <li><strong class="text-slate-800">check_service_health</strong> — after explain_error, probe the provider's status page to answer "is it down, or is it me?"</li>
+      <li><strong class="text-slate-800">report_issue</strong> — flag outdated or misattributed chunks; queued for the next sync triage.</li>
+      <li><strong class="text-slate-800">submit_source</strong> — submit a documentation source for ingestion review (async job with polling).</li>
+    </ul>
+    <p class="mt-4 text-sm text-slate-500">
+      Also available: <code class="bg-slate-100 px-1 rounded">contribution_stats</code> (live mesh counters),
+      x402 payment tier discovery at <code class="bg-slate-100 px-1 rounded">/payment/tiers</code>
+      (free tier is the default and stays fully useful), and A2A delegation via
+      <code class="bg-slate-100 px-1 rounded">submit_task</code>.
+    </p>
+  </section>
+
+  <hr class="border-slate-100" />
+
   <!-- 3. Version awareness -->
   <section id="versions" class="scroll-mt-24">
     <div class="flex items-center gap-3">

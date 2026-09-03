@@ -1697,10 +1697,19 @@ async function handleFetch(request, env, ctx, url, __t0) {
         sandbox: url.origin + " (read-only open API — the live service is the sandbox)",
         sdks: { npm: "documesh (SDK + CLI)", install: "npm install documesh", cli: "documesh search <query>" },
         tools: {
-          mcp_tools: ["search_docs_across", "explain_error", "list_vendors"],
-          product_mcp_tools: ["service_status", "submit_vendor", "list_api_surface"],
+          mcp_tools: ["search_docs_across", "explain_error", "list_vendors", "verify_config", "compare_configs", "check_service_health", "report_issue", "submit_source", "contribution_stats"],
+          product_mcp_tools: ["service_status", "submit_vendor", "list_api_surface", "report_issue", "verify_config", "check_service_health", "contribution_stats"],
           mcp_apps_ui: true,
           ui_resources: ["ui://documesh/search-results", "ui://documesh/error-match", "ui://documesh/vendor-grid"],
+        },
+        actions: {
+          verify_config: "POST /verify-config — diff a config file against documented keys, with citations",
+          compare_configs: "POST /compare-configs — cross-source config key mapping (e.g. netlify vs vercel)",
+          check_service_health: "GET /health-check?provider= — provider status probe (cloudflare, github, npm, sentry)",
+          report_issue: "POST /report-issue — flag outdated/incorrect chunks (queued proposal, poll /v1/issues/{id})",
+          submit_source: "POST /submit-vendors — submit a source for ingestion (async job, poll /v1/jobs/{id})",
+          contribution_stats: "GET /contribution-stats — mesh contribution counters",
+          payments: { protocol: "x402", tiers: "/payment/tiers", note: "free tier is default and fully useful" },
         },
         schemas: {
           openapi: "/openapi.json",
@@ -1719,7 +1728,7 @@ async function handleFetch(request, env, ctx, url, __t0) {
           webmcp_tools_reference: "/webmcp.html",
           coverage_licenses: "/coverage.html",
         },
-        webmcp_tools: ["search_docs_across", "explain_error", "list_vendors"],
+        webmcp_tools: ["search_docs_across", "explain_error", "list_vendors", "verify_config", "compare_configs", "check_service_health", "report_issue", "submit_source", "contribution_stats"],
         a2a: { agent_card: "/.well-known/agent-card.json", endpoint: "/a2a" },
       });
     }

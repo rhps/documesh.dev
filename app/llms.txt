@@ -30,11 +30,27 @@ Any WebMCP-compatible agent can discover and call these tools when the page is o
 ## API
 
 - GET /health — Service health and snapshot date
-- GET /search?q=&vendors=&limit= — Federated search
-- GET /explain?error=&vendor= — Error-to-docs matching
-- GET /vendors — Vendor registry
+- GET /search?q=&vendors=&limit= — Federated search (results carry actionable facts: config_keys, code_snippets, cli_commands)
+- GET /explain?error=&vendor= — Error-to-docs matching (semantic rerank)
+- GET /vendors — Source registry
 - GET /openapi.json — OpenAPI 3.0 specification
 - GET /ask?q= — NLWeb natural language query
+
+## Actions (Act)
+
+- POST /verify-config — Diff a config file against a source's documented keys; missing keys cited to docs
+- POST /compare-configs — Cross-source config key mapping (e.g. netlify vs vercel redirects)
+- GET /health-check?provider= — Provider status probe (cloudflare, github, npm, sentry)
+- POST /report-issue — Report outdated/incorrect chunks (queued proposal; poll /v1/issues/{id})
+- POST /submit-vendors — Submit a source for ingestion (async job; poll /v1/jobs/{id})
+- GET /contribution-stats — Mesh contribution counters
+- GET /payment/tiers — x402 payment tiers (free tier is the default and fully useful)
+
+## MCP
+
+- POST /mcp — Streamable HTTP MCP server, 9 tools: search_docs_across, explain_error, list_vendors, verify_config, compare_configs, check_service_health, report_issue, submit_source, contribution_stats
+- POST /mcp/product — Product MCP server (service ops + act tools)
+- POST /a2a — A2A agent endpoint (message/send, submit_task delegation)
 
 ## Developer Portal
 
