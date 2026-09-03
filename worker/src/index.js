@@ -557,14 +557,20 @@ async function handleFetch(request, env, ctx, url, __t0) {
     if (path === "/.well-known/mcp/server-card.json" || path === "/.well-known/mcp/server-card") {
       return json({
         name: "Documesh MCP Server",
-        description: "Federated developer documentation search across 47 documentation sources",
-        version: "0.2.0",
+        description: "Federated developer documentation search across documentation sources, with config verification, cross-source config comparison, provider health probes, and mesh contribution tools",
+        version: "0.3.0",
         serverUrl: `${url.origin}/mcp`,
         transport: "streamable-http",
         tools: [
-          { name: "search_docs_across", description: "Federated documentation search" },
-          { name: "explain_error", description: "Error-to-docs matching" },
-          { name: "list_vendors", description: "Documentation source registry (sources formerly called vendors)" }
+          { name: "search_docs_across", description: "Federated documentation search with actionable facts (config_keys, code_snippets, cli_commands)" },
+          { name: "explain_error", description: "Error-to-docs matching with semantic rerank" },
+          { name: "list_vendors", description: "Documentation source registry (sources formerly called vendors)" },
+          { name: "verify_config", description: "Diff a user's config file against documented keys, with citations" },
+          { name: "compare_configs", description: "Cross-source config key mapping (e.g. netlify vs vercel)" },
+          { name: "check_service_health", description: "Provider status page probe (cloudflare, github, npm, sentry)" },
+          { name: "report_issue", description: "Report a docs problem (queued proposal)" },
+          { name: "submit_source", description: "Submit a source for ingestion (async job)" },
+          { name: "contribution_stats", description: "Mesh contribution counters" }
         ]
       });
     }
