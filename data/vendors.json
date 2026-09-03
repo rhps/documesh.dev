@@ -1,46 +1,95 @@
 {
- "pulumi": {
-  "name": "Pulumi",
-  "license": "Apache-2.0",
+ "cloudflare": {
+  "name": "Cloudflare",
+  "license": "CC-BY-4.0",
   "license_url": "",
-  "docs_origin": "P4:git-repo",
-  "attribution_required": true,
-  "added": "2026-09-02"
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
  },
-<<<<<<< HEAD
- "ibmcloud": {
-  "name": "IBM Cloud",
+ "netlify": {
+  "name": "Netlify",
   "license": "llms.txt agent-permitted",
   "license_url": "",
-  "docs_origin": "P1b:llms.txt\u2192?format=markdown",
-  "attribution_required": true,
-  "added": "2026-09-03"
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
  },
- "langchain": {
-  "name": "LangChain",
-=======
- "moby": {
-  "name": "Docker (Moby)",
-  "license": "Apache-2.0",
+ "vercel": {
+  "name": "Vercel",
+  "license": "llms.txt agent-permitted",
   "license_url": "",
-  "docs_origin": "P4:git-repo",
-  "attribution_required": true,
-  "added": "2026-09-03"
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "kubernetes": {
+  "name": "Kubernetes",
+  "license": "CC-BY-4.0",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "bun": {
+  "name": "Bun",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "elysia": {
+  "name": "ElysiaJS",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "turso": {
+  "name": "Turso",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "upstash": {
+  "name": "Upstash",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "sentry": {
+  "name": "Sentry",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "stripe": {
+  "name": "Stripe",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "hono": {
+  "name": "Hono",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
  },
  "nuxt": {
   "name": "Nuxt",
->>>>>>> 2eb7ef3 (coverage: cycle 1 deepen pytorch,ibmcloud,aws,opentelemetry,moby,nuxt,clickhouse,langchain,digitalocean,hugo)
   "license": "MIT",
   "license_url": "",
-  "docs_origin": "P1:llms.txt\u2192per-page.md",
-  "attribution_required": true,
-  "added": "2026-09-03"
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
  },
-<<<<<<< HEAD
- "clickhouse": {
-  "name": "ClickHouse",
-  "license": "Apache-2.0",
-=======
+ "solid": {
+  "name": "SolidJS",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
  "opentelemetry": {
   "name": "OpenTelemetry",
   "license": "CC-BY-4.0",
@@ -49,84 +98,240 @@
   "attribution_required": true,
   "added": "2026-09-03"
  },
- "digitalocean": {
-  "name": "DigitalOcean",
-  "license": "llms.txt agent-permitted",
->>>>>>> 2eb7ef3 (coverage: cycle 1 deepen pytorch,ibmcloud,aws,opentelemetry,moby,nuxt,clickhouse,langchain,digitalocean,hugo)
-  "license_url": "",
-  "docs_origin": "P1:llms.txt\u2192per-page.md",
-  "attribution_required": true,
-  "added": "2026-09-03"
-<<<<<<< HEAD
-=======
- },
- "hugo": {
-  "name": "Hugo",
+ "argocd": {
+  "name": "Argo CD",
   "license": "Apache-2.0",
   "license_url": "",
-  "docs_origin": "P4:git-repo",
-  "attribution_required": true,
-  "added": "2026-09-03"
-<<<<<<< HEAD
->>>>>>> 2eb7ef3 (coverage: cycle 1 deepen pytorch,ibmcloud,aws,opentelemetry,moby,nuxt,clickhouse,langchain,digitalocean,hugo)
-=======
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
  },
- "vue-core-docs": {
-  "name": "Vue (core)",
+ "helm": {
+  "name": "Helm",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "flux": {
+  "name": "Flux CD",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "cilium": {
+  "name": "Cilium",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "react": {
+  "name": "React",
   "license": "MIT",
   "license_url": "",
-  "docs_origin": "P4:git-repo",
-  "attribution_required": true,
-  "added": "2026-09-03"
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
  },
- "sentry": {
-  "name": "Sentry",
-  "license": "llms.txt agent-permitted",
+ "pytorch": {
+  "name": "PyTorch",
+  "license": "BSD-style",
   "license_url": "",
-  "docs_origin": "P1:llms.txt\u2192per-page.md",
-  "attribution_required": true,
-  "added": "2026-09-03"
- },
- "upstash": {
-  "name": "Upstash",
-  "license": "llms.txt agent-permitted",
-  "license_url": "",
-  "docs_origin": "P1:llms.txt\u2192per-page.md",
-  "attribution_required": true,
-  "added": "2026-09-03"
-<<<<<<< HEAD
->>>>>>> a5292c6 (coverage: cycle 2 deepen pytorch,ibmcloud,aws,moby,clickhouse,langchain,vue-core-docs,sentry,upstash,elasticsearch)
-=======
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
  },
  "tensorflow": {
   "name": "TensorFlow",
   "license": "Apache-2.0",
   "license_url": "",
-  "docs_origin": "P4:git-repo",
-  "attribution_required": true,
-  "added": "2026-09-03"
-<<<<<<< HEAD
->>>>>>> 9a9ebc1 (coverage: cycle 3 deepen pytorch,ibmcloud,aws,moby,clickhouse,langchain,elasticsearch,docusaurus,gitea,tensorflow)
-=======
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
  },
- "temporal": {
-  "name": "Temporal",
-  "license": "llms.txt agent-permitted",
+ "langchain": {
+  "name": "LangChain",
+  "license": "MIT",
   "license_url": "",
   "docs_origin": "P1:llms.txt\u2192per-page.md",
   "attribution_required": true,
   "added": "2026-09-03"
-<<<<<<< HEAD
->>>>>>> 684043c (coverage: cycle 4 deepen pytorch,ibmcloud,aws,moby,clickhouse,langchain,elasticsearch,docusaurus,gitea,temporal)
-=======
  },
- "argocd": {
-  "name": "Argo CD",
+ "playwright": {
+  "name": "Playwright",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "clickhouse": {
+  "name": "ClickHouse",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "P1:llms.txt\u2192per-page.md",
+  "attribution_required": true,
+  "added": "2026-09-03"
+ },
+ "ollama": {
+  "name": "Ollama",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "electron": {
+  "name": "Electron",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "hugo": {
+  "name": "Hugo",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "docusaurus": {
+  "name": "Docusaurus",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "pytest": {
+  "name": "pytest",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "nodejs": {
+  "name": "Node.js",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "godot": {
+  "name": "Godot",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "neovim": {
+  "name": "Neovim",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "terragrunt": {
+  "name": "Terragrunt",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "moby": {
+  "name": "Docker (Moby)",
   "license": "Apache-2.0",
   "license_url": "",
   "docs_origin": "P4:git-repo",
   "attribution_required": true,
   "added": "2026-09-03"
->>>>>>> 1da2c01 (coverage: cycle 5 deepen pytorch,ibmcloud,aws,moby,clickhouse,langchain,elasticsearch,docusaurus,gitea,argocd)
+ },
+ "elasticsearch": {
+  "name": "Elasticsearch",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "svelte-core": {
+  "name": "Svelte",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "vue-core-docs": {
+  "name": "Vue (core)",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "gitea": {
+  "name": "Gitea",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "aws": {
+  "name": "AWS",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "digitalocean": {
+  "name": "DigitalOcean",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "ibmcloud": {
+  "name": "IBM Cloud",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "P1b:llms.txt\u2192?format=markdown",
+  "attribution_required": true,
+  "added": "2026-09-03"
+ },
+ "anthropic": {
+  "name": "Anthropic",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "neon": {
+  "name": "Neon",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "clerk": {
+  "name": "Clerk",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "pulumi": {
+  "name": "Pulumi",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "P4:git-repo",
+  "attribution_required": true,
+  "added": "2026-09-02"
+ },
+ "temporal": {
+  "name": "Temporal",
+  "license": "llms.txt agent-permitted; core MIT",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
+ },
+ "kong": {
+  "name": "Kong",
+  "license": "llms.txt agent-permitted; Gateway Apache-2.0",
+  "license_url": "",
+  "docs_origin": "worker/src/search-core-lite.js (registry rebuild)",
+  "attribution_required": true
  }
 }
