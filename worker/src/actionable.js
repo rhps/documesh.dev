@@ -15,7 +15,7 @@
 
 const CONFIG_KEY_RE = /(?:^|[\s`"'(])([A-Za-z][A-Za-z0-9_]*(?:[.\-][A-Za-z][A-Za-z0-9_]+){1,3})\s*(?:=|:|(?:key|variable|setting|option|field|property|header)\b)/i;
 const DOTTED_KEY_RE = /^[A-Za-z][A-Za-z0-9_]*(?:[.\-][A-Za-z][A-Za-z0-9_]+){1,3}$/;
-const SHELL_RE = /(?:^|[\n\s])(?:\$ |> |run\s+|execute\s+|with\s+)?((?:npm|npx|yarn|pnpm|bun|pip|pip3|cargo|go|kubectl|helm|docker|wrangler|git|curl|terraform|tofu|flyctl|gh)\s+[^\n`]{4,160})/gi;
+const SHELL_RE = /(?:^|[\n\s])(?:\$ |> |run\s+|execute\s+|with\s+)?((?:npm|npx|yarn|pnpm|bun|pip|pip3|cargo|go|kubectl|helm|docker|wrangler|git|curl|terraform|tofu|flyctl|gh)[^\S\n]+[^\n`]{4,160})/gi;
 const VERSION_RE = /\b(?:since|introduced in|available (?:in|as of|from)|requires?|works? (?:with|from)|version)\b[^.\n]{0,40}?(\d+\.\d+(?:\.\d+)?|\d{4}-\d{2}-\d{2})/i;
 
 const LANG_HINTS = [
