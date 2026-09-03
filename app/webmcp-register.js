@@ -53,7 +53,7 @@ async function registerWebMCP() {
   try {
     ctx.registerTool({
       name: "search_docs_across",
-      description: "Search federated developer documentation (Cloudflare, Netlify, Vercel, Kubernetes, Bun, Stripe, Sentry and more). Returns ranked excerpts with version, license, and canonical source URL for every result.",
+      description: "Search federated developer documentation (Cloudflare, Netlify, Vercel, Kubernetes, Bun, Stripe, Sentry and more). Returns ranked excerpts with version, license, and canonical source URL. Results include `actionable` facts — config_keys, code_snippets, cli_commands — designed to chain with other tools (e.g. fetch the user's config via a GitHub MCP tool and compare against docs config_keys, or run cli_commands in a sandbox).",
       inputSchema: {
         type: "object",
         properties: {
@@ -68,20 +68,37 @@ async function registerWebMCP() {
         if (input.vendors?.length) params.set("vendors", input.vendors.join(","));
         const res = await fetch(`/search?${params}`, { signal: options.signal ?? signal });
         const data = await res.json();
+        const results = (data.results || []).map(r => ({
+          vendor: r.vendor, version: r.version, title: r.title,
+          section: r.heading_path, excerpt_link: r.source_url,
+          license: r.license, last_updated: r.last_updated, relevance: r.score,
+          ...(r.actionable ? { actionable: r.actionable } : {})
+        }));
+        // structuredContent: machine-readable top answer for reliable tool chaining
+        const top = results[0];
+        const structured = {
+          query: input.query,
+          top_answer: top ? {
+            source: top.vendor,
+            title: top.title,
+            section: top.section,
+            canonical_url: top.excerpt_link,
+            license: top.license,
+            ...(top.actionable || {}),
+          } : null,
+          result_count: results.length,
+        };
         return {
-          snapshot_date: data.snapshot_date,
-          results: (data.results || []).map(r => ({
-            vendor: r.vendor, version: r.version, title: r.title,
-            section: r.heading_path, excerpt_link: r.source_url,
-            license: r.license, last_updated: r.last_updated, relevance: r.score
-          }))
+          structuredContent: structured,
+          ...structured,
+          results,
         };
       }
     }, { signal });
 
     ctx.registerTool({
       name: "explain_error",
-      description: "Given a log excerpt or error message, find the closest matching documentation sections across mesh sources. Returns version-cited sections and a disclaimer — not a diagnosis.",
+      description: "Given a log excerpt or error message, find the closest matching documentation sections across mesh sources. Returns version-cited sections plus actionable fix facts (config_keys, code_snippets, cli_commands) and a disclaimer — not a diagnosis. Chain with execution tools (sandbox, GitHub MCP) to apply the suggested fix.",
       inputSchema: {
         type: "object",
         properties: {
@@ -94,7 +111,29 @@ async function registerWebMCP() {
         const params = new URLSearchParams({ error: input.log_excerpt });
         if (input.vendor) params.set("vendor", input.vendor);
         const res = await fetch(`/explain?${params}`, { signal: options.signal ?? signal });
-        return await res.json();
+        const data = await res.json();
+        const matches = (data.matches || []).map(m => ({
+          ...m,
+          ...(m.actionable ? { actionable: m.actionable } : {})
+        }));
+        const top = matches[0];
+        const structured = {
+          error: input.log_excerpt.slice(0, 200),
+          top_fix: top ? {
+            source: top.vendor,
+            title: top.title,
+            canonical_url: top.source_url,
+            license: top.license,
+            ...(top.actionable || {}),
+          } : null,
+          match_count: matches.length,
+        };
+        return {
+          structuredContent: structured,
+          ...data,
+          matches,
+          structured,
+        };
       }
     }, { signal });
 

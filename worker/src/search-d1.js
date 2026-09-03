@@ -8,7 +8,8 @@
  *     next_cursor: string|null, total: number }
  */
 
-import { withSource } from "./result-shape.js";
+import { withSource, withSourceAll } from "./result-shape.js";
+import { extractActionables } from "./actionable.js";
 
 const FTS_COLS_WEIGHTED = "bm25(chunks_fts, 3.0, 2.0, 1.0)"; // title, heading_path, content — mirrors legacy title-boost
 
@@ -169,6 +170,8 @@ export async function searchD1(env, query, opts = {}) {
 }
 
 function shapeResult(r) {
+  // Actionable facts extracted from snippet + heading (chainable by agents).
+  const actionable = extractActionables([r.title, r.heading_path, r.snippet].filter(Boolean).join("\n"));
   return withSource({
     chunk_id: r.chunk_id,
     vendor: r.vendor,
@@ -182,6 +185,7 @@ function shapeResult(r) {
     last_updated: r.last_updated || "",
     score: r.score == null ? 0 : Math.abs(Number(r.score.toFixed(4))),
     snippet: r.snippet || "",
+    ...(Object.keys(actionable).length ? { actionable } : {}),
   });
 }
 
