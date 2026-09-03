@@ -58,16 +58,7 @@ jobs:
         run: |
           BASE="https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/scripts"
           LIST=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "$BASE")
-          NAMES=$(echo "$LIST" | python3 -c "
-            import json, sys
-            d = json.load(sys.stdin)
-            if not d.get('success'):
-                print(''); sys.exit(0)
-            for s in d.get('result', []):
-                name = s.get('id', '')
-                if name.startswith('docs-mesh-pr-'):
-                    print(name)
-          ")
+          NAMES=$(echo "$LIST" | python3 -c "import json,sys; d=json.load(sys.stdin); print('\n'.join(s.get('id','') for s in d.get('result',[]) if str(s.get('id','')).startswith('docs-mesh-pr-'))) if d.get('success') else print('')")
           DELETED=0
           for NAME in $NAMES; do
             echo "deleting stale preview worker: $NAME"
