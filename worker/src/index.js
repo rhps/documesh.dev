@@ -7,7 +7,8 @@
 import { VENDOR_META, tokenize } from "./search-core-lite.js";
 import { handleMCPServer } from "./mcp-server.js";
 import { collectRequestEvent, logRequest } from "./logging.js";
-import { normalizeIssueReport, verifyConfig, checkServiceHealth, ISSUE_TYPES, KNOWN_PROVIDERS } from "./act.js";
+import { normalizeIssueReport, verifyConfig, checkServiceHealth, ISSUE_TYPES, KNOWN_PROVIDERS, PAYMENT_TIERS } from "./act.js";
+import { compareConfigs } from "./compare-configs.js";
 import { withSource, withSourceAll } from "./result-shape.js";
 
 const VENDOR_IDS = Object.keys(VENDOR_META);
@@ -1014,7 +1015,39 @@ async function handleFetch(request, env, ctx, url, __t0) {
       if (method === "tasks/get") {
         return json({ jsonrpc: "2.0", id, error: { code: -32001, message: "Tasks are completed synchronously; no persisted task state." } });
       }
-      return json({ jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${method}. Supported: message/send, tasks/get.` } });
+      // A2A delegation: structured action requests (mesh-contribution skills)
+      if (method === "submit_task") {
+        const kind = params?.task?.kind || params?.kind;
+        const payload = params?.task?.payload || params?.payload || {};
+        if (kind === "submit_source") {
+          const name = payload.name || "", license = payload.license || "";
+          if (!name || !license) {
+            return json({ jsonrpc: "2.0", id, error: { code: -32602, message: "submit_task requires task.payload.name and task.payload.license" } });
+          }
+          const jobId = crypto.randomUUID();
+          jobs.set(jobId, { status: "processing", submitted_at: new Date().toISOString(), vendor: payload, via: "a2a" });
+          return json({ jsonrpc: "2.0", id, result: { id: jobId, status: { state: "submitted" }, kind: "task",
+            artifacts: [{ artifactId: crypto.randomUUID(), name: "submission", parts: [{ kind: "text", text: `Source '${name}' queued. Poll /v1/jobs/${jobId}` }] }] } });
+        }
+        if (kind === "report_issue") {
+          const norm = normalizeIssueReport(payload);
+          if (!norm.ok) return json({ jsonrpc: "2.0", id, error: { code: -32602, message: norm.error } });
+          const issueId = crypto.randomUUID();
+          try {
+            if (env.DB) {
+              await env.DB.prepare(`CREATE TABLE IF NOT EXISTS issue_reports (id TEXT PRIMARY KEY, source_id TEXT NOT NULL, chunk_id TEXT NOT NULL, issue_type TEXT NOT NULL, detail TEXT, suggested_fix TEXT, reporter TEXT, status TEXT DEFAULT 'open', created_at TEXT DEFAULT (datetime('now')))`).run();
+              await env.DB.prepare(`INSERT INTO issue_reports (id, source_id, chunk_id, issue_type, detail, suggested_fix, reporter) VALUES (?,?,?,?,?,?,?)`)
+                .bind(issueId, norm.report.source_id, norm.report.chunk_id, norm.report.issue_type, norm.report.detail, norm.report.suggested_fix ?? null, "a2a-delegate").run();
+            }
+          } catch (e) {
+            return json({ jsonrpc: "2.0", id, error: { code: -32603, message: `persist failed: ${e.message}` } });
+          }
+          return json({ jsonrpc: "2.0", id, result: { id: issueId, status: { state: "submitted" }, kind: "task",
+            artifacts: [{ artifactId: crypto.randomUUID(), name: "issue-report", parts: [{ kind: "text", text: `Issue ${issueId} queued for review.` }] }] } });
+        }
+        return json({ jsonrpc: "2.0", id, error: { code: -32601, message: "Unknown task kind. Supported: submit_source, report_issue." } });
+      }
+      return json({ jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${method}. Supported: message/send, submit_task, tasks/get.` } });
     }
 
     // Versioning & deprecation policy (machine + human readable)
@@ -1101,6 +1134,47 @@ async function handleFetch(request, env, ctx, url, __t0) {
         sources: [...sources, ...registered],
         registered_count: registered.length,
         note: "coverage = ingested pages / source's own published catalog (llms.txt). null = catalog unknown. registered=true = verified source, sync pending.",
+      }, 200, apiEntry ? url.origin : null);
+    }
+
+    // ── Tier 1 #2: POST /compare-configs — cross-vendor config key mapping ──
+    if (path === "/compare-configs" && request.method === "POST") {
+      let body = {};
+      try { body = await request.json(); } catch {}
+      const { source_a, source_b } = body;
+      if (!source_a || !source_b) {
+        return apiError(400, "MISSING_SOURCES", "Both 'source_a' and 'source_b' are required.", `POST JSON {source_a: "netlify", source_b: "vercel", query_a: "netlify redirects configuration", query_b: "vercel redirects configuration"}.`);
+      }
+      if (source_a === source_b) {
+        return apiError(400, "SAME_SOURCE", "source_a and source_b must differ.", undefined);
+      }
+      const qA = body.query_a || `${source_a} configuration`;
+      const qB = body.query_b || `${source_b} configuration`;
+      const [searchA, searchB] = await Promise.all([
+        unifiedSearch(env, qA, { vendors: [source_a], limit: 8, semantic: true }),
+        unifiedSearch(env, qB, { vendors: [source_b], limit: 8, semantic: true }),
+      ]);
+      const result = compareConfigs(searchA.results || [], searchB.results || [], source_a, source_b);
+      if (!result.ok) {
+        return apiError(422, "COMPARE_FAILED", result.error, "Broaden query_a / query_b (e.g. '<source> configuration reference').");
+      }
+      return json({
+        ...result,
+        reranked: searchA.reranked || searchB.reranked || "keyword",
+        disclaimer: result.disclaimer,
+      }, 200, apiEntry ? url.origin : null);
+    }
+
+    // ── Tier 3: x402 tier discovery (payment surface stays honest: advertised,
+    // only enforceable once X402_FACILITATOR_URL is configured) ──
+    if (path === "/payment/tiers") {
+      return json({
+        protocol: "x402",
+        tiers: PAYMENT_TIERS,
+        free_tier_note: "The free tier is the default and remains fully useful. Paid tiers are convenience capacity, not a paywall.",
+        facilitator_configured: !!env.X402_FACILITATOR_URL,
+        discovery: "/discovery/resources",
+        note: "Payment flow: exceed free quota → 402 + WWW-Authenticate: Payment → retry with PAYMENT-SIGNATURE header.",
       }, 200, apiEntry ? url.origin : null);
     }
 

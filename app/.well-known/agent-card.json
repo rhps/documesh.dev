@@ -43,6 +43,34 @@
       "description": "Look up license and attribution information for every documentation source in the mesh.",
       "tags": ["license", "attribution", "legal"],
       "examples": ["what license is the Cloudflare docs under?"]
+    },
+    {
+      "id": "config-verification",
+      "name": "Config Verification",
+      "description": "Diff a user's configuration file against the keys a source documents. Returns missing keys (each cited to the docs) and unknown keys (possible typos). Heuristic, honest about limits.",
+      "tags": ["configuration", "verification", "devops"],
+      "examples": ["check my wrangler.toml against Cloudflare docs", "verify k8s manifest keys"]
+    },
+    {
+      "id": "cross-source-config-mapping",
+      "name": "Cross-Source Config Mapping",
+      "description": "Compare documented configuration keys between two sources (e.g. Netlify vs Vercel redirects) — common keys matched by name/concepts, gaps listed explicitly.",
+      "tags": ["configuration", "migration", "comparison"],
+      "examples": ["netlify redirects vs vercel redirects", "map heroku config vars to cloudflare workers vars"]
+    },
+    {
+      "id": "service-health-probe",
+      "name": "Provider Health Probe",
+      "description": "Probe a provider's public status page (Cloudflare, GitHub, npm, Sentry) to answer 'is it down or is it me?' after an error.",
+      "tags": ["status", "health", "outages"],
+      "examples": ["is cloudflare down right now?", "check github status"]
+    },
+    {
+      "id": "mesh-contribution",
+      "name": "Mesh Contribution",
+      "description": "Submit a documentation source for ingestion, report outdated or incorrect chunks, and view contribution stats. All writes are queued proposals — nothing mutates the mesh directly.",
+      "tags": ["contribution", "ingestion", "quality"],
+      "examples": ["add docs.example.io to the mesh", "report this doc section as outdated"]
     }
   ],
   "supportsAuthenticatedExtendedCard": false

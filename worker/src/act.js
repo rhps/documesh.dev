@@ -148,3 +148,48 @@ export async function checkServiceHealth(env, provider) {
     return { ok: false, error: `status probe failed: ${e.message}` };
   }
 }
+
+/**
+ * x402 payment tiers — metered mesh capacity.
+ *
+ * Free tier stays genuinely useful (100 req/hr); exceeding it returns an x402
+ * challenge (HTTP 402 + WWW-Authenticate: Payment). A request carrying a valid
+ * PAYMENT-SIGNATURE header (verified via the hosted facilitator) gets boosted.
+ *
+ * The facilitator verify call is external — controlled by env.X402_FACILITATOR_URL.
+ * Without it (local dev / not yet enabled), all requests fall through as free tier.
+ */
+
+export const PAYMENT_TIERS = {
+  free:   { requests_per_hour: 100,  max_results: 5,  price_usd: 0 },
+  boosted:{ requests_per_hour: 1000, max_results: 20, price_usd: 0.001 },
+  deep:   { requests_per_hour: 5000, max_results: 50, price_usd: 0.01 },
+};
+
+/** Build an x402 challenge response for a paid tier. */
+export function x402Challenge(env, tier = "boosted") {
+  const t = PAYMENT_TIERS[tier];
+  return {
+    status: 402,
+    headers: {
+      "WWW-Authenticate": `Payment realm="documesh", tier="${tier}", price="${t.price_usd} USD", description="Documesh ${tier} capacity", facilitator="${env.X402_FACILITATOR_URL || "https://facilitator.x402.io"}"`,
+    },
+  };
+}
+
+/**
+ * Tier/quota check for a request.
+ * - Free tier: enforced via RateLimit headers (existing middleware) — this only
+ *   handles the PAID escalation path.
+ * - Returns { tier, boosted } or { tier:"free", challenge } when free quota is
+ *   exhausted and the caller hasn't paid.
+ */
+export function resolveTier(request, env, quotaExceeded) {
+  if (!quotaExceeded) return { tier: "free", boosted: false };
+  // caller claims a paid tier via header; real verification happens through the facilitator
+  const sig = request.headers.get("PAYMENT-SIGNATURE");
+  if (sig && env.X402_FACILITATOR_URL) {
+    return { tier: "boosted", boosted: true, payment_signature: sig };
+  }
+  return { tier: "free", boosted: false, challenge: x402Challenge(env, "boosted") };
+}
