@@ -18,6 +18,10 @@ import urllib.request
 import urllib.error
 from pathlib import Path
 
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
+from deepen_log import install  # stdout + crash tracebacks -> data/logs/deepen.log
+install(__file__)
+
 BASE = Path(__file__).resolve().parent.parent
 CHUNKS_DIR = BASE / "data" / "chunks"
 UA = {"User-Agent": "Mozilla/5.0 (compatible; documesh-indexer/1.0)"}

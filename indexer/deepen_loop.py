@@ -33,6 +33,8 @@ from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE / "indexer"))
+from deepen_log import install  # stdout + crash tracebacks -> data/logs/deepen.log
+install(__file__)
 CHUNKS_DIR = BASE / "data" / "chunks"
 SOURCES = json.load(open(BASE / "indexer" / "crawl_sources.json"))
 

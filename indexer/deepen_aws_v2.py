@@ -7,6 +7,11 @@ from __future__ import annotations
 import json, re, time, hashlib, urllib.request, urllib.error
 from pathlib import Path
 
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+from deepen_log import install  # stdout + crash tracebacks -> data/logs/deepen.log
+install(__file__)
+
 BASE = Path(__file__).resolve().parent.parent
 CHUNKS_DIR = BASE / "data" / "chunks"
 UA = {"User-Agent": "Mozilla/5.0 (compatible; documesh-indexer/1.0)"}
