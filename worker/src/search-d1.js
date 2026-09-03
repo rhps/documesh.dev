@@ -31,6 +31,16 @@ export function toMatchQuery(raw) {
   return tokens.map((t) => `"${t}"`).join(" ");
 }
 
+export function toTokens(raw) {
+  if (!raw) return [];
+  return String(raw)
+    .toLowerCase()
+    .replace(/["'`*():^{}[\]/\\~!@#$%&+=|<>?;,.-]/g, " ")
+    .split(/\s+/)
+    .map((t) => t.trim())
+    .filter((t) => t.length >= 2);
+}
+
 export function encodeCursor(score, rowid) {
   return btoa(JSON.stringify({ s: score, r: rowid })).replace(/=+$/, "");
 }
@@ -94,16 +104,45 @@ export async function searchD1(env, query, opts = {}) {
 
   const { results } = await env.DB.prepare(sql).bind(...bind).all();
 
+  // AND-semantics fallback: strict MATCH (all terms) can zero out natural-language
+  // queries. When empty and not paginated, retry with OR so the reranker (and the
+  // user) still get candidates; BM25 ordering puts best partial matches first.
+  let rows = results;
+  if (!rows.length && !cur) {
+    const toks = toTokens(query);
+    if (toks.length > 1) {
+      const orWhere = ["chunks_fts MATCH ?"];
+      const orBind = [toks.map((t) => `"${t}"`).join(" OR ")];
+      if (vendors?.length) {
+        orWhere.push(`c.vendor IN (${vendors.map(() => "?").join(",")})`);
+        orBind.push(...vendors.map(String));
+      }
+      orBind.push(fetchLim);
+      const orSql = `
+    SELECT c.id AS rowid, c.chunk_id, c.vendor, c.version, c.title,
+           c.heading_path, c.path, c.source_url, c.license, c.attribution,
+           c.last_updated, c.snippet,
+           ${FTS_COLS_WEIGHTED} AS score
+    FROM chunks_fts f
+    JOIN chunks c ON c.id = f.rowid
+    WHERE ${orWhere.join(" AND ")}
+    ORDER BY score ASC, c.id DESC
+    LIMIT ?`;
+      const { results: orRows } = await env.DB.prepare(orSql).bind(...orBind).all();
+      rows = orRows;
+    }
+  }
+
   // ── Semantic rerank (Phase 3, Vectorize-free variant) ──────────────────
   // LLM listwise rerank of keyword candidates via Workers AI (no vector
   // index needed — see worker/src/llm-rerank.js header). Gracefully
   // degrades to keyword order when the AI binding is absent or fails.
-  if (semantic && !cur && results.length) {
+  if (semantic && !cur && rows.length) {
     try {
       const { llmRerank } = await import("./llm-rerank.js");
-      const order = await llmRerank(env, query, results);
+      const order = await llmRerank(env, query, rows);
       if (order) {
-        const byId = new Map(results.map(r => [r.chunk_id, r]));
+        const byId = new Map(rows.map(r => [r.chunk_id, r]));
         const fused = order.map(id => byId.get(id)).filter(Boolean).slice(0, lim);
         return {
           results: fused.map(shapeResult),
@@ -117,8 +156,8 @@ export async function searchD1(env, query, opts = {}) {
     }
   }
 
-  const hasMore = results.length > lim;
-  const page = hasMore ? results.slice(0, lim) : results;
+  const hasMore = rows.length > lim;
+  const page = hasMore ? rows.slice(0, lim) : rows;
   const last = page[page.length - 1];
   const next_cursor = hasMore && last ? encodeCursor(last.score, last.rowid) : null;
 
