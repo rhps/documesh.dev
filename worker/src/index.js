@@ -913,7 +913,7 @@ async function handleFetch(request, env, ctx, url, __t0) {
     }
 
     // Async-job pattern: submit → 202 → poll
-    if (path === "/v1/submit-vendors" && request.method === "POST") {
+    if (path === "/submit-vendors" && request.method === "POST") {
       let body = {};
       try { body = await request.json(); } catch {}
       if (!body.name || !body.license) {
@@ -931,7 +931,7 @@ async function handleFetch(request, env, ctx, url, __t0) {
         202
       );
     }
-    const jobMatch = path.match(/^\/v1\/jobs\/([a-f0-9-]+)$/);
+    const jobMatch = path.match(/^\/(?:v1\/)?jobs\/([a-f0-9-]+)$/);
     if (jobMatch && request.method === "GET") {
       const job = jobs.get(jobMatch[1]);
       if (!job) {
