@@ -44,6 +44,7 @@ DB_ID = "0a83a2f0-86c3-49ff-b98c-a7856d3a0d8b"
 BATCH_SIZE = 10          # vendors deepened per cycle, in PARALLEL
 CYCLE_PAUSE = 60          # seconds between cycles
 PARALLEL_WORKERS = 10     # crawlers running at the same time
+NO_COMMIT = False         # --no-commit: skip git commit/push after cycles
 
 # ── Available (est.) crawlable corpus per vendor — the denominator ──────────
 AVAILABLE = {
@@ -209,6 +210,9 @@ def backfill_d1() -> bool:
 
 
 def git_commit(msg):
+    if NO_COMMIT:
+        print(f"  (commit skipped — NO_COMMIT mode: {msg})")
+        return
     subprocess.run(["git", "add", "-A"], cwd=BASE, capture_output=True)
     r = subprocess.run(["git", "commit", "-m", msg], cwd=BASE, capture_output=True, text=True)
     if "nothing to commit" not in (r.stdout + r.stderr):
@@ -265,7 +269,12 @@ def main():
     ap.add_argument("--batch", type=int, default=BATCH_SIZE)
     ap.add_argument("--workers", type=int, default=PARALLEL_WORKERS,
                     help="crawlers running in parallel per cycle")
+    ap.add_argument("--no-commit", action="store_true",
+                    help="do NOT git commit/push after each cycle "
+                         "(chunks still written to data/chunks/ and backfilled to D1)")
     args = ap.parse_args()
+    global NO_COMMIT
+    NO_COMMIT = args.no_commit
 
     if not args.dry and (not TOKEN or not ACCOUNT_ID):
         print("need CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID")
