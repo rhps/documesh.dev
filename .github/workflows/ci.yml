@@ -36,9 +36,10 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
+          cache: npm
 
-      - name: Install wrangler
-        run: npm install --no-save wrangler
+      - name: Install wrangler (from lockfile, npm-cached)
+        run: npm ci --ignore-scripts --no-audit --no-fund 2>/dev/null || npm install --no-save --no-audit --no-fund wrangler
 
       # Case 1: a specific PR was closed or merged — delete its preview worker.
       - name: Delete preview worker for this PR
