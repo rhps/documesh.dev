@@ -41,8 +41,9 @@ SOURCES = json.load(open(BASE / "indexer" / "crawl_sources.json"))
 ACCOUNT_ID = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "")
 TOKEN = os.environ.get("CLOUDFLARE_API_TOKEN", "")
 DB_ID = "0a83a2f0-86c3-49ff-b98c-a7856d3a0d8b"
-BATCH_SIZE = 3
+BATCH_SIZE = 10          # vendors deepened per cycle, in PARALLEL
 CYCLE_PAUSE = 60          # seconds between cycles
+PARALLEL_WORKERS = 10     # crawlers running at the same time
 
 # ── Available (est.) crawlable corpus per vendor — the denominator ──────────
 AVAILABLE = {
@@ -141,10 +142,28 @@ def rank(vendor, n):
     return min(100.0, round(100 * n / avail, 1))
 
 
+def run_crawler_tagged(vendor, counts: dict, results: dict) -> bool:
+    """
+    Thread-worker wrapper: announces the vendor, runs its crawler, records
+    the result. All output is prefixed with [vendor] so parallel threads
+    stay distinguishable in stdout and deepen.log.
+    """
+    print(f"[{vendor}] --- deepening (have {counts.get(vendor, '?')}, "
+          f"target {AVAILABLE.get(vendor)}) ---")
+    try:
+        ok = run_crawler(vendor)
+    except Exception as e:
+        print(f"[{vendor}] !! crashed: {e}")
+        ok = False
+    print(f"[{vendor}] done: {'ok' if ok else 'FAILED'}")
+    results[vendor] = ok
+    return ok
+
+
 def run_crawler(vendor) -> bool:
     spec = CRAWLERS.get(vendor)
     if not spec:
-        print(f"  !! no crawler registered for {vendor}")
+        print(f"  [{vendor}] !! no crawler registered")
         return False
     script, mode = spec
     if mode == "script":
@@ -244,6 +263,8 @@ def main():
     ap.add_argument("--max-cycles", type=int, default=0, help="0 = loop forever")
     ap.add_argument("--dry", action="store_true", help="rank and print plan only")
     ap.add_argument("--batch", type=int, default=BATCH_SIZE)
+    ap.add_argument("--workers", type=int, default=PARALLEL_WORKERS,
+                    help="crawlers running in parallel per cycle")
     args = ap.parse_args()
 
     if not args.dry and (not TOKEN or not ACCOUNT_ID):
@@ -274,10 +295,25 @@ def main():
             print("(dry) would deepen:", batch)
             return
 
+        # ── deepen the batch, up to args.workers crawlers IN PARALLEL ──
+        # Each worker (thread) runs one vendor's crawler. Crawlers are
+        # I/O-bound (HTTP fetches), so threads parallelize them cleanly.
+        # Logging stays per-vendor-tagged and deep-log writes are locked.
+        print(f"\n=== running {len(batch)} crawlers, {args.workers} in parallel ===")
+        results = {}
+        with cf.ThreadPoolExecutor(max_workers=args.workers) as pool:
+            futs = {pool.submit(run_crawler_tagged, v, counts, results): v for v in batch}
+            for fut in cf.as_completed(futs):
+                v = futs[fut]
+                try:
+                    results[v] = fut.result()
+                except Exception as e:
+                    results[v] = False
+                    print(f"  !! {v}: crawler crashed: {e}")
         for v in batch:
-            print(f"\n--- deepening {v} (have {counts[v]}, target {AVAILABLE.get(v)}) ---")
-            ok = run_crawler(v)
-            print(f"  {'ok' if ok else 'FAILED'}")
+            print(f"  {v}: {'ok' if results.get(v) else 'FAILED'}")
+        if not all(results.get(v) for v in batch):
+            print("  (some crawlers failed — continuing with what succeeded)")
 
         if backfill_d1():
             new_counts = have_counts()

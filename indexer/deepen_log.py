@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import builtins
 import sys
+import threading
 import traceback
 from datetime import datetime, timezone
 from pathlib import Path
@@ -29,6 +30,8 @@ BASE = Path(__file__).resolve().parent.parent
 LOG_DIR = BASE / "data" / "logs"
 LOG_FILE = LOG_DIR / "deepen.log"
 MAX_BYTES = 5 * 1024 * 1024  # rotate at 5 MB
+
+_LOG_LOCK = threading.Lock()  # parallel crawlers log from many threads
 
 
 def _rotate_if_needed():
@@ -44,12 +47,15 @@ def _stamp() -> str:
 
 
 def log_write(line: str):
-    """Append one already-formatted line to deepen.log (best-effort)."""
+    """Append one already-formatted line to deepen.log (thread-safe, best-effort)."""
+    if not line:
+        return
     try:
-        LOG_DIR.mkdir(parents=True, exist_ok=True)
-        _rotate_if_needed()
-        with LOG_FILE.open("a", encoding="utf-8") as f:
-            f.write(line)
+        with _LOG_LOCK:
+            LOG_DIR.mkdir(parents=True, exist_ok=True)
+            _rotate_if_needed()
+            with LOG_FILE.open("a", encoding="utf-8") as f:
+                f.write(line)
     except OSError:
         pass  # never let logging break the crawl
 
@@ -63,14 +69,16 @@ def install(script_path) -> None:
     log_write(f"\n{'=' * 70}\n[{_stamp()}] === {name} started (pid {__import__('os').getpid()}) ===\n")
 
     original_print = builtins.print
+    _print_lock = threading.Lock()
 
     def print_tee(*args, **kwargs):
         # render exactly like print() would
         sep = kwargs.get("sep", " ")
         end = kwargs.get("end", "\n")
         text = sep.join(str(a) for a in args) + end
-        original_print(*args, **kwargs)
-        log_write(text)
+        with _print_lock:  # keep console + log lines whole under threads
+            original_print(*args, **kwargs)
+            log_write(text)
 
     builtins.print = print_tee
 
