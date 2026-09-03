@@ -6,7 +6,7 @@ on:
     paths:
       - "**"
       - ".github/workflows/deploy-staging.yml"
-
+  workflow_dispatch:
 
 concurrency:
   group: deploy-staging
