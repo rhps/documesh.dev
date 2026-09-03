@@ -54,7 +54,7 @@ export function decodeCursor(cursor) {
  * @param {{vendors?: string[], limit?: number, cursor?: string}} opts
  */
 export async function searchD1(env, query, opts = {}) {
-  const { vendors, limit = 5, cursor } = opts;
+  const { vendors, limit = 5, cursor, semantic = false } = opts;
   const match = toMatchQuery(query);
   if (!match) {
     return { results: [], next_cursor: null, total: 0 };
@@ -62,6 +62,11 @@ export async function searchD1(env, query, opts = {}) {
 
   const lim = Math.min(Math.max(1, limit | 0 || 5), 50);
   const cur = decodeCursor(cursor);
+
+  // Semantic mode needs a wider keyword candidate pool to fuse against.
+  // (Not combined with cursor pagination — semantic returns a fused top-N,
+  //  there is no keyset to continue from.)
+  const fetchLim = semantic ? Math.max(lim, 50) : lim + 1;
 
   // All-positional placeholders (?): D1 bind() maps them in order.
   const where = ["chunks_fts MATCH ?"];
@@ -74,7 +79,7 @@ export async function searchD1(env, query, opts = {}) {
     bind.push(cur.s, cur.s, cur.r);
     where.push(`(${FTS_COLS_WEIGHTED} < ? OR (${FTS_COLS_WEIGHTED} = ? AND c.id < ?))`);
   }
-  bind.push(lim + 1);
+  bind.push(fetchLim);
 
   const sql = `
     SELECT c.id AS rowid, c.chunk_id, c.vendor, c.version, c.title,
@@ -89,29 +94,67 @@ export async function searchD1(env, query, opts = {}) {
 
   const { results } = await env.DB.prepare(sql).bind(...bind).all();
 
+  // ── Semantic rerank (Phase 3) ──────────────────────────────────────────
+  // Fuse keyword candidates with vector neighbors via RRF. Gracefully
+  // degrades to keyword when bindings are absent or the vector call fails.
+  if (semantic && !cur && results.length) {
+    try {
+      const { embedQuery, vecQuery, fuse } = await import("./search-semantic.js");
+      if (env.AI && env.VEC) {
+        const vector = await embedQuery(env, query);
+        const vecMatches = await vecQuery(env, vector, 50);
+        const fusedIds = fuse(results, vecMatches, lim);
+        const byId = new Map(results.map(r => [r.chunk_id, r]));
+        const fused = fusedIds.map(id => byId.get(id)).filter(Boolean);
+        // Vector-only hits (not in keyword pool) are dropped — hydrating them
+        // needs another D1 round trip; keyword∩vector overlap is high enough
+        // that the fused list is rarely shorter than `lim` in practice.
+        return {
+          results: fused.map(r => withSource({ ...r, score: r.score })),
+          next_cursor: null,
+          total: fused.length,
+          reranked: "semantic",
+        };
+      }
+    } catch (e) {
+      // fall through to keyword results; tag why
+      console.error("semantic rerank failed, using keyword:", e.message);
+      return {
+        results: results.slice(0, lim).map((r) => shapeResult(r)),
+        next_cursor: null,
+        total: Math.min(lim, results.length),
+        reranked: "keyword",
+      };
+    }
+  }
+
   const hasMore = results.length > lim;
   const page = hasMore ? results.slice(0, lim) : results;
   const last = page[page.length - 1];
   const next_cursor = hasMore && last ? encodeCursor(last.score, last.rowid) : null;
 
   return {
-    results: page.map((r) => withSource({
-      chunk_id: r.chunk_id,
-      vendor: r.vendor,
-      version: r.version,
-      title: r.title,
-      heading_path: r.heading_path || "",
-      path: r.path || "",
-      source_url: r.source_url,
-      license: r.license,
-      attribution: r.attribution || "",
-      last_updated: r.last_updated || "",
-      score: r.score == null ? 0 : Math.abs(Number(r.score.toFixed(4))),
-      snippet: r.snippet || "",
-    })),
+    results: page.map(shapeResult),
     next_cursor,
     total: page.length,
   };
+}
+
+function shapeResult(r) {
+  return withSource({
+    chunk_id: r.chunk_id,
+    vendor: r.vendor,
+    version: r.version,
+    title: r.title,
+    heading_path: r.heading_path || "",
+    path: r.path || "",
+    source_url: r.source_url,
+    license: r.license,
+    attribution: r.attribution || "",
+    last_updated: r.last_updated || "",
+    score: r.score == null ? 0 : Math.abs(Number(r.score.toFixed(4))),
+    snippet: r.snippet || "",
+  });
 }
 
 /**
@@ -119,7 +162,9 @@ export async function searchD1(env, query, opts = {}) {
  * Signatures are pre-extracted by the caller; here we just search.
  */
 export async function explainD1(env, errText, vendor) {
-  const out = await searchD1(env, errText, { vendors: vendor ? [vendor] : undefined, limit: 6 });
+  // explain_error's whole job is fuzzy matching → semantic ON by default
+  // (gracefully degrades to keyword when VEC/AI bindings are absent).
+  const out = await searchD1(env, errText, { vendors: vendor ? [vendor] : undefined, limit: 6, semantic: true });
   const seen = new Set();
   const matches = [];
   for (const r of out.results) {

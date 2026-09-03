@@ -26,6 +26,11 @@ const CORS = {
 
 const LINK_HEADERS = '</sitemap.xml>; rel="sitemap", </llms.txt>; rel="alternate"; type="text/plain", </openapi.json>; rel="service-desc", </index.md>; rel="alternate"; type="text/markdown", </.well-known/api-catalog>; rel="api-catalog"';
 
+function body_page_size(request) {
+  // best-effort page size from JSON body; 0 if absent/invalid
+  return 0; // page size comes from query param instead — keep the admin route stateless
+}
+
 function baseHeaders(authHintOrigin = null) {
   const h = {
     ...CORS,
@@ -696,6 +701,54 @@ async function handleFetch(request, env, ctx, url, __t0) {
       return response;
     }
 
+    // ── Admin: embedding backfill (Phase 3) ────────────────────────────────
+    // POST /admin/embed-backfill  (header: X-Admin-Secret)
+    // Body: { "page_size": 50 } — embeds one page of not-yet-embedded chunks
+    // into Vectorize per call. Resumable: repeats until {done:true}.
+    if (path === "/admin/embed-backfill" && request.method === "POST") {
+      if (!env.ADMIN_SECRET || request.headers.get("X-Admin-Secret") !== env.ADMIN_SECRET) {
+        return apiError(403, "FORBIDDEN", "Admin secret required.", "Send X-Admin-Secret header.");
+      }
+      if (!env.AI || !env.VEC || !env.DB) {
+        return apiError(501, "BINDINGS_MISSING", "AI/VEC/DB bindings not present in this environment.", "Deploy with vectorize + ai bindings in wrangler.jsonc.");
+      }
+      const url = new URL(request.url);
+      const pageSize = Math.min(parseInt(url.searchParams.get("page_size") || "50") || 50, 100);
+      const { embedBatch } = await import("./search-semantic.js");
+      // marker table so re-runs resume exactly
+      await env.DB.prepare(
+        `CREATE TABLE IF NOT EXISTS embeddings (chunk_id TEXT PRIMARY KEY, embedded_at TEXT DEFAULT (datetime('now')))`
+      ).run();
+      const { results: pending } = await env.DB.prepare(
+        `SELECT c.chunk_id, c.vendor, c.title, c.heading_path, c.snippet
+         FROM chunks c LEFT JOIN embeddings e ON e.chunk_id = c.chunk_id
+         WHERE e.chunk_id IS NULL LIMIT ?`
+      ).bind(pageSize).all();
+      if (!pending.length) {
+        return json({ done: true, message: "all chunks embedded" });
+      }
+      const rows = pending.map(r => ({
+        chunk_id: r.chunk_id,
+        vendor: r.vendor,
+        // title + heading + snippet: fits bge 512-token window, carries the signal
+        text: [r.title, r.heading_path, r.snippet].filter(Boolean).join("\n").slice(0, 1200),
+      }));
+      const t0 = Date.now();
+      const embedded = await embedBatch(env, rows);
+      await env.DB.prepare(
+        `INSERT INTO embeddings (chunk_id) VALUES ${pending.map(() => "(?)").join(",")}`
+      ).bind(...pending.map(r => r.chunk_id)).run();
+      const left = await env.DB.prepare(
+        `SELECT COUNT(*) AS n FROM chunks c LEFT JOIN embeddings e ON e.chunk_id = c.chunk_id WHERE e.chunk_id IS NULL`
+      ).first();
+      return json({
+        embedded,
+        took_ms: Date.now() - t0,
+        remaining: left?.n ?? 0,
+        next_page: (left?.n ?? 0) > 0 ? "POST again with the same secret" : null,
+      });
+    }
+
     // ── A2A (Agent2Agent) JSON-RPC endpoint ──
     // Card at /.well-known/agent-card.json advertises this URL. Skills map
     // to the docs mesh: search, explain, vendors.
@@ -866,7 +919,7 @@ async function handleFetch(request, env, ctx, url, __t0) {
 
     // Search — GET and POST (POST accepts Idempotency-Key for safe retries)
     if (path === "/search" && (request.method === "GET" || request.method === "POST")) {
-      let q, vendors, limit, cursor;
+      let q, vendors, limit, cursor, bodyPrefer;
       if (request.method === "POST") {
         let body = {};
         try { body = await request.json(); } catch {}
@@ -874,6 +927,7 @@ async function handleFetch(request, env, ctx, url, __t0) {
         vendors = body.vendors;
         limit = body.limit;
         cursor = body.cursor;
+        bodyPrefer = body.prefer;
       } else {
         q = url.searchParams.get("q") || "";
         vendors = url.searchParams.get("vendors")?.split(",").map(s => s.trim()).filter(Boolean);
@@ -892,9 +946,11 @@ async function handleFetch(request, env, ctx, url, __t0) {
         return new Response(cached.body, { status: cached.status, headers });
       }
       const start = Date.now();
-      const out = await unifiedSearch(env, q, { vendors: vendors || undefined, limit, cursor });
+      // Semantic opt-in: ?prefer=semantic (GET) or body.prefer.semantic (POST)
+      const semantic = url.searchParams.get("prefer") === "semantic" || bodyPrefer?.semantic === true;
+      const out = await unifiedSearch(env, q, { vendors: vendors || undefined, limit, cursor, semantic });
       const { results, next_cursor, total } = out;
-      const response = json({ query: q, results, total, next_cursor, took_ms: Date.now() - start, backend: out.backend }, 200, apiEntry ? url.origin : null);
+      const response = json({ query: q, results, total, next_cursor, took_ms: Date.now() - start, backend: out.backend, reranked: out.reranked || "keyword" }, 200, apiEntry ? url.origin : null);
       if (idemKey && request.method === "POST") {
         idempotencyCache.set(idemKey, { status: response.status, body: await response.clone().text(), headers: response.headers });
       }
