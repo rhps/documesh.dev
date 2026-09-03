@@ -751,7 +751,7 @@ async function handleFetch(request, env, ctx, url, __t0) {
             inputSchema: {
               type: "object",
               properties: {
-                provider: { type: "string", enum: ["cloudflare", "netlify", "github", "npm", "aws", "vercel", "stripe", "sentry"] },
+                provider: { type: "string", enum: ["cloudflare", "github", "npm", "sentry"] },
               },
               required: ["provider"],
             },

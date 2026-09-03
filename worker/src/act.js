@@ -18,12 +18,8 @@ export const ISSUE_TYPES = ["outdated", "incorrect", "misattributed", "license-m
 /** Public provider status pages (read-only health probes). */
 export const KNOWN_PROVIDERS = {
   cloudflare: { status_url: "https://www.cloudflarestatus.com/api/v2/status.json", name: "Cloudflare" },
-  netlify: { status_url: "https://netlifystatus.net/api/v2/status.json", name: "Netlify" },
   github: { status_url: "https://www.githubstatus.com/api/v2/status.json", name: "GitHub" },
   npm: { status_url: "https://status.npmjs.org/api/v2/status.json", name: "npm" },
-  aws: { status_url: "https://health.aws.amazon.com/public/currentstatus", name: "AWS" },
-  vercel: { status_url: "https://www.vercelstatus.com/api/v2/status.json", name: "Vercel" },
-  stripe: { status_url: "https://status.stripe.com/api/v2/status.json", name: "Stripe" },
   sentry: { status_url: "https://status.sentry.io/api/v2/status.json", name: "Sentry" },
 };
 
