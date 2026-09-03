@@ -148,3 +148,27 @@ since D1 production traffic) for Vectorize + AI bindings.
 - Semantic-only search path (keyword stays the cheap always-on baseline)
 - Multi-vector per chunk (one embedding per chunk; heading_path in text covers hierarchy)
 - Turso/libSQL vectors (second vendor for no gain at our scale)
+
+---
+
+## Implementation status (2026-09-03 ~01:40 UTC)
+
+| Step | Status |
+|---|---|
+| 3a Vectorize index creation | 🔴 **BLOCKED** — both the laptop CF API token and the CI (Deploy Staging) token lack Vectorize scope ("Authentication error 10000"). One-off CI workflow attempt confirmed. |
+| 3b backfill route | ✅ Implemented: `POST /admin/embed-backfill` (X-Admin-Secret header, ?page_size=, resumable via `embeddings` marker table, 501 when bindings absent) — live, guard verified (403 without secret) |
+| 3c query path | ✅ Implemented: `searchD1(semantic:true)` RRF fusion, `?prefer=semantic` / POST `prefer.semantic`, `reranked` field added; `explain_error` semantic-on-by-default |
+| 3d degrade path | ✅ Verified live: `?prefer=semantic` returns 200 `reranked:"keyword"` (bindings absent → keyword fallback, no error); eval gate 5/5 still passes |
+| wrangler bindings | ⏸ VEC/AI blocks written then held out of wrangler.jsonc until the index exists (deploy would fail otherwise). Re-add the three blocks (top-level + staging + production) after index creation — they are in this plan §3a. |
+| ADMIN_SECRET | ⏸ Not set — `wrangler secret put ADMIN_SECRET --env staging` (and production), needs a value from the user |
+
+### To finish (needs a token with Vectorize edit permission)
+1. Dashboard → AI & Platform → Vectorize → Create index: name `documesh-chunks`, dims **768**, metric **cosine**
+   (or: new API token with `Vectorize:Edit` → `npx wrangler vectorize create documesh-chunks --dimensions=768 --metric=cosine`)
+2. Re-add VEC + AI binding blocks to wrangler.jsonc (§3a above, 3 places) → push → Deploy Staging
+3. `wrangler secret put ADMIN_SECRET --env staging`
+4. Loop until `{"done":true}`:
+   `curl -s -X POST 'https://documesh.selatan.org/admin/embed-backfill?page_size=100' -H "X-Admin-Secret: $SECRET"`
+   (~31k chunks → ~310 calls, ~20–40 min)
+5. Verify: `curl 'https://documesh.selatan.org/search?q=pod+keeps+restarting&prefer=semantic&limit=3'` → `reranked:"semantic"`
+6. Same for production env before next `v*` tag.
