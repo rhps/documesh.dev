@@ -40,6 +40,9 @@
   "r2_buckets": [
     { "binding": "LOGS", "bucket_name": "selatan-org" }
   ],
+  "ai": {
+    "binding": "AI"
+  },
   "vars": {
     "SEARCH_BACKEND": "d1"
   },
@@ -64,6 +67,9 @@
       "r2_buckets": [
         { "binding": "LOGS", "bucket_name": "selatan-org" }
       ],
+      "ai": {
+        "binding": "AI"
+      },
       "vars": {
         "SEARCH_BACKEND": "d1",
         "LOG_PREFIX": "documesh-request-logs/staging"
@@ -92,6 +98,9 @@
       "r2_buckets": [
         { "binding": "LOGS", "bucket_name": "selatan-org" }
       ],
+      "ai": {
+        "binding": "AI"
+      },
       "vars": {
         "SEARCH_BACKEND": "d1",
         "LOG_PREFIX": "documesh-request-logs/production"

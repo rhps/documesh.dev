@@ -701,51 +701,32 @@ async function handleFetch(request, env, ctx, url, __t0) {
       return response;
     }
 
-    // ── Admin: embedding backfill (Phase 3) ────────────────────────────────
-    // POST /admin/embed-backfill  (header: X-Admin-Secret)
-    // Body: { "page_size": 50 } — embeds one page of not-yet-embedded chunks
-    // into Vectorize per call. Resumable: repeats until {done:true}.
-    if (path === "/admin/embed-backfill" && request.method === "POST") {
+    // ── Admin: rerank check (Phase 3, Vectorize-free) ──────────────────────
+    // GET /admin/rerank-check?q=... (header: X-Admin-Secret)
+    // Runs one LLM rerank against live D1 candidates; reports whether the
+    // Workers AI binding is active and what order the model returned.
+    if (path === "/admin/rerank-check" && request.method === "GET") {
       if (!env.ADMIN_SECRET || request.headers.get("X-Admin-Secret") !== env.ADMIN_SECRET) {
         return apiError(403, "FORBIDDEN", "Admin secret required.", "Send X-Admin-Secret header.");
       }
-      if (!env.AI || !env.VEC || !env.DB) {
-        return apiError(501, "BINDINGS_MISSING", "AI/VEC/DB bindings not present in this environment.", "Deploy with vectorize + ai bindings in wrangler.jsonc.");
+      if (!env.AI) {
+        return apiError(501, "AI_BINDING_MISSING", "Workers AI binding not present in this environment.", 'Add "ai": { "binding": "AI" } to wrangler.jsonc and deploy.');
       }
-      const url = new URL(request.url);
-      const pageSize = Math.min(parseInt(url.searchParams.get("page_size") || "50") || 50, 100);
-      const { embedBatch } = await import("./search-semantic.js");
-      // marker table so re-runs resume exactly
-      await env.DB.prepare(
-        `CREATE TABLE IF NOT EXISTS embeddings (chunk_id TEXT PRIMARY KEY, embedded_at TEXT DEFAULT (datetime('now')))`
-      ).run();
-      const { results: pending } = await env.DB.prepare(
+      const q = url.searchParams.get("q") || "pod keeps restarting";
+      const { results } = await env.DB.prepare(
         `SELECT c.chunk_id, c.vendor, c.title, c.heading_path, c.snippet
-         FROM chunks c LEFT JOIN embeddings e ON e.chunk_id = c.chunk_id
-         WHERE e.chunk_id IS NULL LIMIT ?`
-      ).bind(pageSize).all();
-      if (!pending.length) {
-        return json({ done: true, message: "all chunks embedded" });
-      }
-      const rows = pending.map(r => ({
-        chunk_id: r.chunk_id,
-        vendor: r.vendor,
-        // title + heading + snippet: fits bge 512-token window, carries the signal
-        text: [r.title, r.heading_path, r.snippet].filter(Boolean).join("\n").slice(0, 1200),
-      }));
-      const t0 = Date.now();
-      const embedded = await embedBatch(env, rows);
-      await env.DB.prepare(
-        `INSERT INTO embeddings (chunk_id) VALUES ${pending.map(() => "(?)").join(",")}`
-      ).bind(...pending.map(r => r.chunk_id)).run();
-      const left = await env.DB.prepare(
-        `SELECT COUNT(*) AS n FROM chunks c LEFT JOIN embeddings e ON e.chunk_id = c.chunk_id WHERE e.chunk_id IS NULL`
-      ).first();
+         FROM chunks_fts f JOIN chunks c ON c.id = f.rowid
+         WHERE chunks_fts MATCH ? ORDER BY rank LIMIT 10`
+      ).bind(q.split(/\s+/).map(w => `"${w.replace(/"/g, "")}"`).join(" ")).all();
+      const { llmRerank } = await import("./llm-rerank.js");
+      const order = await llmRerank(env, q, results);
+      const before = results.map(r => r.chunk_id);
       return json({
-        embedded,
-        took_ms: Date.now() - t0,
-        remaining: left?.n ?? 0,
-        next_page: (left?.n ?? 0) > 0 ? "POST again with the same secret" : null,
+        query: q,
+        ai_binding: true,
+        rerank_changed_order: order ? JSON.stringify(order) !== JSON.stringify(before.slice(0, order.length)) : false,
+        order_before: before,
+        order_after: order,
       });
     }
 

@@ -94,37 +94,26 @@ export async function searchD1(env, query, opts = {}) {
 
   const { results } = await env.DB.prepare(sql).bind(...bind).all();
 
-  // ── Semantic rerank (Phase 3) ──────────────────────────────────────────
-  // Fuse keyword candidates with vector neighbors via RRF. Gracefully
-  // degrades to keyword when bindings are absent or the vector call fails.
+  // ── Semantic rerank (Phase 3, Vectorize-free variant) ──────────────────
+  // LLM listwise rerank of keyword candidates via Workers AI (no vector
+  // index needed — see worker/src/llm-rerank.js header). Gracefully
+  // degrades to keyword order when the AI binding is absent or fails.
   if (semantic && !cur && results.length) {
     try {
-      const { embedQuery, vecQuery, fuse } = await import("./search-semantic.js");
-      if (env.AI && env.VEC) {
-        const vector = await embedQuery(env, query);
-        const vecMatches = await vecQuery(env, vector, 50);
-        const fusedIds = fuse(results, vecMatches, lim);
+      const { llmRerank } = await import("./llm-rerank.js");
+      const order = await llmRerank(env, query, results);
+      if (order) {
         const byId = new Map(results.map(r => [r.chunk_id, r]));
-        const fused = fusedIds.map(id => byId.get(id)).filter(Boolean);
-        // Vector-only hits (not in keyword pool) are dropped — hydrating them
-        // needs another D1 round trip; keyword∩vector overlap is high enough
-        // that the fused list is rarely shorter than `lim` in practice.
+        const fused = order.map(id => byId.get(id)).filter(Boolean).slice(0, lim);
         return {
-          results: fused.map(r => withSource({ ...r, score: r.score })),
+          results: fused.map(shapeResult),
           next_cursor: null,
           total: fused.length,
           reranked: "semantic",
         };
       }
     } catch (e) {
-      // fall through to keyword results; tag why
       console.error("semantic rerank failed, using keyword:", e.message);
-      return {
-        results: results.slice(0, lim).map((r) => shapeResult(r)),
-        next_cursor: null,
-        total: Math.min(lim, results.length),
-        reranked: "keyword",
-      };
     }
   }
 
