@@ -784,6 +784,106 @@ async function handleFetch(request, env, ctx, url, __t0) {
           lastMcpTool.results = sources.length;
           return { content: [{ type: "text", text: JSON.stringify({ vendors: sources, sources }) }] };
         }
+        // ── Act tools on the main /mcp server too (previously product-only) ──
+        if (toolName === "verify_config") {
+          const source = args.source || args.vendor;
+          if (!source || !args.config_text) {
+            return { content: [{ type: "text", text: JSON.stringify({ error: "Both 'source' and 'config_text' are required." }) }], isError: true };
+          }
+          const search = await unifiedSearch(env, args.config_query || `${source} configuration`, { vendors: [source], limit: 8, semantic: true });
+          let docEntries = search.results || [];
+          if (!docEntries.some(r => r.actionable?.config_keys?.length) && env.DB) {
+            try {
+              const { extractActionables } = await import("./actionable.js");
+              const match = (args.config_query || `${source} configuration`).split(/\s+/).filter(w => w.length >= 2).map(w => `"${w.replace(/"/g, "")}"`).join(" OR ");
+              const { results: deepRows } = await env.DB.prepare(
+                `SELECT c.chunk_id, c.vendor, c.title, c.heading_path, c.source_url, c.content
+                 FROM chunks_fts f JOIN chunks c ON c.id = f.rowid
+                 WHERE chunks_fts MATCH ? AND c.vendor = ? ORDER BY rank LIMIT 12`
+              ).bind(match, source).all();
+              docEntries = deepRows.map(r => {
+                const a = extractActionables([r.title, r.heading_path, r.content].filter(Boolean).join("\n"), { maxScan: 8000 });
+                return { chunk_id: r.chunk_id, vendor: r.vendor, title: r.title, source_url: r.source_url, actionable: a };
+              }).filter(r => r.actionable?.config_keys?.length);
+            } catch (e) { console.error("verify_config deep pass failed:", e.message); }
+          }
+          const result = verifyConfig(docEntries, args.config_text);
+          if (!result.ok) return { content: [{ type: "text", text: JSON.stringify({ error: result.error }) }], isError: true };
+          return { content: [{ type: "text", text: JSON.stringify({ source, ...result, disclaimer: result.disclaimer }) }] };
+        }
+        if (toolName === "compare_configs") {
+          if (!args.source_a || !args.source_b) {
+            return { content: [{ type: "text", text: JSON.stringify({ error: "Both 'source_a' and 'source_b' are required." }) }], isError: true };
+          }
+          const qA = args.query_a || `${args.source_a} configuration`;
+          const qB = args.query_b || `${args.source_b} configuration`;
+          const [searchA, searchB] = await Promise.all([
+            unifiedSearch(env, qA, { vendors: [args.source_a], limit: 8, semantic: true }),
+            unifiedSearch(env, qB, { vendors: [args.source_b], limit: 8, semantic: true }),
+          ]);
+          const deepEntries = async (q, source, search) => {
+            if (search.results?.some(r => r.actionable?.config_keys?.length) || !env.DB) return search.results || [];
+            try {
+              const match = q.split(/\s+/).filter(w => w.length >= 2).map(w => `"${w.replace(/"/g, "")}"`).join(" OR ");
+              const { results: rows } = await env.DB.prepare(
+                `SELECT c.chunk_id, c.vendor, c.title, c.heading_path, c.source_url, c.content
+                 FROM chunks_fts f JOIN chunks c ON c.id = f.rowid
+                 WHERE chunks_fts MATCH ? AND c.vendor = ? ORDER BY rank LIMIT 12`
+              ).bind(match, source).all();
+              const { extractActionables } = await import("./actionable.js");
+              return rows.map(r => {
+                const a = extractActionables([r.title, r.heading_path, r.content].filter(Boolean).join("\n"), { maxScan: 8000 });
+                return { chunk_id: r.chunk_id, vendor: r.vendor, title: r.title, source_url: r.source_url, actionable: a };
+              }).filter(r => r.actionable?.config_keys?.length);
+            } catch { return search.results || []; }
+          };
+          const [entriesA, entriesB] = await Promise.all([
+            deepEntries(qA, args.source_a, searchA),
+            deepEntries(qB, args.source_b, searchB),
+          ]);
+          const result = compareConfigs(entriesA, entriesB, args.source_a, args.source_b);
+          if (!result.ok) return { content: [{ type: "text", text: JSON.stringify({ error: result.error }) }], isError: true };
+          return { content: [{ type: "text", text: JSON.stringify(result) }] };
+        }
+        if (toolName === "check_service_health") {
+          if (!args.provider) return { content: [{ type: "text", text: JSON.stringify({ error: "'provider' is required (cloudflare, github, npm, sentry)." }) }], isError: true };
+          const health = await checkServiceHealth(env, args.provider);
+          if (!health.ok) return { content: [{ type: "text", text: JSON.stringify({ error: health.error }) }], isError: true };
+          return { content: [{ type: "text", text: JSON.stringify(health) }] };
+        }
+        if (toolName === "report_issue") {
+          const norm = normalizeIssueReport(args);
+          if (!norm.ok) return { content: [{ type: "text", text: JSON.stringify({ error: norm.error }) }], isError: true };
+          const issueId = crypto.randomUUID();
+          try {
+            if (env.DB) {
+              await env.DB.prepare(`CREATE TABLE IF NOT EXISTS issue_reports (id TEXT PRIMARY KEY, source_id TEXT NOT NULL, chunk_id TEXT NOT NULL, issue_type TEXT NOT NULL, detail TEXT, suggested_fix TEXT, reporter TEXT, status TEXT DEFAULT 'open', created_at TEXT DEFAULT (datetime('now')))`).run();
+              await env.DB.prepare(`INSERT INTO issue_reports (id, source_id, chunk_id, issue_type, detail, suggested_fix, reporter) VALUES (?,?,?,?,?,?,?)`)
+                .bind(issueId, norm.report.source_id, norm.report.chunk_id, norm.report.issue_type, norm.report.detail, norm.report.suggested_fix ?? null, norm.report.reporter ?? "mcp").run();
+            }
+          } catch (e) {
+            return { content: [{ type: "text", text: JSON.stringify({ error: `persist failed: ${e.message}` }) }], isError: true };
+          }
+          return { content: [{ type: "text", text: JSON.stringify({ issue_id: issueId, status: "open", report: norm.report, poll: `/v1/issues/${issueId}` }) }] };
+        }
+        if (toolName === "submit_source") {
+          if (!args.name || !args.license) {
+            return { content: [{ type: "text", text: JSON.stringify({ error: "Both 'name' and 'license' are required." }) }], isError: true };
+          }
+          const jobId = crypto.randomUUID();
+          jobs.set(jobId, { status: "processing", submitted_at: new Date().toISOString(), vendor: args, via: "mcp" });
+          return { content: [{ type: "text", text: JSON.stringify({ job_id: jobId, status: "processing", poll: `/v1/jobs/${jobId}` }) }] };
+        }
+        if (toolName === "contribution_stats") {
+          const stats = { source_submissions: jobs.size, issue_reports: 0, open_issues: 0, sources_indexed: VENDOR_IDS.length };
+          try {
+            if (env.DB) {
+              const row = await env.DB.prepare(`SELECT COUNT(*) AS total, SUM(CASE WHEN status='open' THEN 1 ELSE 0 END) AS open FROM issue_reports`).first();
+              if (row) { stats.issue_reports = row.total || 0; stats.open_issues = row.open || 0; }
+            }
+          } catch {}
+          return { content: [{ type: "text", text: JSON.stringify(stats) }] };
+        }
         return { content: [{ type: "text", text: JSON.stringify({ error: `unknown tool: ${toolName}` }) }], isError: true };
       }, {
         onLog: (ev) => {
@@ -792,6 +892,111 @@ async function handleFetch(request, env, ctx, url, __t0) {
           if (ev.mcpTool) response.headers.set("X-Mcp-Tool", ev.mcpTool);
           if (ev.sessionId) response.headers.set("X-Mcp-Session", ev.sessionId);
         },
+        tools: [
+          {
+            name: "search_docs_across",
+            description: "Search federated developer documentation across sources. Results carry version, license, canonical source URL, and actionable facts (config_keys, code_snippets, cli_commands) for chaining with other tools.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                query: { type: "string", description: "Search query" },
+                vendors: { type: "array", items: { type: "string" }, description: "Optional source filter (source ids)" },
+                limit: { type: "number", description: "Max results (default 5)" },
+              },
+              required: ["query"],
+            },
+            _meta: { ui: { resourceUri: "ui://documesh/search-results" } },
+          },
+          {
+            name: "explain_error",
+            description: "Given a log excerpt or error message, find the closest matching documentation sections (semantic rerank). Returns actionable fix facts and a disclaimer — not a diagnosis.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                log_excerpt: { type: "string", description: "The error message or log lines" },
+                vendor: { type: "string", description: "Optional source filter" },
+              },
+              required: ["log_excerpt"],
+            },
+            _meta: { ui: { resourceUri: "ui://documesh/error-match" } },
+          },
+          {
+            name: "list_vendors",
+            description: "List the documentation sources in the mesh with their license and attribution requirements.",
+            inputSchema: { type: "object", properties: {} },
+            _meta: { ui: { resourceUri: "ui://documesh/vendor-grid" } },
+          },
+          {
+            name: "verify_config",
+            description: "Diff a user's config file against the keys a source documents. Returns missing_keys (each cited to the docs) and unknown_keys (possible typos). Chain after search_docs_across when the user asks 'is my config right?'.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                source: { type: "string", description: "Source id (e.g. 'cloudflare')" },
+                config_text: { type: "string", description: "The user's config file contents" },
+                config_query: { type: "string", description: "Optional docs query (default: '<source> configuration')" },
+              },
+              required: ["source", "config_text"],
+            },
+          },
+          {
+            name: "compare_configs",
+            description: "Compare documented configuration keys between two sources (e.g. netlify vs vercel redirects) — matched keys with citations, gaps listed explicitly.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                source_a: { type: "string", description: "First source id" },
+                source_b: { type: "string", description: "Second source id" },
+                query_a: { type: "string", description: "Optional docs query for source_a" },
+                query_b: { type: "string", description: "Optional docs query for source_b" },
+              },
+              required: ["source_a", "source_b"],
+            },
+          },
+          {
+            name: "check_service_health",
+            description: "Probe a provider's public status page (cloudflare, github, npm, sentry). Chain after explain_error to answer 'is the service down, or is it my code?'.",
+            inputSchema: {
+              type: "object",
+              properties: { provider: { type: "string", enum: ["cloudflare", "github", "npm", "sentry"] } },
+              required: ["provider"],
+            },
+          },
+          {
+            name: "report_issue",
+            description: "Report a documentation problem (outdated/incorrect/misattributed). Queued as a proposal for review — never mutates the mesh directly.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                source_id: { type: "string", description: "Source id" },
+                chunk_id: { type: "string", description: "chunk_id from a search result" },
+                issue_type: { type: "string", enum: ["outdated", "incorrect", "misattributed", "license-mismatch", "broken-link"] },
+                detail: { type: "string", description: "What is wrong (≥10 chars)" },
+                suggested_fix: { type: "string", description: "Optional suggested correction" },
+                reporter: { type: "string", description: "Optional reporter name" },
+              },
+              required: ["source_id", "chunk_id", "issue_type", "detail"],
+            },
+          },
+          {
+            name: "submit_source",
+            description: "Submit a documentation source for ingestion review (async job). Requires name and license.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                name: { type: "string", description: "Source name" },
+                docs_origin: { type: "string", description: "Docs origin URL" },
+                license: { type: "string", description: "License (e.g. MIT, CC-BY-4.0)" },
+              },
+              required: ["name", "license"],
+            },
+          },
+          {
+            name: "contribution_stats",
+            description: "Get mesh contribution counters: submissions, issue reports, sources indexed.",
+            inputSchema: { type: "object", properties: {} },
+          },
+        ],
       });
       return response;
     }

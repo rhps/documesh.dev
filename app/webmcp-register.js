@@ -154,3 +154,132 @@ async function registerWebMCP() {
 }
 
 registerWebMCP();
+
+// ── Act tools (browser surface) — same capabilities as the MCP server ──
+try {
+  // verify_config
+  ctx.registerTool({
+    name: "verify_config",
+    description: "Diff the user's config file against the keys a source documents. Returns missing_keys (cited to docs) and unknown_keys (possible typos).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        source: { type: "string", description: "Source id (e.g. 'cloudflare')" },
+        config_text: { type: "string", description: "The config file contents" },
+        config_query: { type: "string", description: "Optional docs query" },
+      },
+      required: ["source", "config_text"],
+    },
+    execute: async (input, options = {}) => {
+      const res = await fetch("/verify-config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+        signal: options.signal ?? signal,
+      });
+      return await res.json();
+    },
+  }, { signal });
+
+  // compare_configs
+  ctx.registerTool({
+    name: "compare_configs",
+    description: "Compare documented configuration keys between two sources (e.g. netlify vs vercel) — matched keys with citations, gaps listed.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        source_a: { type: "string", description: "First source id" },
+        source_b: { type: "string", description: "Second source id" },
+        query_a: { type: "string" },
+        query_b: { type: "string" },
+      },
+      required: ["source_a", "source_b"],
+    },
+    execute: async (input, options = {}) => {
+      const res = await fetch("/compare-configs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+        signal: options.signal ?? signal,
+      });
+      return await res.json();
+    },
+  }, { signal });
+
+  // check_service_health
+  ctx.registerTool({
+    name: "check_service_health",
+    description: "Probe a provider's public status page (cloudflare, github, npm, sentry). Answers 'is it down, or is it me?'",
+    inputSchema: {
+      type: "object",
+      properties: { provider: { type: "string", enum: ["cloudflare", "github", "npm", "sentry"] } },
+      required: ["provider"],
+    },
+    execute: async (input, options = {}) => {
+      const res = await fetch(`/health-check?provider=${encodeURIComponent(input.provider)}`, { signal: options.signal ?? signal });
+      return await res.json();
+    },
+  }, { signal });
+
+  // report_issue
+  ctx.registerTool({
+    name: "report_issue",
+    description: "Report a documentation problem (outdated/incorrect/misattributed). Queued as a proposal for review.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        source_id: { type: "string" },
+        chunk_id: { type: "string" },
+        issue_type: { type: "string", enum: ["outdated", "incorrect", "misattributed", "license-mismatch", "broken-link"] },
+        detail: { type: "string" },
+        suggested_fix: { type: "string" },
+        reporter: { type: "string" },
+      },
+      required: ["source_id", "chunk_id", "issue_type", "detail"],
+    },
+    execute: async (input, options = {}) => {
+      const res = await fetch("/report-issue", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+        signal: options.signal ?? signal,
+      });
+      return await res.json();
+    },
+  }, { signal });
+
+  // submit_source
+  ctx.registerTool({
+    name: "submit_source",
+    description: "Submit a documentation source for ingestion review (async job).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        name: { type: "string" },
+        docs_origin: { type: "string" },
+        license: { type: "string" },
+      },
+      required: ["name", "license"],
+    },
+    execute: async (input, options = {}) => {
+      const res = await fetch("/submit-vendors", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+        signal: options.signal ?? signal,
+      });
+      return await res.json();
+    },
+  }, { signal });
+
+  // contribution_stats
+  ctx.registerTool({
+    name: "contribution_stats",
+    description: "Mesh contribution counters: submissions, issue reports, sources indexed.",
+    inputSchema: { type: "object", properties: {} },
+    execute: async (_input, options = {}) =>
+      await fetch("/contribution-stats", { signal: options.signal ?? signal }).then(r => r.json()),
+  }, { signal });
+} catch (e) {
+  console.error("[webmcp] act tool registration failed:", e);
+}

@@ -5,12 +5,51 @@
   "serverUrl": "https://documesh.selatan.org/mcp",
   "transport": "streamable-http",
   "tools": [
-    { "name": "search_docs_across", "description": "Federated documentation search" },
-    { "name": "explain_error", "description": "Error-to-docs matching" },
-    { "name": "list_vendors", "description": "Vendor registry with licenses" }
+    {
+      "name": "search_docs_across",
+      "description": "Federated documentation search with actionable facts"
+    },
+    {
+      "name": "explain_error",
+      "description": "Error-to-docs matching with semantic rerank"
+    },
+    {
+      "name": "list_vendors",
+      "description": "Source registry with licenses"
+    },
+    {
+      "name": "verify_config",
+      "description": "Diff user config against documented keys"
+    },
+    {
+      "name": "compare_configs",
+      "description": "Cross-source config key mapping"
+    },
+    {
+      "name": "check_service_health",
+      "description": "Provider status page probe"
+    },
+    {
+      "name": "report_issue",
+      "description": "Report a docs problem (queued proposal)"
+    },
+    {
+      "name": "submit_source",
+      "description": "Submit a source for ingestion (async job)"
+    },
+    {
+      "name": "contribution_stats",
+      "description": "Mesh contribution counters"
+    }
   ],
   "resources": [
-    { "uri": "ui://documesh/search-results", "name": "Search Results View" },
-    { "uri": "ui://documesh/error-match", "name": "Error Match View" }
+    {
+      "uri": "ui://documesh/search-results",
+      "name": "Search Results View"
+    },
+    {
+      "uri": "ui://documesh/error-match",
+      "name": "Error Match View"
+    }
   ]
 }
