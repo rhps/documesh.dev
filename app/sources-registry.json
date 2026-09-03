@@ -1,0 +1,4442 @@
+{
+ "digitalocean": {
+  "name": "DigitalOcean",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://docs.digitalocean.com/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "ibmcloud": {
+  "name": "IBM Cloud",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://cloud.ibm.com/docs/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "opentelemetry": {
+  "name": "OpenTelemetry",
+  "license": "CC-BY-4.0",
+  "interface": "repo",
+  "llms": "https://github.com/open-telemetry/opentelemetry.io",
+  "tier": 0,
+  "synced": true
+ },
+ "pulumi": {
+  "name": "Pulumi",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "https://github.com/pulumi/docs",
+  "tier": 0,
+  "synced": true
+ },
+ "sentry": {
+  "name": "Sentry",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://docs.sentry.io/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "langchain": {
+  "name": "LangChain",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://python.langchain.com/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "vercel": {
+  "name": "Vercel",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://vercel.com/docs/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "hugo": {
+  "name": "Hugo",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "https://github.com/gohugoio/hugoDocs",
+  "tier": 0,
+  "synced": true
+ },
+ "docusaurus": {
+  "name": "Docusaurus",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/facebook/docusaurus",
+  "tier": 0,
+  "synced": true
+ },
+ "upstash": {
+  "name": "Upstash",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://docs.upstash.com/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "bun": {
+  "name": "Bun",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://bun.com/docs/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "tensorflow": {
+  "name": "TensorFlow",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "https://github.com/tensorflow/docs",
+  "tier": 0,
+  "synced": true
+ },
+ "clickhouse": {
+  "name": "ClickHouse",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://clickhouse.com/docs/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "nuxt": {
+  "name": "Nuxt",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://nuxt.com/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "solid": {
+  "name": "SolidJS",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/solidjs/solid-docs",
+  "tier": 0,
+  "synced": true
+ },
+ "vue-core-docs": {
+  "name": "Vue (core)",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/vuejs/docs",
+  "tier": 0,
+  "synced": true
+ },
+ "gitea": {
+  "name": "Gitea",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/go-gitea/gitea",
+  "tier": 0,
+  "synced": true
+ },
+ "terragrunt": {
+  "name": "Terragrunt",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/gruntwork-io/terragrunt",
+  "tier": 0,
+  "synced": true
+ },
+ "argocd": {
+  "name": "Argo CD",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "https://github.com/argoproj/argo-cd",
+  "tier": 0,
+  "synced": true
+ },
+ "moby": {
+  "name": "Docker (Moby)",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "https://github.com/moby/moby",
+  "tier": 0,
+  "synced": true
+ },
+ "helm": {
+  "name": "Helm",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "https://github.com/helm/helm",
+  "tier": 0,
+  "synced": true
+ },
+ "flux": {
+  "name": "Flux CD",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "https://github.com/fluxcd/flux2",
+  "tier": 0,
+  "synced": true
+ },
+ "cilium": {
+  "name": "Cilium",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "https://github.com/cilium/cilium",
+  "tier": 0,
+  "synced": true
+ },
+ "temporal": {
+  "name": "Temporal",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://docs.temporal.io/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "kong": {
+  "name": "Kong",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://developer.konghq.com/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "react": {
+  "name": "React",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://react.dev/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "neovim": {
+  "name": "Neovim",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "https://github.com/neovim/neovim",
+  "tier": 0,
+  "synced": true
+ },
+ "netlify": {
+  "name": "Netlify",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://docs.netlify.com/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "elasticsearch": {
+  "name": "Elasticsearch",
+  "license": "Elastic License 2.0 / Apache-2.0 components",
+  "interface": "llms",
+  "llms": "https://www.elastic.co/docs/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "godot": {
+  "name": "Godot",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/godotengine/godot-docs",
+  "tier": 0,
+  "synced": true
+ },
+ "electron": {
+  "name": "Electron",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/electron/electron",
+  "tier": 0,
+  "synced": true
+ },
+ "svelte-core": {
+  "name": "Svelte",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://svelte.dev/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "anthropic": {
+  "name": "Anthropic",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://docs.anthropic.com/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "neon": {
+  "name": "Neon",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://neon.com/docs/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "clerk": {
+  "name": "Clerk",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://clerk.com/docs/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "cloudflare": {
+  "name": "Cloudflare",
+  "license": "CC-BY-4.0",
+  "interface": "llms",
+  "llms": "https://developers.cloudflare.com/llms.txt",
+  "tier": 0,
+  "synced": true
+ },
+ "nodejs": {
+  "name": "Node.js",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/nodejs/node",
+  "tier": 0,
+  "synced": true
+ },
+ "vuejs": {
+  "name": "Vue.js",
+  "license": "MIT (docs CC-BY-NC-SA \u2014 check)",
+  "interface": "llms",
+  "llms": "https://vuejs.org/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "angular": {
+  "name": "Angular",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://angular.dev/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "svelte": {
+  "name": "Svelte",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://svelte.dev/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "nextjs": {
+  "name": "Next.js",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://nextjs.org/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "astro": {
+  "name": "Astro",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/withastro/astro",
+  "tier": 0,
+  "synced": false
+ },
+ "sveltekit": {
+  "name": "SvelteKit",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/sveltejs/kit",
+  "tier": 0,
+  "synced": false
+ },
+ "typescript": {
+  "name": "TypeScript",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "https://github.com/microsoft/TypeScript",
+  "tier": 0,
+  "synced": false
+ },
+ "tailwindcss": {
+  "name": "Tailwind CSS",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/tailwindlabs/tailwindcss",
+  "tier": 0,
+  "synced": false
+ },
+ "vite": {
+  "name": "Vite",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://vite.dev/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "webpack": {
+  "name": "webpack",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/webpack/webpack",
+  "tier": 0,
+  "synced": false
+ },
+ "rollupjs": {
+  "name": "Rollup",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://rollupjs.org/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "babeljs": {
+  "name": "Babel",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/babel/babel",
+  "tier": 0,
+  "synced": false
+ },
+ "prettier": {
+  "name": "Prettier",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://prettier.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "vitest": {
+  "name": "Vitest",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://vitest.dev/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "jestjs": {
+  "name": "Jest",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/jestjs/jest",
+  "tier": 0,
+  "synced": false
+ },
+ "cypress": {
+  "name": "Cypress",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://docs.cypress.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "storybook": {
+  "name": "Storybook",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://storybook.js.org/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "denoland": {
+  "name": "Deno",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://docs.deno.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "expressjs": {
+  "name": "Express",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://expressjs.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "fastify": {
+  "name": "Fastify",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://fastify.dev/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "nestjs": {
+  "name": "NestJS",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://docs.nestjs.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "hapi": {
+  "name": "hapi",
+  "license": "BSD-3",
+  "interface": "repo",
+  "llms": "https://github.com/hapijs/hapi",
+  "tier": 0,
+  "synced": false
+ },
+ "koa": {
+  "name": "Koa",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/koajs/koa",
+  "tier": 0,
+  "synced": false
+ },
+ "adonisjs": {
+  "name": "AdonisJS",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/adonisjs/core",
+  "tier": 0,
+  "synced": false
+ },
+ "blitzjs": {
+  "name": "Blitz.js",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/blitz-js/blitz",
+  "tier": 0,
+  "synced": false
+ },
+ "trpc": {
+  "name": "tRPC",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://trpc.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "graphql": {
+  "name": "GraphQL",
+  "license": "MIT (spec)",
+  "interface": "llms",
+  "llms": "https://graphql.org/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "apollo": {
+  "name": "Apollo GraphQL",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://www.apollographql.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "relay": {
+  "name": "Relay",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/facebook/relay",
+  "tier": 0,
+  "synced": false
+ },
+ "prisma": {
+  "name": "Prisma",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://www.prisma.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "drizzle": {
+  "name": "Drizzle ORM",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://orm.drizzle.team/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "sequelize": {
+  "name": "Sequelize",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "https://github.com/sequelize/sequelize",
+  "tier": 0,
+  "synced": false
+ },
+ "typeorm": {
+  "name": "TypeORM",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://typeorm.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "mongoose": {
+  "name": "Mongoose",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://mongoosejs.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "mongodb": {
+  "name": "MongoDB",
+  "license": "SSPL \u2014 docs CC-BY-NC-SA?",
+  "interface": "llms",
+  "llms": "https://www.mongodb.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "couchdb": {
+  "name": "CouchDB",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "https://github.com/apache/couchdb",
+  "tier": 0,
+  "synced": false
+ },
+ "ravendb": {
+  "name": "RavenDB",
+  "license": "AGPL \u2014 check docs",
+  "interface": "llms",
+  "llms": "https://ravendb.net/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "influxdb": {
+  "name": "InfluxDB",
+  "license": "MIT/Apache",
+  "interface": "llms",
+  "llms": "https://docs.influxdata.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "supabase": {
+  "name": "Supabase",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://supabase.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "appwrite": {
+  "name": "Appwrite",
+  "license": "BSD-3",
+  "interface": "llms",
+  "llms": "https://appwrite.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "firebase": {
+  "name": "Firebase",
+  "license": "Apache-2.0 (SDK)",
+  "interface": "llms",
+  "llms": "https://firebase.google.com/docs/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "hasura": {
+  "name": "Hasura",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://hasura.io/docs/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "docker": {
+  "name": "Docker",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://docs.docker.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "calico": {
+  "name": "Calico",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://docs.tigera.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "crossplane": {
+  "name": "Crossplane",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://docs.crossplane.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "loki": {
+  "name": "Grafana Loki",
+  "license": "AGPL \u2014 docs? check",
+  "interface": "llms",
+  "llms": "https://grafana.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "tempo": {
+  "name": "Grafana Tempo",
+  "license": "AGPL \u2014 check",
+  "interface": "llms",
+  "llms": "https://grafana.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "victoriametrics": {
+  "name": "VictoriaMetrics",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://docs.victoriametrics.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "elastic": {
+  "name": "Elasticsearch",
+  "license": "Apache-2.0 / SSPL dual",
+  "interface": "llms",
+  "llms": "https://www.elastic.co/docs/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "opensearch": {
+  "name": "OpenSearch",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://docs.opensearch.org/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "nats": {
+  "name": "NATS",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://docs.nats.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "github": {
+  "name": "GitHub",
+  "license": "proprietary, agent-permitted?",
+  "interface": "llms",
+  "llms": "https://docs.github.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "gitlab": {
+  "name": "GitLab",
+  "license": "MIT (docs CC-BY-NC-SA?)",
+  "interface": "llms",
+  "llms": "https://docs.gitlab.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "circleci": {
+  "name": "CircleCI",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://circleci.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "artifactory": {
+  "name": "JFrog Artifactory",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://jfrog.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "render": {
+  "name": "Render",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://render.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "railway": {
+  "name": "Railway",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://docs.railway.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "flyio": {
+  "name": "Fly.io",
+  "license": "Apache-2.0 (CLI)",
+  "interface": "llms",
+  "llms": "https://fly.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "heroku": {
+  "name": "Heroku",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://devcenter.heroku.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "scaleway": {
+  "name": "Scaleway",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://www.scaleway.com/docs/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "awsdocs": {
+  "name": "AWS",
+  "license": "CC BY-NC? mostly awsdocs repos per-service",
+  "interface": "llms",
+  "llms": "https://docs.aws.amazon.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "alibabacloud": {
+  "name": "Alibaba Cloud",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://www.alibabacloud.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "tencentcloud": {
+  "name": "Tencent Cloud",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://www.tencentcloud.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "paypal": {
+  "name": "PayPal",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://developer.paypal.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "square": {
+  "name": "Square",
+  "license": "Apache-2.0 SDK",
+  "interface": "llms",
+  "llms": "https://developer.squareup.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "braintree": {
+  "name": "Braintree",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://developer.paypal.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "adyen": {
+  "name": "Adyen",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://docs.adyen.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "plaid": {
+  "name": "Plaid",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://plaid.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "twilio": {
+  "name": "Twilio",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://www.twilio.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "sendgrid": {
+  "name": "SendGrid",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://www.twilio.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "mailgun": {
+  "name": "Mailgun",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://documentation.mailgun.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "postmark": {
+  "name": "Postmark",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://postmarkapp.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "sendinblue": {
+  "name": "Brevo",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://developers.brevo.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "vonage": {
+  "name": "Vonage",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://developer.vonage.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "slack": {
+  "name": "Slack API",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://api.slack.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "telegram": {
+  "name": "Telegram Bot API",
+  "license": "BSD",
+  "interface": "llms",
+  "llms": "https://core.telegram.org/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "whatsapp": {
+  "name": "WhatsApp Business",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://developers.facebook.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "notion": {
+  "name": "Notion API",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://developers.notion.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "linear": {
+  "name": "Linear API",
+  "license": "proprietary (GraphQL API docs)",
+  "interface": "llms",
+  "llms": "https://developers.linear.app/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "jira": {
+  "name": "Jira",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://developer.atlassian.com/docs/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "confluence": {
+  "name": "Confluence",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://developer.atlassian.com/docs/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "asana": {
+  "name": "Asana API",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://developers.asana.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "trello": {
+  "name": "Trello",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://developer.atlassian.com/docs/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "hubspot": {
+  "name": "HubSpot",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://developers.hubspot.com/docs/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "bigcommerce": {
+  "name": "BigCommerce",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://developer.bigcommerce.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "webflow": {
+  "name": "Webflow",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://developers.webflow.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "datadog": {
+  "name": "Datadog",
+  "license": "Apache-2.0 agent, docs proprietary",
+  "interface": "llms",
+  "llms": "https://docs.datadoghq.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "dynatrace": {
+  "name": "Dynatrace",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://docs.dynatrace.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "honeycomb": {
+  "name": "Honeycomb",
+  "license": "proprietary docs",
+  "interface": "llms",
+  "llms": "https://docs.honeycomb.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "pagerduty": {
+  "name": "PagerDuty",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://developer.pagerduty.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "statuspage": {
+  "name": "Statuspage",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://doers.statuspage.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "fastly": {
+  "name": "Fastly",
+  "license": "proprietary docs, MIT SDKs",
+  "interface": "llms",
+  "llms": "https://www.fastly.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "akamai": {
+  "name": "Akamai",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://techdocs.akamai.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "zerssl": {
+  "name": "Snyk",
+  "license": "Apache-2.0 CLI",
+  "interface": "llms",
+  "llms": "https://docs.snyk.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "snyk": {
+  "name": "Snyk",
+  "license": "proprietary docs",
+  "interface": "llms",
+  "llms": "https://docs.snyk.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "auth0": {
+  "name": "Auth0",
+  "license": "proprietary docs",
+  "interface": "llms",
+  "llms": "https://auth0.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "workos": {
+  "name": "WorkOS",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://workos.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "supertokens": {
+  "name": "SuperTokens",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://supertokens.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "ory": {
+  "name": "Ory",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://www.ory.sh/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "logto": {
+  "name": "Logto",
+  "license": "MPL-2.0",
+  "interface": "llms",
+  "llms": "https://docs.logto.io/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "kinde": {
+  "name": "Kinde",
+  "license": "proprietary",
+  "interface": "llms",
+  "llms": "https://kinde.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "stytch": {
+  "name": "Stytch",
+  "license": "proprietary docs / MIT SDKs",
+  "interface": "llms",
+  "llms": "https://stytch.com/llms.txt",
+  "tier": 0,
+  "synced": false
+ },
+ "ponytail": {
+  "name": "Makes your AI agent think like the laziest senior dev in the room. The best code",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://ponytail.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "hoppscotch": {
+  "name": "Open-Source API Development Ecosystem \u2022 https://hoppscotch.io \u2022 Offline, On-Prem",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://hoppscotch.io/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "awesome-claude-skills": {
+  "name": "A curated list of awesome Claude Skills, resources, and tools for customizing Cl",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "daytona": {
+  "name": "Daytona is a Secure and Elastic Infrastructure for Running AI-Generated Code",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://daytona.io/docs/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "professional-programming": {
+  "name": "A collection of learning resources for curious software engineers",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "agno": {
+  "name": "Build, run, and manage agent platforms.",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://docs.agno.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "cheat-sh": {
+  "name": "the only cheat sheet you need",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://cheat.sh/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "agents": {
+  "name": "Multi-harness agentic plugin marketplace for Claude Code, Codex, Cursor, OpenCod",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://sethhobson.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "cli": {
+  "name": "\ud83e\udd67 HTTPie CLI  \u2014 modern, user-friendly command-line HTTP client for the API era. ",
+  "license": "BSD-3-Clause",
+  "interface": "llms",
+  "llms": "https://httpie.io/docs/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "wtfpython": {
+  "name": "What the f*ck Python? \ud83d\ude31",
+  "license": "WTFPL",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "herdr": {
+  "name": "the runtime your coding agents live on",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://herdr.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "ai-website-cloner-template": {
+  "name": "Clone any website with one command using AI coding agents",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://dsc.gg/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "gpt-pilot": {
+  "name": "The first real AI developer",
+  "license": "NOASSERTION",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "surrealdb": {
+  "name": "A scalable, distributed, collaborative, document-graph database, for the realtim",
+  "license": "NOASSERTION",
+  "interface": "llms",
+  "llms": "https://surrealdb.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "lighthouse": {
+  "name": "Automated auditing, performance metrics, and best practices for the web.",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://developer.chrome.com/docs/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "composio": {
+  "name": "Composio powers 1000+ toolkits, tool search, context management, authentication,",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://docs.composio.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "reflex": {
+  "name": "\ud83d\udd78\ufe0f Web apps in pure Python \ud83d\udc0d",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://reflex.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "repomix": {
+  "name": "\ud83d\udce6 Repomix is a powerful tool that packs your entire repository into a single, AI",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://repomix.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "i-have-adhd": {
+  "name": "A skill to stop your coding agent from burying the answer. ADHD-friendly output.",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "docz": {
+  "name": "\u270d It has never been so easy to document your things!",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "archon": {
+  "name": "The first open-source harness builder for AI coding. Make AI coding deterministi",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://archon.diy/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "chinese-programmer-wrong-pronunciation": {
+  "name": "\u4e2d\u56fd\u7a0b\u5e8f\u5458\u5bb9\u6613\u53d1\u97f3\u9519\u8bef\u7684\u5355\u8bcd",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "marimo": {
+  "name": "A reactive notebook for Python \u2014 run reproducible experiments, query with SQL, e",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://marimo.io/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "nnn": {
+  "name": "n\u00b3 The unorthodox terminal file manager",
+  "license": "BSD-2-Clause",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "khazix-skills": {
+  "name": "\u6570\u5b57\u751f\u547d\u5361\u5179\u514b\u5f00\u6e90\u7684 AI Skills \u5408\u96c6 | Agent Skills: leader\uff08\u5e2e\u4f60\u5b9a\u4e49\u76ee\u6807\uff09, neat-freak \u6d01\u7656, hv-analys",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "iii": {
+  "name": "Effortlessly compose, extend, and observe every service in real-time for the fir",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://iii.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "scalar": {
+  "name": "Scalar is an open-source API platform:\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\ud83c\udf10 M",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://scalar.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "dvc": {
+  "name": "\ud83e\udd89 Data Versioning and ML Experiments",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://dvc.org/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "paseo": {
+  "name": "Orchestrate multiple coding agents from desktop and mobile",
+  "license": "NOASSERTION",
+  "interface": "llms",
+  "llms": "https://paseo.sh/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "kaniko": {
+  "name": "Build Container Images In Kubernetes",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "jsdoc": {
+  "name": "An API documentation generator for JavaScript.",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://jsdoc.app/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "superset": {
+  "name": "Superset is an agentic IDE to orchestrate 100+ coding agents in parallel. Run an",
+  "license": "NOASSERTION",
+  "interface": "llms",
+  "llms": "https://superset.sh/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "cheat": {
+  "name": "cheat allows you to create and view interactive cheatsheets on the command-line.",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "ccstatusline": {
+  "name": "\ud83d\ude80 Beautiful highly customizable statusline for Claude Code CLI with powerline su",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "posting": {
+  "name": "The modern API client that lives in your terminal.",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "illa-builder": {
+  "name": "Low-code platform allows you to build business apps, enables you to quickly crea",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "react-dev": {
+  "name": "The React documentation website",
+  "license": "CC-BY-4.0",
+  "interface": "llms",
+  "llms": "https://react.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "fiftyone": {
+  "name": "Refine high-quality datasets and visual AI models",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://fiftyone.ai/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "codeburn": {
+  "name": "Free, local tool to track AI coding token usage and cost across 37 tools and age",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://codeburn.app/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "omni-tools": {
+  "name": "Self-hosted collection of powerful web-based tools for everyday tasks. No ads, n",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://omnitools.app/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "claude-code-tips": {
+  "name": "45+ tips for getting the most out of Claude Code, from basics to advanced - incl",
+  "license": "NOASSERTION",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "beautiful-docs": {
+  "name": "Pointers to useful, well-written, and otherwise beautiful documentation.",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "modelcontextprotocol": {
+  "name": "Specification and\u00a0documentation for the Model Context Protocol",
+  "license": "NOASSERTION",
+  "interface": "llms",
+  "llms": "https://modelcontextprotocol.io/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "standard-readme": {
+  "name": "A standard style for README files",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "the-documentation-compendium": {
+  "name": "\ud83d\udce2 Various README templates & tips on writing high-quality documentation that peo",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "expressjs-com": {
+  "name": "The Express.js Website",
+  "license": "CC-BY-4.0",
+  "interface": "llms",
+  "llms": "https://expressjs.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "cloudflare-docs": {
+  "name": "Cloudflare\u2019s documentation",
+  "license": "CC-BY-4.0",
+  "interface": "llms",
+  "llms": "https://developers.cloudflare.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "liam": {
+  "name": "Automatically generates beautiful and easy-to-read ER diagrams from your databas",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://liambx.com/docs/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "typescript-handbook": {
+  "name": "Deprecated, please use the TypeScript-Website repo instead",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "go-recipes": {
+  "name": "\ud83e\udda9 Tools for Go projects",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "utoipa": {
+  "name": "Simple, Fast, Code first and Compile time generated OpenAPI documentation for Ru",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "mm-wiki": {
+  "name": "MM-Wiki \u4e00\u4e2a\u8f7b\u91cf\u7ea7\u7684\u4f01\u4e1a\u77e5\u8bc6\u5206\u4eab\u4e0e\u56e2\u961f\u534f\u540c\u8f6f\u4ef6\uff0c\u53ef\u7528\u4e8e\u5feb\u901f\u6784\u5efa\u4f01\u4e1a Wiki \u548c\u56e2\u961f\u77e5\u8bc6\u5206\u4eab\u5e73\u53f0\u3002\u90e8\u7f72\u65b9\u4fbf\uff0c\u4f7f\u7528\u7b80\u5355\uff0c\u5e2e\u52a9\u56e2\u961f\u6784\u5efa\u4e00\u4e2a\u4fe1\u606f\u5171\u4eab\u3001\u6587\u6863\u7ba1\u7406",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "express-typescript-boilerplate": {
+  "name": "A delightful way to building a RESTful API with NodeJs & TypeScript by @w3tecch",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "kin-openapi": {
+  "name": "OpenAPI 3.0 and 3.1 and 3.2 (and Swagger v2) implementation for Go (parsing, con",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "try": {
+  "name": "Try .NET provides developers and content authors with tools to create interactiv",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "express-example": {
+  "name": "A proposal for the usage of Sequelize within an Express.JS application.",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "docmd": {
+  "name": "Documentation compiler for humans and machines. One Markdown source, one command",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://docmd.io/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "oh-my-mermaid": {
+  "name": "Turn complex codebases into clear, navigable architecture diagrams with Claude C",
+  "license": "MIT",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "xrpl-dev-portal": {
+  "name": "Source code for xrpl.org including developer documentation",
+  "license": "NOASSERTION",
+  "interface": "llms",
+  "llms": "https://xrpl.org/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "devdocs": {
+  "name": "Completely free, private, UI based Tech Documentation MCP server. Designed for c",
+  "license": "Apache-2.0",
+  "interface": "llms",
+  "llms": "https://www.cyberagi.ai/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "cloudflare-r2": {
+  "name": "Cloudflare R2",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://developers.cloudflare.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "cloudflare-workers": {
+  "name": "Cloudflare Workers",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://developers.cloudflare.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "aws-lambda": {
+  "name": "AWS Lambda",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.aws.amazon.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "aws-s3": {
+  "name": "Amazon S3",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.aws.amazon.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "aws-ec2": {
+  "name": "Amazon EC2",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.aws.amazon.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "aws-cdk": {
+  "name": "AWS CDK",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.aws.amazon.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "kotlin": {
+  "name": "Kotlin",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://kotlinlang.org/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "ruby": {
+  "name": "Ruby",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://www.ruby-lang.org/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "perl": {
+  "name": "Perl",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://www.perl.org/docs/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "crystal": {
+  "name": "Crystal",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://crystal-lang.org/docs/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "nim": {
+  "name": "Nim",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://nim-lang.org/docs/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "zustand": {
+  "name": "Zustand",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://zustand.docs.pmnd.rs/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "tanstack": {
+  "name": "TanStack",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://tanstack.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "solidjs": {
+  "name": "SolidJS",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://www.solidjs.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "alpinejs": {
+  "name": "Alpine.js",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://alpinejs.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "nativescript": {
+  "name": "NativeScript",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.nativescript.org/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "expo": {
+  "name": "Expo",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.expo.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "reactnative": {
+  "name": "React Native",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://reactnative.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "tauri": {
+  "name": "Tauri",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://tauri.app/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "flutter": {
+  "name": "Flutter",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.flutter.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "styledcomponents": {
+  "name": "styled-components",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://styled-components.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "antdesign": {
+  "name": "Ant Design",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://ant.design/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "chakra": {
+  "name": "Chakra UI",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://chakra-ui.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "shadcn": {
+  "name": "shadcn/ui",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://ui.shadcn.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "daisyui": {
+  "name": "daisyUI",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://daisyui.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "threejs": {
+  "name": "Three.js",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://threejs.org/docs/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "apexcharts": {
+  "name": "ApexCharts",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://apexcharts.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "framer": {
+  "name": "Framer Motion",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://motion.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "storybook-test": {
+  "name": "Storybook test",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://storybook.js.org/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "ava": {
+  "name": "AVA",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "k6": {
+  "name": "k6",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://grafana.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "sqlalchemy": {
+  "name": "SQLAlchemy",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.sqlalchemy.org/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "django": {
+  "name": "Django",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.djangoproject.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "pytorch-lightning": {
+  "name": "PyTorch Lightning",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://lightning.ai/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "llamaindex": {
+  "name": "LlamaIndex",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.llamaindex.ai/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "crewai": {
+  "name": "CrewAI",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.crewai.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "pydantic": {
+  "name": "Pydantic",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.pydantic.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "githubactions": {
+  "name": "GitHub Actions",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "semgrep": {
+  "name": "Semgrep",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://semgrep.dev/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "sonarqube": {
+  "name": "SonarQube",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.sonarsource.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "checkmarx": {
+  "name": "Checkmarx",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://checkmarx.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "metabase": {
+  "name": "Metabase",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://www.metabase.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "dbt": {
+  "name": "dbt",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.getdbt.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "spark": {
+  "name": "Apache Spark",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://spark.apache.org/docs/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "duckdb": {
+  "name": "DuckDB",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://duckdb.org/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "weaviate": {
+  "name": "Weaviate",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://weaviate.io/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "qdrant": {
+  "name": "Qdrant",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://qdrant.tech/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "milvus": {
+  "name": "Milvus",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://milvus.io/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "chroma": {
+  "name": "Chroma",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.trychroma.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "pgvector": {
+  "name": "pgvector",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://github.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "pinecone": {
+  "name": "Pinecone",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://docs.pinecone.io/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "typesense": {
+  "name": "Typesense",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://typesense.org/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "meilisearch": {
+  "name": "Meilisearch",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://www.meilisearch.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "algolia": {
+  "name": "Algolia",
+  "license": "TBD-verify",
+  "interface": "llms",
+  "llms": "https://www.algolia.com/llms.txt",
+  "tier": 1,
+  "synced": false
+ },
+ "genkit": {
+  "name": "genkit.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://genkit.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "mastra": {
+  "name": "mastra.ai",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://mastra.ai/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "mikroorm": {
+  "name": "mikro-orm.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://mikro-orm.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "modulefederation": {
+  "name": "module-federation.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://module-federation.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "argosci": {
+  "name": "argos-ci.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://argos-ci.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "orchidorm": {
+  "name": "orchid-orm.netlify.app",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://orchid-orm.netlify.app/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "sanity": {
+  "name": "sanity.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://sanity.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "sst": {
+  "name": "sst.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://sst.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "vitejs": {
+  "name": "vitejs.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://vitejs.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "betterauth": {
+  "name": "better-auth.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://better-auth.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "commandkit": {
+  "name": "commandkit.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://commandkit.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "graphqlmarkdown": {
+  "name": "graphql-markdown.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://graphql-markdown.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "modernjs": {
+  "name": "modernjs.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://modernjs.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "bullmq": {
+  "name": "bullmq.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://bullmq.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "debridge": {
+  "name": "debridge.finance",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://debridge.finance/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "betterdrizzle": {
+  "name": "better-drizzle.vercel.app",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://better-drizzle.vercel.app/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "atlasgo": {
+  "name": "atlasgo.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://atlasgo.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "fedify": {
+  "name": "fedify.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://fedify.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "hono": {
+  "name": "hono.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://hono.dev/llms.txt",
+  "tier": 2,
+  "synced": true
+ },
+ "reglejs": {
+  "name": "reglejs.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://reglejs.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "rspack": {
+  "name": "rspack.rs",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://rspack.rs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "telerik": {
+  "name": "telerik.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://telerik.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "aisdk": {
+  "name": "ai-sdk.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://ai-sdk.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "middy": {
+  "name": "middy.js.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://middy.js.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "oxc": {
+  "name": "oxc.rs",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://oxc.rs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "outstatic": {
+  "name": "outstatic.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://outstatic.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "featurevisor": {
+  "name": "featurevisor.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://featurevisor.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "prove": {
+  "name": "prove.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://prove.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "payloadcms": {
+  "name": "payloadcms.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://payloadcms.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "stonejs": {
+  "name": "stonejs.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://stonejs.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "vendure": {
+  "name": "vendure.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://vendure.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "coreui": {
+  "name": "coreui.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://coreui.io/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "chromatic": {
+  "name": "chromatic.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://chromatic.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "gethinode": {
+  "name": "gethinode.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://gethinode.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "vitepress": {
+  "name": "vitepress.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://vitepress.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "revealjs": {
+  "name": "revealjs.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://revealjs.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "dynamic": {
+  "name": "dynamic.xyz",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://dynamic.xyz/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "betterauthui": {
+  "name": "better-auth-ui.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://better-auth-ui.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "capawesome": {
+  "name": "capawesome.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://capawesome.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "athena": {
+  "name": "athena.xbp.app",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://athena.xbp.app/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "developer": {
+  "name": "developer.shopware.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://developer.shopware.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "bitmovin": {
+  "name": "bitmovin.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://bitmovin.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "turborepo": {
+  "name": "turborepo.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://turborepo.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "logtape": {
+  "name": "logtape.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://logtape.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "api": {
+  "name": "api.readme.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://api.readme.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "ckeditor": {
+  "name": "ckeditor.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://ckeditor.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "nimbusdocs": {
+  "name": "nimbus-docs.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://nimbus-docs.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "novence": {
+  "name": "novence.ai",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://novence.ai/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "honojs": {
+  "name": "honojs.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://honojs.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "silkhq": {
+  "name": "silkhq.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://silkhq.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "bunup": {
+  "name": "bunup.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://bunup.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "quasar": {
+  "name": "quasar.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://quasar.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "capgo": {
+  "name": "capgo.app",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://capgo.app/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "hazeljs": {
+  "name": "hazeljs.ai",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://hazeljs.ai/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "turbineorm": {
+  "name": "turbineorm.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://turbineorm.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "keryxjs": {
+  "name": "keryxjs.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://keryxjs.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "preactjs": {
+  "name": "preactjs.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://preactjs.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "labex": {
+  "name": "labex.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://labex.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "reactnavigation": {
+  "name": "reactnavigation.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://reactnavigation.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "objectstack": {
+  "name": "objectstack.ai",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://objectstack.ai/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "addfox": {
+  "name": "addfox.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://addfox.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "wildix": {
+  "name": "wildix.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://wildix.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "lowdefy": {
+  "name": "lowdefy.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://lowdefy.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "tldraw": {
+  "name": "tldraw.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://tldraw.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "napi": {
+  "name": "napi.rs",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://napi.rs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "amplitude": {
+  "name": "amplitude.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://amplitude.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "rsbuild": {
+  "name": "rsbuild.rs",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://rsbuild.rs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "orm": {
+  "name": "orm.drizzle.team",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://orm.drizzle.team/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "kura": {
+  "name": "kura.build",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://kura.build/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "simpleengine": {
+  "name": "simpleengine.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://simpleengine.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "xmcp": {
+  "name": "xmcp.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://xmcp.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "lingui": {
+  "name": "lingui.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://lingui.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "heyapi": {
+  "name": "heyapi.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://heyapi.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "fraci": {
+  "name": "fraci.roundtrip.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://fraci.roundtrip.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "arcjet": {
+  "name": "arcjet.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://arcjet.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "unocss": {
+  "name": "unocss.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://unocss.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "taskfile": {
+  "name": "taskfile.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://taskfile.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "openwaters": {
+  "name": "openwaters.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://openwaters.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "gitee": {
+  "name": "gitee.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://gitee.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "glama": {
+  "name": "glama.ai",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://glama.ai/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "c15t": {
+  "name": "c15t.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://c15t.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "reposdk": {
+  "name": "repo-sdk.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://repo-sdk.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "metaplex": {
+  "name": "metaplex.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://metaplex.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "sigx": {
+  "name": "sigx.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://sigx.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "wxt": {
+  "name": "wxt.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://wxt.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "webdriver": {
+  "name": "webdriver.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://webdriver.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "alchemy": {
+  "name": "alchemy.run",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://alchemy.run/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "fontawesome": {
+  "name": "fontawesome.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://fontawesome.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "applitools": {
+  "name": "applitools.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://applitools.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "vibecontrols": {
+  "name": "vibecontrols.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://vibecontrols.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "civic": {
+  "name": "civic.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://civic.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "cap": {
+  "name": "cap.cloud.sap",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://cap.cloud.sap/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "serverjs": {
+  "name": "serverjs.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://serverjs.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "gqloom": {
+  "name": "gqloom.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://gqloom.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "primereact": {
+  "name": "primereact.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://primereact.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "backstage": {
+  "name": "backstage.spotify.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://backstage.spotify.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "promptfoo": {
+  "name": "promptfoo.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://promptfoo.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "delmaredigital": {
+  "name": "delmaredigital.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://delmaredigital.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "reatom": {
+  "name": "reatom.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://reatom.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "teleporthq": {
+  "name": "teleporthq.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://teleporthq.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "stripe": {
+  "name": "stripe.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://stripe.com/llms.txt",
+  "tier": 2,
+  "synced": true
+ },
+ "retejs": {
+  "name": "retejs.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://retejs.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "vuetifyjs": {
+  "name": "vuetifyjs.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://vuetifyjs.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "logux": {
+  "name": "logux.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://logux.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "doc": {
+  "name": "doc.sitecore.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://doc.sitecore.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "e2b": {
+  "name": "e2b.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://e2b.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "chakraui": {
+  "name": "chakra-ui.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://chakra-ui.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "gqltada": {
+  "name": "gql-tada.0no.co",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://gql-tada.0no.co/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "n8n": {
+  "name": "n8n.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://n8n.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "devcycle": {
+  "name": "devcycle.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://devcycle.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "sematext": {
+  "name": "sematext.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://sematext.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "next2d": {
+  "name": "next2d.app",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://next2d.app/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "poui": {
+  "name": "po-ui.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://po-ui.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "kbve": {
+  "name": "kbve.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://kbve.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "rxdb": {
+  "name": "rxdb.info",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://rxdb.info/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "usevoltra": {
+  "name": "use-voltra.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://use-voltra.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "plugins": {
+  "name": "plugins.pinelab.studio",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://plugins.pinelab.studio/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "fivesobes": {
+  "name": "fivesobes.gitbook.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://fivesobes.gitbook.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "solana": {
+  "name": "solana.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://solana.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "zod": {
+  "name": "zod.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://zod.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "devopsshield": {
+  "name": "devopsshield.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://devopsshield.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "srvx": {
+  "name": "srvx.h3.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://srvx.h3.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "dbml": {
+  "name": "dbml.dbdiagram.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://dbml.dbdiagram.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "fastcheck": {
+  "name": "fast-check.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://fast-check.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "arkui": {
+  "name": "ark-ui.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://ark-ui.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "flagsmith": {
+  "name": "flagsmith.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://flagsmith.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "adaptabletools": {
+  "name": "adaptabletools.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://adaptabletools.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "rednose": {
+  "name": "rednose.nl",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://rednose.nl/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "tiagodanin": {
+  "name": "tiagodanin.github.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://tiagodanin.github.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "agentback": {
+  "name": "agentback.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://agentback.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "agimon": {
+  "name": "agimon.ai",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://agimon.ai/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "aikido": {
+  "name": "aikido.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://aikido.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "allurereport": {
+  "name": "allurereport.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://allurereport.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "apartejs": {
+  "name": "apartejs.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://apartejs.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "astmetrics": {
+  "name": "ast-metrics.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://ast-metrics.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "atomcp": {
+  "name": "ato-mcp.com.au",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://ato-mcp.com.au/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "beejs": {
+  "name": "beejs.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://beejs.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "blazediff": {
+  "name": "blazediff.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://blazediff.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "botpress": {
+  "name": "botpress.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://botpress.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "bpmnkit": {
+  "name": "bpmnkit.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://bpmnkit.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "brightdata": {
+  "name": "brightdata.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://brightdata.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "bryntum": {
+  "name": "bryntum.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://bryntum.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "buildkite": {
+  "name": "buildkite.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://buildkite.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "burnerform": {
+  "name": "burnerform.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://burnerform.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "certifaction": {
+  "name": "certifaction.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://certifaction.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "chatsdk": {
+  "name": "chat-sdk.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://chat-sdk.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "comark": {
+  "name": "comark.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://comark.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "conciv": {
+  "name": "conciv.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://conciv.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "cortexjs": {
+  "name": "cortexjs.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://cortexjs.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "crawlee": {
+  "name": "crawlee.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://crawlee.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "cronalive": {
+  "name": "cronalive.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://cronalive.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "crossws": {
+  "name": "crossws.h3.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://crossws.h3.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "danubedata": {
+  "name": "danubedata.ro",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://danubedata.ro/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "dialtone": {
+  "name": "dialtone.dialpad.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://dialtone.dialpad.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "drtammedspaclinic": {
+  "name": "drtam-medspa-clinic.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://drtam-medspa-clinic.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "edge": {
+  "name": "edge.app",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://edge.app/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "engini": {
+  "name": "engini.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://engini.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "envio": {
+  "name": "envio.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://envio.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "eslint": {
+  "name": "eslint.interlace.tools",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://eslint.interlace.tools/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "evlog": {
+  "name": "evlog.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://evlog.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "exstreamjs": {
+  "name": "exstream-js.github.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://exstream-js.github.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "extension": {
+  "name": "extension.js.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://extension.js.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "floggy": {
+  "name": "floggy.xyz",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://floggy.xyz/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "flow": {
+  "name": "flow.foblex.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://flow.foblex.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "foxglove": {
+  "name": "foxglove.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://foxglove.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "frontside": {
+  "name": "frontside.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://frontside.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "fullcalendar": {
+  "name": "fullcalendar.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://fullcalendar.io/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "geodesics": {
+  "name": "geodesics.ai",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://geodesics.ai/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "gorules": {
+  "name": "gorules.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://gorules.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "heroui": {
+  "name": "heroui.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://heroui.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "heymantle": {
+  "name": "heymantle.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://heymantle.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "homespun": {
+  "name": "homespun.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://homespun.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "hubui": {
+  "name": "hubui.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://hubui.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "importok": {
+  "name": "importok.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://importok.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "imqueue": {
+  "name": "imqueue.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://imqueue.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "imtakt": {
+  "name": "imtakt.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://imtakt.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "interfere": {
+  "name": "interfere.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://interfere.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "internetcomputer": {
+  "name": "internetcomputer.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://internetcomputer.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "jalalijs": {
+  "name": "jalali-js.yanovian.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://jalali-js.yanovian.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "juno": {
+  "name": "juno.build",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://juno.build/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "kubb": {
+  "name": "kubb.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://kubb.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "lacspace": {
+  "name": "lacspace.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://lacspace.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "liveblocks": {
+  "name": "liveblocks.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://liveblocks.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "loomweaver": {
+  "name": "loomweaver.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://loomweaver.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "loro": {
+  "name": "loro.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://loro.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "mantine": {
+  "name": "mantine.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://mantine.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "markdy": {
+  "name": "markdy.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://markdy.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "meep": {
+  "name": "meep.company-named.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://meep.company-named.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "microlink": {
+  "name": "microlink.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://microlink.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "morsehq": {
+  "name": "morsehq.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://morsehq.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "motionary": {
+  "name": "motionary.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://motionary.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "moviie": {
+  "name": "moviie.ai",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://moviie.ai/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "neo4j": {
+  "name": "neo4j.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://neo4j.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "nestjsredisx": {
+  "name": "nestjs-redisx.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://nestjs-redisx.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "nexus": {
+  "name": "nexus.mkiteg.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://nexus.mkiteg.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "nodecron": {
+  "name": "nodecron.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://nodecron.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "nova": {
+  "name": "nova.laravel.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://nova.laravel.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "nutjs": {
+  "name": "nutjs.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://nutjs.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "paraglidejs": {
+  "name": "paraglidejs.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://paraglidejs.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "particles": {
+  "name": "particles.js.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://particles.js.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "pdfsmaller": {
+  "name": "pdfsmaller.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://pdfsmaller.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "pipedream": {
+  "name": "pipedream.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://pipedream.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "platform": {
+  "name": "platform.moonshot.cn",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://platform.moonshot.cn/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "proto": {
+  "name": "proto.cat",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://proto.cat/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "proxlane": {
+  "name": "proxlane.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://proxlane.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "radar": {
+  "name": "radar.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://radar.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "raisindb": {
+  "name": "raisindb.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://raisindb.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "reactdriftkit": {
+  "name": "react-driftkit.saktichourasia.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://react-driftkit.saktichourasia.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "rebilder": {
+  "name": "rebilder.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://rebilder.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "replicas": {
+  "name": "replicas.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://replicas.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "scalebrowser": {
+  "name": "scalebrowser.net",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://scalebrowser.net/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "scribe": {
+  "name": "scribe.genlook.app",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://scribe.genlook.app/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "serpapi": {
+  "name": "serpapi.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://serpapi.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "serverlessstack": {
+  "name": "serverless-stack.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://serverless-stack.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "shipyard": {
+  "name": "shipyard.levinkeller.de",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://shipyard.levinkeller.de/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "siebly": {
+  "name": "siebly.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://siebly.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "simplejwtlogin": {
+  "name": "simplejwtlogin.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://simplejwtlogin.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "snapdom": {
+  "name": "snapdom.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://snapdom.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "snaptrade": {
+  "name": "snaptrade.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://snaptrade.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "soat": {
+  "name": "soat.ttoss.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://soat.ttoss.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "sometic": {
+  "name": "sometic.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://sometic.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "stalux": {
+  "name": "stalux.needhelp.icu",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://stalux.needhelp.icu/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "stenciljs": {
+  "name": "stenciljs.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://stenciljs.com/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "stillosdigitalholdings": {
+  "name": "stillosdigitalholdings.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://stillosdigitalholdings.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "stumason": {
+  "name": "stumason.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://stumason.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "surveyjs": {
+  "name": "surveyjs.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://surveyjs.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "sveltiacms": {
+  "name": "sveltiacms.app",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://sveltiacms.app/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "tenjin": {
+  "name": "tenjin.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://tenjin.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "tgbotsdk": {
+  "name": "tg-bot-sdk.website",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://tg-bot-sdk.website/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "thebridge": {
+  "name": "thebridge.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://thebridge.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "tickbird": {
+  "name": "tickbird.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://tickbird.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "toren": {
+  "name": "toren.run",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://toren.run/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "typespec": {
+  "name": "typespec.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://typespec.io/docs/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "uploadcare": {
+  "name": "uploadcare.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://uploadcare.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "uppy": {
+  "name": "uppy.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://uppy.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "upyo": {
+  "name": "upyo.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://upyo.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "valibot": {
+  "name": "valibot.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://valibot.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "vgpu": {
+  "name": "vgpu.sh",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://vgpu.sh/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "visioncamera": {
+  "name": "visioncamera.margelo.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://visioncamera.margelo.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "visulima": {
+  "name": "visulima.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://visulima.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "wcstack": {
+  "name": "wcstack.github.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://wcstack.github.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "webjs": {
+  "name": "webjs.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://webjs.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "wildflowerjs": {
+  "name": "wildflowerjs.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://wildflowerjs.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "wreq": {
+  "name": "wreq.sqdsh.win",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://wreq.sqdsh.win/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "botium": {
+  "name": "botium.ai",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://botium.ai/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "cloudbees": {
+  "name": "cloudbees.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://cloudbees.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "computesdk": {
+  "name": "computesdk.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://computesdk.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "diffusion": {
+  "name": "diffusion.studio",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://diffusion.studio/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "featbit": {
+  "name": "featbit.co",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://featbit.co/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "ip2location": {
+  "name": "ip2location.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://ip2location.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "logisticinfotech": {
+  "name": "logisticinfotech.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://logisticinfotech.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "multilocale": {
+  "name": "multilocale.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://multilocale.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "ngdiagram": {
+  "name": "ngdiagram.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://ngdiagram.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "oneschema": {
+  "name": "oneschema.co",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://oneschema.co/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "siere": {
+  "name": "siere.ai",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://siere.ai/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "stackone": {
+  "name": "stackone.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://stackone.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "superdoc": {
+  "name": "superdoc.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://superdoc.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "testdino": {
+  "name": "testdino.com",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://testdino.com/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "workflowbuilder": {
+  "name": "workflowbuilder.io",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://workflowbuilder.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "xsai": {
+  "name": "xsai.js.org",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://xsai.js.org/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "yamblog": {
+  "name": "yamblog.dev",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://yamblog.dev/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "urllib3": {
+  "name": "urllib3",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://urllib3.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "charset-normalizer": {
+  "name": "charset-normalizer",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://charset-normalizer.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "cryptography": {
+  "name": "cryptography",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://cryptography.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "attrs": {
+  "name": "attrs",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://attrs.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "pyjwt": {
+  "name": "pyjwt",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://pyjwt.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "aiohttp": {
+  "name": "aiohttp",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://aiohttp.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "websockets": {
+  "name": "websockets",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://websockets.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "virtualenv": {
+  "name": "virtualenv",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://virtualenv.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "hatchling": {
+  "name": "hatchling",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://hatchling.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "more-itertools": {
+  "name": "more-itertools",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://more-itertools.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "distlib": {
+  "name": "distlib",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://distlib.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "pytest-asyncio": {
+  "name": "pytest-asyncio",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://pytest-asyncio.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "pyopenssl": {
+  "name": "pyopenssl",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://pyopenssl.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "networkx": {
+  "name": "networkx",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://networkx.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "redis": {
+  "name": "redis",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://redis.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "gitpython": {
+  "name": "gitpython",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://gitpython.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "chardet": {
+  "name": "chardet",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://chardet.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "gitdb": {
+  "name": "gitdb",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://gitdb.readthedocs.io/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "gunicorn": {
+  "name": "gunicorn",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://docs.gunicorn.org/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "astor": {
+  "name": "astor",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://docs.astor.org/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "arxiv": {
+  "name": "arxiv",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://docs.arxiv.org/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "robotframework": {
+  "name": "robotframework",
+  "license": "docs interface verified (sitemap/llms)",
+  "interface": "sitemap",
+  "llms": "https://docs.robotframework.org/sitemap.xml",
+  "tier": 2,
+  "synced": false
+ },
+ "awesome-react-native": {
+  "name": "awesome-react-native",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://jondot.github.io/awesome-react-native/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "awesome-ebpf": {
+  "name": "awesome-ebpf",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://awesome-ebpf.github.io/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "awesome-python": {
+  "name": "awesome-python",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://vinta.github.io/awesome-python/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "awesome-vehicle-security": {
+  "name": "awesome-vehicle-security",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://jaredthecoder.github.io/awesome-vehicle-security/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "empathy-in-engineering": {
+  "name": "empathy-in-engineering",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://KimberlyMunoz.github.io/empathy-in-engineering/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "bots": {
+  "name": "bots",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://hackerkid.github.io/bots/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "awesome-dtrace": {
+  "name": "awesome-dtrace",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://xen0l.github.io/awesome-dtrace/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "diff2html-cli": {
+  "name": "diff2html-cli",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://rtfpessoa.github.io/diff2html-cli/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "mikro-orm": {
+  "name": "mikro-orm",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://mikro-orm.github.io/mikro-orm/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "sinon": {
+  "name": "sinon",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://sinonjs.github.io/sinon/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "worker": {
+  "name": "worker",
+  "license": "llms.txt agent-permitted",
+  "interface": "llms",
+  "llms": "https://graphile.github.io/worker/llms.txt",
+  "tier": 2,
+  "synced": false
+ },
+ "aws": {
+  "name": "AWS",
+  "license": "llms.txt agent-permitted",
+  "interface": "repo",
+  "llms": "",
+  "tier": 0,
+  "synced": true
+ },
+ "elysia": {
+  "name": "ElysiaJS",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "",
+  "tier": 0,
+  "synced": true
+ },
+ "kubernetes": {
+  "name": "Kubernetes",
+  "license": "CC-BY-4.0 docs",
+  "interface": "repo",
+  "llms": "",
+  "tier": 0,
+  "synced": true
+ },
+ "ollama": {
+  "name": "Ollama",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "",
+  "tier": 0,
+  "synced": true
+ },
+ "playwright": {
+  "name": "Playwright",
+  "license": "Apache-2.0",
+  "interface": "repo",
+  "llms": "",
+  "tier": 0,
+  "synced": true
+ },
+ "pytest": {
+  "name": "pytest",
+  "license": "MIT",
+  "interface": "repo",
+  "llms": "",
+  "tier": 0,
+  "synced": true
+ },
+ "pytorch": {
+  "name": "PyTorch",
+  "license": "BSD-style",
+  "interface": "repo",
+  "llms": "",
+  "tier": 0,
+  "synced": true
+ },
+ "turso": {
+  "name": "Turso",
+  "license": "llms.txt agent-permitted",
+  "interface": "repo",
+  "llms": "",
+  "tier": 0,
+  "synced": true
+ }
+}

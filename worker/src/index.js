@@ -845,12 +845,26 @@ async function handleFetch(request, env, ctx, url, __t0) {
         id,
         chunks: counts[id] || 0,
         catalog_pages: catalog[id]?.catalog ?? null,
-        coverage: catalog[id]?.pct ?? null,
+        coverage: catalog[id]?.catalog != null ? catalog[id].pct : null,
       }));
+      // Registered-but-not-yet-synced sources (crawl_sources expansion) —
+      // they appear on /coverage under "Registered" but carry no chunks yet.
+      let registered = [];
+      try {
+        const regRes = await env.ASSETS.fetch(new Request("https://internal/sources-registry.json"));
+        if (regRes.ok) {
+          const reg = await regRes.json();
+          for (const [id, info] of Object.entries(reg)) {
+            if (counts[id] > 0) continue; // already covered above
+            registered.push({ id, name: info.name, chunks: 0, catalog_pages: null, coverage: null, registered: true });
+          }
+        }
+      } catch {}
       return json({
         total_chunks: Object.values(counts).reduce((a, b) => a + b, 0),
-        sources,
-        note: "coverage = ingested pages / source's own published catalog (llms.txt). null = catalog unknown.",
+        sources: [...sources, ...registered],
+        registered_count: registered.length,
+        note: "coverage = ingested pages / source's own published catalog (llms.txt). null = catalog unknown. registered=true = verified source, sync pending.",
       }, 200, apiEntry ? url.origin : null);
     }
 
@@ -890,12 +904,44 @@ async function handleFetch(request, env, ctx, url, __t0) {
     // key; `vendors` kept as deprecated alias for existing consumers)
     if (path === "/vendors") {
       const cursor = url.searchParams.get("cursor");
-      const limit = Math.min(parseInt(url.searchParams.get("limit") || String(VENDOR_IDS.length)), VENDOR_IDS.length);
-      const all = VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id] }));
+      const limitParam = url.searchParams.get("limit");
+      // Authoritative registry = sources-registry.json (all verified sources).
+      // VENDOR_META (the original 45) remains the fallback if the asset is missing.
+      let all = [];
+      let syncedCount = 0;
+      try {
+        const regRes = await env.ASSETS.fetch(new Request("https://internal/sources-registry.json"));
+        if (regRes.ok) {
+          const reg = await regRes.json();
+          all = Object.entries(reg).map(([id, info]) => ({
+            id,
+            name: info.name,
+            license: info.license || "—",
+            interface: info.interface || "llms",
+            docs_url: info.llms || null,
+            synced: !!info.synced,
+            ...VENDOR_META[id],
+          }));
+          syncedCount = all.filter(v => v.synced).length;
+        }
+      } catch {}
+      if (!all.length) {
+        all = VENDOR_IDS.map(id => ({ id, ...VENDOR_META[id], synced: true }));
+        syncedCount = all.length;
+      }
+      const limit = Math.min(parseInt(limitParam || String(all.length)), all.length);
       const start = cursor ? parseInt(b64uDecode(cursor)) || 0 : 0;
       const page = all.slice(start, start + limit);
       const next_cursor = start + limit < all.length ? b64uEncode(String(start + limit)) : null;
-      return json({ vendors: page, sources: page, total: all.length, next_cursor, pagination: { style: "cursor", cursor_param: "cursor", limit_param: "limit" } }, 200, apiEntry ? url.origin : null);
+      return json({
+        vendors: page,
+        sources: page,
+        total: all.length,
+        synced: syncedCount,
+        registered: all.length - syncedCount,
+        next_cursor,
+        pagination: { style: "cursor", cursor_param: "cursor", limit_param: "limit" },
+      }, 200, apiEntry ? url.origin : null);
     }
 
     // Search — GET and POST (POST accepts Idempotency-Key for safe retries)

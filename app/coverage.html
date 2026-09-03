@@ -100,12 +100,12 @@
   </p>
   <div class="mt-6 grid grid-cols-3 gap-4 max-w-lg">
     <div class="border border-green-200 bg-green-50 rounded-xl px-4 py-3 text-center">
-      <div class="text-2xl font-bold text-green-700">47</div>
+      <div class="text-2xl font-bold text-green-700" id="stat-synced">47</div>
       <div class="text-xs text-green-800">sources synced to the mesh</div>
     </div>
     <div class="border border-slate-200 bg-slate-50 rounded-xl px-4 py-3 text-center">
-      <div class="text-2xl font-bold text-slate-600">6</div>
-      <div class="text-xs text-slate-500">queued for sync</div>
+      <div class="text-2xl font-bold text-slate-600" id="stat-registered">500</div>
+      <div class="text-xs text-slate-500">registered &amp; verified — sync pending</div>
     </div>
     <div class="border border-red-200 bg-red-50 rounded-xl px-4 py-3 text-center">
       <div class="text-2xl font-bold text-red-600">4</div>
@@ -123,6 +123,11 @@
       <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">synced to the mesh</span>
     </div>
     <p class="mt-2 text-slate-600 text-sm">Click any source to search its docs in the app. Coverage = the share of a source's own published documentation catalog (its llms.txt / docs index) that is synced into the Documesh mesh network.</p>
+    <div class="mt-4">
+      <input id="coverage-search" type="search" placeholder="Filter sources… (e.g. kubernetes, stripe, python)"
+             class="w-full max-w-md px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#929a68]" />
+      <span class="ml-3 text-xs text-slate-400" id="coverage-count"></span>
+    </div>
     <div class="mt-6 overflow-x-auto border border-slate-100 rounded-2xl">
       <table class="w-full text-sm">
         <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-400">
@@ -137,6 +142,7 @@
         </tbody>
       </table>
     </div>
+    <div class="mt-3 flex gap-2" id="coverage-pager"></div>
   </section>
 
   <!-- ============ DEFERRED ============ -->
@@ -146,22 +152,12 @@
       <span class="text-xs bg-[#a9af8b]/30 text-[#4b5320] px-2 py-1 rounded-full">license OK · interface work needed</span>
     </div>
     <p class="mt-2 text-slate-600 text-sm">
-      These projects are actively maintained with permissive licenses, the docs are legally
-      usable, but they lack a machine-ready interface today (no llms.txt, no <code>.md</code>
-      endpoints, docs generated from site-specific builds). They are on queue now to be
-      synced to our Documesh mesh network.
-    </p>
-    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Apache Airflow</div><div class="text-xs text-slate-500 mt-1">License: Apache-2.0 · docs generated outside main repo</div></div>
-      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Go</div><div class="text-xs text-slate-500 mt-1">License: BSD-3-Clause · thin in-repo docs surface</div></div>
-      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Django</div><div class="text-xs text-slate-500 mt-1">License: BSD-3-Clause · Sphinx-generated HTML</div></div>
-      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Flask</div><div class="text-xs text-slate-500 mt-1">License: BSD-3-Clause · Sphinx-generated docs</div></div>
-      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Python</div><div class="text-xs text-slate-500 mt-1">License: PSF-2.0 · docs generated from Sphinx sources</div></div>
-      <div class="border border-[#929a68] rounded-xl p-4"><div class="font-medium">Ruby on Rails</div><div class="text-xs text-slate-500 mt-1">License: MIT · guides generated from edge guides</div></div>
-    </div>
-    <p class="mt-4 text-sm text-slate-500">
-      Want one of these prioritized (or a source we haven't listed)?
-      <a href="https://github.com/rhps/competition/issues" class="text-[#4b5320] hover:text-[#6a7337] underline">Open an issue</a>.
+      Every source in the table above with a <em>Registered</em> badge is in this bucket:
+      actively maintained, permissively licensed, and verified against its official agent
+      interface (llms.txt / docs index) — but its docs are not synced into the mesh yet.
+      Use the filter box to check whether a project is already registered, or
+      <a href="https://github.com/rhps/documesh.dev/issues" class="text-[#4b5320] hover:text-[#6a7337] underline">open an issue</a>
+      to prioritize its sync.
     </p>
   </section>
 
@@ -271,16 +267,24 @@ try {
   const snap = await fetch(API + "/search?q=the&limit=1").then(r => r.json()); // placeholder
 } catch {}
 
-// Two calls: /stats (coverage) + /vendors (authoritative names/licenses for all 47)
+// Two calls: /stats (coverage + registered sources) + /vendors (authoritative names/licenses for ALL sources)
 const [data, vendorData] = await Promise.all([
   fetch(API + "/stats").then(r => r.json()),
   fetch(API + "/vendors").then(r => r.json()).catch(() => ({})),
 ]);
 data.vendors = vendorData.vendors || [];
+
+// ── header stats ──
+document.getElementById("stat-synced").textContent = String(vendorData.synced ?? data.sources.filter(s => s.chunks > 0).length);
+document.getElementById("stat-registered").textContent = String(vendorData.registered ?? data.sources.filter(s => s.registered).length);
+
 const tb = document.getElementById("covered-tbody");
-tb.innerHTML = "";
 
 function coverageBadge(s) {
+  if (s.registered) return `<span class="inline-flex items-center gap-1.5 justify-end">
+    <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+    <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-500">Registered</span>
+  </span>`;
   if (s.coverage == null) return `<span class="inline-block w-24 text-right text-slate-400">—</span>`;
   const pct = s.coverage;
   const [cls, dot, label] = pct >= 90 ? ["bg-green-100 text-green-700", "bg-green-500", "Synced"]
@@ -292,22 +296,68 @@ function coverageBadge(s) {
   </span>`;
 }
 
-for (const s of data.sources) {
-  // /vendors carries the authoritative license for all 47 sources — the
-  // static VENDOR_META map below only covers the original 18 (fallback).
-  const v = data.vendors?.find(x => x.id === s.id) || {};
-  const name = v.name || VENDOR_META[s.id]?.name || s.id;
-  const license = v.license || VENDOR_META[s.id]?.license || "—";
-  const tr = document.createElement("tr");
-  tr.className = "hover:bg-slate-50";
-  tr.innerHTML = `
-    <td class="px-5 py-3 font-medium">
-      <a href="app.html?q=docs&vendors=${s.id}" class="hover:text-[#4b5320]">${name}</a>
-    </td>
-    <td class="px-5 py-3 text-slate-600">${license}</td>
-    <td class="px-5 py-3 text-right">${coverageBadge(s)}</td>`;
-  tb.appendChild(tr);
+// Synced sources first (by name), then registered sources (by name) — search filters across both.
+const PAGE = 50;
+let filtered = [];
+let pageIdx = 0;
+
+function renderPage() {
+  const slice = filtered.slice(pageIdx * PAGE, pageIdx * PAGE + PAGE);
+  tb.innerHTML = "";
+  if (!slice.length) {
+    tb.innerHTML = `<tr><td colspan="3" class="px-5 py-4 text-slate-400">No sources match.</td></tr>`;
+  }
+  for (const s of slice) {
+    const v = data.vendors.find(x => x.id === s.id) || {};
+    const name = v.name || VENDOR_META[s.id]?.name || s.name || s.id;
+    const license = v.license || VENDOR_META[s.id]?.license || "—";
+    const tr = document.createElement("tr");
+    tr.className = "hover:bg-slate-50" + (s.registered ? " opacity-75" : "");
+    tr.innerHTML = `
+      <td class="px-5 py-3 font-medium">
+        ${s.registered
+          ? `<span class="text-slate-500" title="Verified source — docs sync pending">${name}</span>`
+          : `<a href="app.html?q=docs&vendors=${s.id}" class="hover:text-[#4b5320]">${name}</a>`}
+      </td>
+      <td class="px-5 py-3 text-slate-600">${license}</td>
+      <td class="px-5 py-3 text-right">${coverageBadge(s)}</td>`;
+    tb.appendChild(tr);
+  }
+  // pager
+  const pager = document.getElementById("coverage-pager");
+  pager.innerHTML = "";
+  const pages = Math.ceil(filtered.length / PAGE);
+  if (pages > 1) {
+    for (let p = 0; p < pages; p++) {
+      const b = document.createElement("button");
+      b.textContent = String(p + 1);
+      b.className = `px-3 py-1 rounded-lg text-xs border ${p === pageIdx ? "bg-[#4b5320] text-white border-[#4b5320]" : "border-slate-200 text-slate-600 hover:bg-slate-50"}`;
+      b.addEventListener("click", () => { pageIdx = p; renderPage(); window.scrollTo({ top: document.getElementById("covered").offsetTop - 80, behavior: "smooth" }); });
+      pager.appendChild(b);
+    }
+  }
+  document.getElementById("coverage-count").textContent = `${filtered.length} of ${data.sources.length} sources`;
 }
+
+function applyFilter() {
+  const q = document.getElementById("coverage-search").value.trim().toLowerCase();
+  const sorted = [...data.sources].sort((a, b) => {
+    if (!!a.registered !== !!b.registered) return a.registered ? 1 : -1;
+    const na = (data.vendors.find(v => v.id === a.id)?.name || a.name || a.id).toLowerCase();
+    const nb = (data.vendors.find(v => v.id === b.id)?.name || b.name || b.id).toLowerCase();
+    return na < nb ? -1 : 1;
+  });
+  filtered = q ? sorted.filter(s => {
+    const v = data.vendors.find(x => x.id === s.id) || {};
+    return (s.id + " " + (v.name || s.name || "") + " " + (v.license || "")).toLowerCase().includes(q);
+  }) : sorted;
+  pageIdx = 0;
+  renderPage();
+}
+
+document.getElementById("coverage-search").addEventListener("input", applyFilter);
+applyFilter();
+
 // add verified marker legend
 const legend = document.createElement("p");
 legend.className = "mt-3 text-xs text-slate-400";
