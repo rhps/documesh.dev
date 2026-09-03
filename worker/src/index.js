@@ -1154,7 +1154,32 @@ async function handleFetch(request, env, ctx, url, __t0) {
         unifiedSearch(env, qA, { vendors: [source_a], limit: 8, semantic: true }),
         unifiedSearch(env, qB, { vendors: [source_b], limit: 8, semantic: true }),
       ]);
-      const result = compareConfigs(searchA.results || [], searchB.results || [], source_a, source_b);
+      // Snippets are prose-heavy; when they carry no config_keys, re-extract from
+      // FULL chunk content via D1 FTS (same deep pass as verify-config).
+      const deepEntries = async (q, source, search) => {
+        if (search.results?.some(r => r.actionable?.config_keys?.length) || !env.DB) return search.results || [];
+        try {
+          const match = q.split(/\s+/).filter(w => w.length >= 2).map(w => `"${w.replace(/"/g, "")}"`).join(" ");
+          const { results: rows } = await env.DB.prepare(
+            `SELECT c.chunk_id, c.vendor, c.title, c.heading_path, c.source_url, c.content
+             FROM chunks_fts f JOIN chunks c ON c.id = f.rowid
+             WHERE chunks_fts MATCH ? AND c.vendor = ? ORDER BY rank LIMIT 12`
+          ).bind(match, source).all();
+          const { extractActionables } = await import("./actionable.js");
+          return rows.map(r => {
+            const a = extractActionables([r.title, r.heading_path, r.content].filter(Boolean).join("\n"), { maxScan: 8000 });
+            return { chunk_id: r.chunk_id, vendor: r.vendor, title: r.title, source_url: r.source_url, actionable: a };
+          }).filter(r => r.actionable?.config_keys?.length);
+        } catch (e) {
+          console.error("compare-configs deep extraction failed:", e.message);
+          return search.results || [];
+        }
+      };
+      const [entriesA, entriesB] = await Promise.all([
+        deepEntries(qA, source_a, searchA),
+        deepEntries(qB, source_b, searchB),
+      ]);
+      const result = compareConfigs(entriesA, entriesB, source_a, source_b);
       if (!result.ok) {
         return apiError(422, "COMPARE_FAILED", result.error, "Broaden query_a / query_b (e.g. '<source> configuration reference').");
       }
