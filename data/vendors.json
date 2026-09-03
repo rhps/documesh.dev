@@ -7,6 +7,7 @@
   "attribution_required": true,
   "added": "2026-09-02"
  },
+<<<<<<< HEAD
  "ibmcloud": {
   "name": "IBM Cloud",
   "license": "llms.txt agent-permitted",
@@ -17,18 +18,55 @@
  },
  "langchain": {
   "name": "LangChain",
+=======
+ "moby": {
+  "name": "Docker (Moby)",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "P4:git-repo",
+  "attribution_required": true,
+  "added": "2026-09-03"
+ },
+ "nuxt": {
+  "name": "Nuxt",
+>>>>>>> 2eb7ef3 (coverage: cycle 1 deepen pytorch,ibmcloud,aws,opentelemetry,moby,nuxt,clickhouse,langchain,digitalocean,hugo)
   "license": "MIT",
   "license_url": "",
   "docs_origin": "P1:llms.txt\u2192per-page.md",
   "attribution_required": true,
   "added": "2026-09-03"
  },
+<<<<<<< HEAD
  "clickhouse": {
   "name": "ClickHouse",
   "license": "Apache-2.0",
+=======
+ "opentelemetry": {
+  "name": "OpenTelemetry",
+  "license": "CC-BY-4.0",
+  "license_url": "",
+  "docs_origin": "P4:git-repo",
+  "attribution_required": true,
+  "added": "2026-09-03"
+ },
+ "digitalocean": {
+  "name": "DigitalOcean",
+  "license": "llms.txt agent-permitted",
+>>>>>>> 2eb7ef3 (coverage: cycle 1 deepen pytorch,ibmcloud,aws,opentelemetry,moby,nuxt,clickhouse,langchain,digitalocean,hugo)
   "license_url": "",
   "docs_origin": "P1:llms.txt\u2192per-page.md",
   "attribution_required": true,
   "added": "2026-09-03"
+<<<<<<< HEAD
+=======
+ },
+ "hugo": {
+  "name": "Hugo",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "P4:git-repo",
+  "attribution_required": true,
+  "added": "2026-09-03"
+>>>>>>> 2eb7ef3 (coverage: cycle 1 deepen pytorch,ibmcloud,aws,opentelemetry,moby,nuxt,clickhouse,langchain,digitalocean,hugo)
  }
 }
