@@ -7,6 +7,7 @@
 import { VENDOR_META, tokenize } from "./search-core-lite.js";
 import { handleMCPServer } from "./mcp-server.js";
 import { collectRequestEvent, logRequest } from "./logging.js";
+import { normalizeIssueReport, verifyConfig, checkServiceHealth, ISSUE_TYPES, KNOWN_PROVIDERS } from "./act.js";
 import { withSource, withSourceAll } from "./result-shape.js";
 
 const VENDOR_IDS = Object.keys(VENDOR_META);
@@ -633,13 +634,61 @@ async function handleFetch(request, env, ctx, url, __t0) {
           return { content: [{ type: "text", text: JSON.stringify({ job_id: jobId, status: "processing", poll: `/v1/jobs/${jobId}` }) }] };
         }
         if (toolName === "list_api_surface") {
-          return { content: [{ type: "text", text: JSON.stringify({ endpoints: ["/search", "/explain", "/vendors", "/health", "/ask", "/batch", "/v1/submit-vendors"], openapi: `${url.origin}/openapi.json`, auth: "none (open API)" }) }] };
+          return { content: [{ type: "text", text: JSON.stringify({ endpoints: ["/search", "/explain", "/vendors", "/health", "/ask", "/batch", "/v1/submit-vendors", "/report-issue", "/verify-config", "/health-check", "/contribution-stats"], openapi: `${url.origin}/openapi.json`, auth: "none (open API)" }) }] };
+        }
+        if (toolName === "report_issue") {
+          const norm = normalizeIssueReport(args);
+          if (!norm.ok) return { content: [{ type: "text", text: JSON.stringify({ error: norm.error }) }], isError: true };
+          const issueId = crypto.randomUUID();
+          try {
+            if (env.DB) {
+              await env.DB.prepare(
+                `CREATE TABLE IF NOT EXISTS issue_reports (
+                   id TEXT PRIMARY KEY, source_id TEXT NOT NULL, chunk_id TEXT NOT NULL,
+                   issue_type TEXT NOT NULL, detail TEXT, suggested_fix TEXT, reporter TEXT,
+                   status TEXT DEFAULT 'open', created_at TEXT DEFAULT (datetime('now')))`
+              ).run();
+              await env.DB.prepare(
+                `INSERT INTO issue_reports (id, source_id, chunk_id, issue_type, detail, suggested_fix, reporter) VALUES (?,?,?,?,?,?,?)`
+              ).bind(issueId, norm.report.source_id, norm.report.chunk_id, norm.report.issue_type,
+                     norm.report.detail, norm.report.suggested_fix ?? null, norm.report.reporter ?? null).run();
+            }
+          } catch (e) {
+            return { content: [{ type: "text", text: JSON.stringify({ error: `persist failed: ${e.message}` }) }], isError: true };
+          }
+          return { content: [{ type: "text", text: JSON.stringify({ issue_id: issueId, status: "open", report: norm.report, poll: `/v1/issues/${issueId}` }) }] };
+        }
+        if (toolName === "verify_config") {
+          const source = args.source || args.vendor;
+          if (!source || !args.config_text) {
+            return { content: [{ type: "text", text: JSON.stringify({ error: "Both 'source' and 'config_text' are required." }) }], isError: true };
+          }
+          const search = await unifiedSearch(env, args.config_query || `${source} configuration`, { vendors: [source], limit: 8, semantic: true });
+          const result = verifyConfig(search.results || [], args.config_text);
+          if (!result.ok) return { content: [{ type: "text", text: JSON.stringify({ error: result.error }) }], isError: true };
+          return { content: [{ type: "text", text: JSON.stringify({ source, ...result, disclaimer: result.disclaimer }) }] };
+        }
+        if (toolName === "check_service_health") {
+          if (!args.provider) return { content: [{ type: "text", text: JSON.stringify({ error: "'provider' is required (e.g. cloudflare, aws, stripe)." }) }], isError: true };
+          const health = await checkServiceHealth(env, args.provider);
+          if (!health.ok) return { content: [{ type: "text", text: JSON.stringify({ error: health.error, known_providers: health.known_providers }) }], isError: true };
+          return { content: [{ type: "text", text: JSON.stringify(health) }] };
+        }
+        if (toolName === "contribution_stats") {
+          const stats = { source_submissions: jobs.size, issue_reports: 0, open_issues: 0, sources_indexed: VENDOR_IDS.length };
+          try {
+            if (env.DB) {
+              const row = await env.DB.prepare(`SELECT COUNT(*) AS total, SUM(CASE WHEN status='open' THEN 1 ELSE 0 END) AS open FROM issue_reports`).first();
+              if (row) { stats.issue_reports = row.total || 0; stats.open_issues = row.open || 0; }
+            }
+          } catch {}
+          return { content: [{ type: "text", text: JSON.stringify(stats) }] };
         }
         return { content: [{ type: "text", text: JSON.stringify({ error: `unknown tool: ${toolName}` }) }], isError: true };
       }, {
         serverName: "documesh-product",
         serverTitle: "Documesh Product Server",
-        serverDescription: "Act on the Documesh product: check service status, submit a documentation source for ingestion, inspect the API surface.",
+        serverDescription: "Act on the Documesh product: check service status, submit a documentation source for ingestion, report doc issues, verify user configs against documented keys, probe provider health, inspect the API surface.",
         tools: [
           {
             name: "service_status",
@@ -666,6 +715,51 @@ async function handleFetch(request, env, ctx, url, __t0) {
             description: "List the Documesh API endpoints and where the OpenAPI contract lives.",
             inputSchema: { type: "object", properties: {} },
             _meta: { ui: { resourceUri: "ui://documesh/product-surface" } },
+          },
+          {
+            name: "report_issue",
+            description: "Report a documentation problem (outdated/incorrect/misattributed chunk). Queued as a proposal for review — never mutates the mesh directly.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                source_id: { type: "string", description: "Source id (e.g. 'cloudflare')" },
+                chunk_id: { type: "string", description: "The chunk_id from a search result" },
+                issue_type: { type: "string", enum: ["outdated", "incorrect", "misattributed", "license-mismatch", "broken-link"] },
+                detail: { type: "string", description: "What is wrong (≥10 chars)" },
+                suggested_fix: { type: "string", description: "Optional suggested correction" },
+                reporter: { type: "string", description: "Optional reporter name/handle" },
+              },
+              required: ["source_id", "chunk_id", "issue_type", "detail"],
+            },
+          },
+          {
+            name: "verify_config",
+            description: "Diff a user's config file against the keys documented by a source. Returns missing_keys (documented but absent — each with doc citation) and unknown_keys (possible typos). Chain after search_docs_across when the user asks 'is my config right?'.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                source: { type: "string", description: "Source id (e.g. 'cloudflare')" },
+                config_text: { type: "string", description: "The user's config file contents" },
+                config_query: { type: "string", description: "Optional query for which docs to compare against (default: '<source> configuration')" },
+              },
+              required: ["source", "config_text"],
+            },
+          },
+          {
+            name: "check_service_health",
+            description: "Probe a provider's public status page. Chain after explain_error to answer 'is the service down, or is it my code?'. Read-only, no auth.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                provider: { type: "string", enum: ["cloudflare", "netlify", "github", "npm", "aws", "vercel", "stripe", "sentry"] },
+              },
+              required: ["provider"],
+            },
+          },
+          {
+            name: "contribution_stats",
+            description: "Get mesh contribution counters: submissions, issue reports, sources indexed.",
+            inputSchema: { type: "object", properties: {} },
           },
         ],
       });
@@ -728,6 +822,114 @@ async function handleFetch(request, env, ctx, url, __t0) {
         order_before: before,
         order_after: order,
       });
+    }
+
+    // ── Act surface: contribution protocol + doc-verified actions ──────────
+    // All writes are queued proposals (append-only); nothing mutates the corpus.
+
+    // POST /report-issue — flag a chunk as outdated/incorrect/misattributed
+    if (path === "/report-issue" && request.method === "POST") {
+      let body = {};
+      try { body = await request.json(); } catch {}
+      const norm = normalizeIssueReport(body);
+      if (!norm.ok) {
+        return apiError(400, "INVALID_REPORT", norm.error, `POST JSON {source_id, chunk_id, issue_type, detail}. issue_type: one of ${ISSUE_TYPES.join(", ")}.`);
+      }
+      const issueId = crypto.randomUUID();
+      const now = new Date().toISOString();
+      try {
+        if (env.DB) {
+          await env.DB.prepare(
+            `CREATE TABLE IF NOT EXISTS issue_reports (
+               id TEXT PRIMARY KEY, source_id TEXT NOT NULL, chunk_id TEXT NOT NULL,
+               issue_type TEXT NOT NULL, detail TEXT, suggested_fix TEXT, reporter TEXT,
+               status TEXT DEFAULT 'open', created_at TEXT DEFAULT (datetime('now')))`
+          ).run();
+          await env.DB.prepare(
+            `INSERT INTO issue_reports (id, source_id, chunk_id, issue_type, detail, suggested_fix, reporter) VALUES (?,?,?,?,?,?,?)`
+          ).bind(issueId, norm.report.source_id, norm.report.chunk_id, norm.report.issue_type,
+                 norm.report.detail, norm.report.suggested_fix ?? null, norm.report.reporter ?? null).run();
+        }
+      } catch (e) {
+        console.error("report-issue persist failed:", e.message);
+      }
+      return json({
+        issue_id: issueId,
+        status: "open",
+        message: "Report queued for review. Open issues are triaged before the next sync cycle.",
+        report: norm.report,
+        links: { self: `/v1/issues/${issueId}` },
+      }, 202, apiEntry ? url.origin : null);
+    }
+
+    // GET /v1/issues/{id} — poll report status
+    const issueMatch = path.match(/^\/(?:v1\/)?issues\/([a-f0-9-]+)$/);
+    if (issueMatch && request.method === "GET") {
+      if (!env.DB) return apiError(501, "DB_UNAVAILABLE", "Issue persistence requires the D1 backend.", undefined);
+      try {
+        const row = await env.DB.prepare(`SELECT * FROM issue_reports WHERE id = ?`).bind(issueMatch[1]).first();
+        if (!row) return apiError(404, "ISSUE_NOT_FOUND", `No issue report with id ${issueMatch[1]}.`, undefined);
+        return json({ issue_id: row.id, source_id: row.source_id, chunk_id: row.chunk_id,
+                      issue_type: row.issue_type, status: row.status, created_at: row.created_at });
+      } catch (e) {
+        return apiError(500, "ISSUE_LOOKUP_FAILED", e.message, undefined);
+      }
+    }
+
+    // GET /contribution-stats — aggregate mesh contribution counters
+    if (path === "/contribution-stats") {
+      const stats = { source_submissions: jobs.size, issue_reports: 0, open_issues: 0, sources_indexed: VENDOR_IDS.length, total_chunks: null };
+      try {
+        if (env.DB) {
+          const row = await env.DB.prepare(
+            `SELECT COUNT(*) AS total, SUM(CASE WHEN status = 'open' THEN 1 ELSE 0 END) AS open FROM issue_reports`
+          ).first();
+          if (row) { stats.issue_reports = row.total || 0; stats.open_issues = row.open || 0; }
+          const ch = await env.DB.prepare(`SELECT COUNT(*) AS n, COUNT(DISTINCT vendor) AS v FROM chunks`).first();
+          if (ch) { stats.total_chunks = ch.n || 0; stats.sources_indexed = ch.v || stats.sources_indexed; }
+        }
+      } catch {}
+      return json(stats, 200, apiEntry ? url.origin : null);
+    }
+
+    // POST /verify-config — diff a user's config against documented config keys
+    if (path === "/verify-config" && request.method === "POST") {
+      let body = {};
+      try { body = await request.json(); } catch {}
+      const source = body.source || body.vendor;
+      const cfgQuery = body.config_query || `${source} configuration`;
+      if (!source) {
+        return apiError(400, "MISSING_SOURCE", "Field 'source' is required.", `POST JSON {source: "cloudflare", config_text: "...", config_query: "... configuration"}.`);
+      }
+      if (!body.config_text) {
+        return apiError(400, "MISSING_CONFIG", "Field 'config_text' is required.", `POST JSON {source: "cloudflare", config_text: "<your config file contents>"}.`);
+      }
+      // Pull documented keys from the mesh itself (uses semantic rerank when enabled)
+      const search = await unifiedSearch(env, cfgQuery, { vendors: [source], limit: 8, semantic: true });
+      const result = verifyConfig(search.results || [], body.config_text);
+      if (!result.ok) {
+        return apiError(422, "VERIFY_FAILED", result.error, "Broaden config_query (e.g. '<source> configuration reference') or pick a different source.");
+      }
+      return json({
+        source,
+        config_query: cfgQuery,
+        ...result,
+        reranked: search.reranked || "keyword",
+        disclaimer: result.disclaimer,
+      }, 200, apiEntry ? url.origin : null);
+    }
+
+    // GET /health-check?provider=cloudflare — public status probe (read-only bridge action)
+    if (path === "/health-check" && request.method === "GET") {
+      const provider = url.searchParams.get("provider");
+      if (!provider) {
+        return apiError(400, "MISSING_PROVIDER", "Required query parameter 'provider' is missing.", `Try ?provider=cloudflare. Known: ${Object.keys(KNOWN_PROVIDERS).join(", ")}.`);
+      }
+      const result = await checkServiceHealth(env, provider);
+      if (!result.ok) {
+        return apiError(422, "HEALTH_CHECK_FAILED", result.error, result.known_providers ? `Known providers: ${result.known_providers.join(", ")}.` : "Retry shortly.");
+      }
+      return json(result, 200, apiEntry ? url.origin : null);
     }
 
     // ── A2A (Agent2Agent) JSON-RPC endpoint ──
