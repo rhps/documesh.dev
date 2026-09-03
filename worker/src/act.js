@@ -63,10 +63,14 @@ export function verifyConfig(docEntries, configText) {
   if (!configText || typeof configText !== "string" || !configText.trim()) {
     return { ok: false, error: "config_text is required" };
   }
-  // Aggregate documented keys per source from search results
+  // Aggregate documented keys per source from search results.
+  // Skip filenames (wrangler.toml etc.) — they are files, not config keys.
+  const NOT_A_KEY = /\.(toml|ya?ml|json|md|txt|jsx?|tsx?|py|go|rs|sh|html|css)$/i;
   const docByKey = new Map();
   for (const r of docEntries) {
-    for (const k of r?.actionable?.config_keys || []) {
+    for (const rawKey of r?.actionable?.config_keys || []) {
+      const k = rawKey.replace(/[.\-_]+$/, "");
+      if (NOT_A_KEY.test(k)) continue;
       if (!docByKey.has(k)) docByKey.set(k, { title: r.title, source_url: r.source_url, vendor: r.vendor || r.source });
     }
   }
