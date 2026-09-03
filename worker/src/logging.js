@@ -108,14 +108,19 @@ function flushR2(ctx, env) {
     return;
   }
 
-  // Same window: debounce ~2 s so bursts coalesce into fewer PUTs
-  if (flushR2._timer) return;
-  flushR2._timer = setTimeout(() => {
-    flushR2._timer = null;
-    if (!r2Buffer.length || !env.LOGS) return;
-    const lines = r2Buffer.splice(0);
-    ctx.waitUntil(putR2(env, r2Key, lines));
-  }, 2000);
+  // Same window: debounce ~2 s so bursts coalesce into fewer PUTs.
+  // Workers have no cross-request timers — a setTimeout callback may never run
+  // after the response returns. Instead, hold the flush in ctx.waitUntil with
+  // an in-isolate sleep; waitUntil keeps the isolate alive for it.
+  if (flushR2._pending) return;
+  flushR2._pending = true;
+  const lines = r2Buffer.splice(0);
+  const key = r2Key;
+  ctx.waitUntil(
+    new Promise(r => setTimeout(r, 2000))
+      .then(() => putR2(env, key, lines))
+      .finally(() => { flushR2._pending = false; })
+  );
 }
 
 async function putR2(env, key, lines) {
