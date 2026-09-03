@@ -817,12 +817,13 @@ async function handleFetch(request, env, ctx, url, __t0) {
     // vs each source's own llms.txt); snapshot fallback when audit absent.
     if (path === "/stats") {
       const counts = {};
+      const pages = {};
       try {
         if ((env.SEARCH_BACKEND || "shards") === "d1" && env.DB) {
           const { results } = await env.DB.prepare(
-            "SELECT vendor, COUNT(*) AS n FROM chunks GROUP BY vendor"
+            "SELECT vendor, COUNT(*) AS n, COUNT(DISTINCT path) AS p FROM chunks GROUP BY vendor"
           ).all();
-          for (const r of results) counts[r.vendor] = r.n;
+          for (const r of results) { counts[r.vendor] = r.n; pages[r.vendor] = r.p; }
         }
       } catch (e) {
         console.error("stats d1 counts failed, using snapshot:", e.message);
@@ -832,7 +833,7 @@ async function handleFetch(request, env, ctx, url, __t0) {
           const snapRes = await env.ASSETS.fetch(new Request("https://internal/snapshot.json"));
           if (snapRes.ok) {
             const snap = await snapRes.json();
-            for (const [v, info] of Object.entries(snap.vendors || {})) counts[v] = info.chunks || 0;
+            for (const [v, info] of Object.entries(snap.vendors || {})) { counts[v] = info.chunks || 0; pages[v] = info.pages || 0; }
           }
         } catch {}
       }
@@ -841,12 +842,24 @@ async function handleFetch(request, env, ctx, url, __t0) {
         const auditRes = await env.ASSETS.fetch(new Request("https://internal/stats/coverage-catalog.json"));
         if (auditRes.ok) catalog = await auditRes.json();
       } catch {}
-      const sources = VENDOR_IDS.map(id => ({
-        id,
-        chunks: counts[id] || 0,
-        catalog_pages: catalog[id]?.catalog ?? null,
-        coverage: catalog[id]?.catalog != null ? catalog[id].pct : null,
-      }));
+      const sources = VENDOR_IDS.map(id => {
+        const catalogPages = catalog[id]?.catalog ?? null;
+        let coverage = null;
+        if (catalogPages != null && catalogPages > 0) {
+          // Page-level coverage: distinct ingested pages / source's published catalog.
+          // Chunk counts split pages into sections, so chunks/catalog would overshoot.
+          const p = pages[id] ?? 0;
+          coverage = p > 0 ? Math.min(Math.round((p / catalogPages) * 1000) / 10, 100) : 0;
+        }
+        return {
+          id,
+          chunks: counts[id] || 0,
+          pages: pages[id] ?? 0,
+          catalog_pages: catalogPages,
+          catalog_basis: catalog[id]?.basis ?? null,
+          coverage,
+        };
+      });
       // Registered-but-not-yet-synced sources (crawl_sources expansion) —
       // they appear on /coverage under "Registered" but carry no chunks yet.
       let registered = [];

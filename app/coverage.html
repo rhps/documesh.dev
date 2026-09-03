@@ -287,8 +287,8 @@ function coverageBadge(s) {
   </span>`;
   if (s.coverage == null) return `<span class="inline-block w-24 text-right text-slate-400">—</span>`;
   const pct = s.coverage;
-  const [cls, dot, label] = pct >= 90 ? ["bg-green-100 text-green-700", "bg-green-500", "Synced"]
-    : pct >= 30 ? ["bg-amber-100 text-amber-700", "bg-amber-500", "Partial"]
+  const [cls, dot, label] = pct >= 60 ? ["bg-green-100 text-green-700", "bg-green-500", "Synced"]
+    : pct >= 20 ? ["bg-amber-100 text-amber-700", "bg-amber-500", "Partial"]
     : ["bg-red-100 text-red-700", "bg-red-500", "Early"];
   return `<span class="inline-flex items-center gap-1.5 justify-end">
     <span class="w-2 h-2 rounded-full ${dot}"></span>
@@ -361,7 +361,7 @@ applyFilter();
 // add verified marker legend
 const legend = document.createElement("p");
 legend.className = "mt-3 text-xs text-slate-400";
-legend.textContent = "Coverage compares each source's ingested pages with the catalog that source publishes about itself (llms.txt / docs index). Synced: this documentation is synced into the Documesh mesh network with ≥90% coverage.";
+legend.textContent = "Coverage = distinct pages ingested from a source ÷ that source's published catalog (llms.txt links or docs index), computed live from D1. Synced: ≥60% of the catalog is in the mesh; over-crawled sources cap at 100%.";
 tb.parentElement.insertAdjacentElement("afterend", legend);
 </script>
 <script src="webmcp-register.js"></script>

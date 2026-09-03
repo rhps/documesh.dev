@@ -1,190 +1,190 @@
 {
- "anthropic": {
-  "catalog": 700,
-  "pct": 45.1
- },
- "argocd": {
-  "catalog": 700,
-  "pct": 100.0
+ "pytorch": {
+  "catalog": 6000,
+  "basis": "crawler estimate"
  },
  "aws": {
-  "catalog": 45000,
-  "pct": 2.9
+  "catalog": 2242,
+  "basis": "llms.txt pages"
  },
- "bun": {
-  "catalog": 350,
-  "pct": 17.1
+ "moby": {
+  "catalog": 39,
+  "basis": "llms.txt pages"
  },
- "cilium": {
-  "catalog": 1100,
-  "pct": 16.0
- },
- "clerk": {
-  "catalog": 900,
-  "pct": 55.6
- },
- "clickhouse": {
-  "catalog": 2500,
-  "pct": 100.0
- },
- "cloudflare": {
-  "catalog": 40000,
-  "pct": 18.9
- },
- "digitalocean": {
-  "catalog": 4000,
-  "pct": 100.0
+ "elasticsearch": {
+  "catalog": 123,
+  "basis": "llms.txt pages"
  },
  "docusaurus": {
   "catalog": 400,
-  "pct": 11.0
- },
- "elasticsearch": {
-  "catalog": 4000,
-  "pct": 9.5
- },
- "electron": {
-  "catalog": 1200,
-  "pct": 85.8
- },
- "elysia": {
-  "catalog": 150,
-  "pct": 82.0
- },
- "flux": {
-  "catalog": 600,
-  "pct": 53.7
+  "basis": "crawler estimate"
  },
  "gitea": {
   "catalog": 800,
-  "pct": 12.8
+  "basis": "crawler estimate"
  },
- "godot": {
-  "catalog": 3000,
-  "pct": 80.6
+ "solid": {
+  "catalog": 271,
+  "basis": "llms.txt pages"
  },
- "helm": {
-  "catalog": 800,
-  "pct": 23.5
+ "cilium": {
+  "catalog": 1100,
+  "basis": "crawler estimate"
  },
- "hono": {
-  "catalog": 300,
-  "pct": 94.7
- },
- "hugo": {
-  "catalog": 900,
-  "pct": 100.0
- },
- "ibmcloud": {
-  "catalog": 10000,
-  "pct": 23.6
- },
- "kong": {
-  "catalog": 2000,
-  "pct": 25.2
+ "bun": {
+  "catalog": 321,
+  "basis": "llms.txt pages"
  },
  "kubernetes": {
   "catalog": 4500,
-  "pct": 17.6
- },
- "langchain": {
-  "catalog": 2500,
-  "pct": 36.0
- },
- "moby": {
-  "catalog": 1800,
-  "pct": 4.1
- },
- "neon": {
-  "catalog": 500,
-  "pct": 49.2
- },
- "neovim": {
-  "catalog": 700,
-  "pct": 88.7
- },
- "netlify": {
-  "catalog": 1800,
-  "pct": 84.5
- },
- "nodejs": {
-  "catalog": 5000,
-  "pct": 93.6
- },
- "nuxt": {
-  "catalog": 1200,
-  "pct": 100.0
- },
- "ollama": {
-  "catalog": 80,
-  "pct": 100.0
- },
- "opentelemetry": {
-  "catalog": 2000,
-  "pct": 100.0
- },
- "playwright": {
-  "catalog": 900,
-  "pct": 92.9
- },
- "pulumi": {
-  "catalog": 2000,
-  "pct": 100.0
- },
- "pytest": {
-  "catalog": 350,
-  "pct": 32.9
- },
- "pytorch": {
-  "catalog": 6000,
-  "pct": 1.2
- },
- "react": {
-  "catalog": 1600,
-  "pct": 68.4
- },
- "sentry": {
-  "catalog": 1500,
-  "pct": 58.9
- },
- "solid": {
-  "catalog": 400,
-  "pct": 15.5
+  "basis": "crawler estimate"
  },
  "stripe": {
-  "catalog": 3500,
-  "pct": 18.5
+  "catalog": 465,
+  "basis": "llms.txt pages"
  },
- "svelte-core": {
-  "catalog": 1700,
-  "pct": 91.7
- },
- "temporal": {
-  "catalog": 800,
-  "pct": 100.0
- },
- "tensorflow": {
-  "catalog": 5000,
-  "pct": 24.6
+ "cloudflare": {
+  "catalog": 106,
+  "basis": "llms.txt pages"
  },
  "terragrunt": {
   "catalog": 450,
-  "pct": 21.6
+  "basis": "crawler estimate"
  },
- "turso": {
-  "catalog": 600,
-  "pct": 50.2
+ "helm": {
+  "catalog": 800,
+  "basis": "crawler estimate"
  },
- "upstash": {
-  "catalog": 700,
-  "pct": 100.0
+ "ibmcloud": {
+  "catalog": 297,
+  "basis": "llms.txt pages"
+ },
+ "tensorflow": {
+  "catalog": 5000,
+  "basis": "crawler estimate"
+ },
+ "kong": {
+  "catalog": 2000,
+  "basis": "crawler estimate"
  },
  "vercel": {
   "catalog": 2500,
-  "pct": 28.8
+  "basis": "crawler estimate"
+ },
+ "pytest": {
+  "catalog": 350,
+  "basis": "crawler estimate"
+ },
+ "langchain": {
+  "catalog": 2500,
+  "basis": "crawler estimate"
+ },
+ "anthropic": {
+  "catalog": 700,
+  "basis": "crawler estimate"
+ },
+ "neon": {
+  "catalog": 255,
+  "basis": "llms.txt pages"
+ },
+ "turso": {
+  "catalog": 289,
+  "basis": "llms.txt pages"
+ },
+ "flux": {
+  "catalog": 600,
+  "basis": "crawler estimate"
+ },
+ "clerk": {
+  "catalog": 2490,
+  "basis": "llms.txt pages"
+ },
+ "sentry": {
+  "catalog": 126,
+  "basis": "llms.txt pages"
+ },
+ "react": {
+  "catalog": 178,
+  "basis": "llms.txt pages"
  },
  "vue-core-docs": {
-  "catalog": 1500,
-  "pct": 74.6
+  "catalog": 94,
+  "basis": "llms.txt pages"
+ },
+ "godot": {
+  "catalog": 3000,
+  "basis": "crawler estimate"
+ },
+ "elysia": {
+  "catalog": 89,
+  "basis": "llms.txt pages"
+ },
+ "netlify": {
+  "catalog": 105,
+  "basis": "llms.txt pages"
+ },
+ "electron": {
+  "catalog": 1200,
+  "basis": "crawler estimate"
+ },
+ "neovim": {
+  "catalog": 700,
+  "basis": "crawler estimate"
+ },
+ "svelte-core": {
+  "catalog": 1700,
+  "basis": "legacy audit"
+ },
+ "playwright": {
+  "catalog": 900,
+  "basis": "crawler estimate"
+ },
+ "nodejs": {
+  "catalog": 68,
+  "basis": "llms.txt pages"
+ },
+ "hono": {
+  "catalog": 161,
+  "basis": "llms.txt pages"
+ },
+ "argocd": {
+  "catalog": 700,
+  "basis": "crawler estimate"
+ },
+ "clickhouse": {
+  "catalog": 2500,
+  "basis": "crawler estimate"
+ },
+ "digitalocean": {
+  "catalog": 298,
+  "basis": "llms.txt pages"
+ },
+ "hugo": {
+  "catalog": 900,
+  "basis": "crawler estimate"
+ },
+ "nuxt": {
+  "catalog": 358,
+  "basis": "llms.txt pages"
+ },
+ "ollama": {
+  "catalog": 10,
+  "basis": "llms.txt pages"
+ },
+ "opentelemetry": {
+  "catalog": 29,
+  "basis": "llms.txt pages"
+ },
+ "pulumi": {
+  "catalog": 2000,
+  "basis": "crawler estimate"
+ },
+ "temporal": {
+  "catalog": 127,
+  "basis": "llms.txt pages"
+ },
+ "upstash": {
+  "catalog": 700,
+  "basis": "legacy audit"
  }
 }
