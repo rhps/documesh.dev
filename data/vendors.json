@@ -116,6 +116,17 @@
   "docs_origin": "P1:llms.txt\u2192per-page.md",
   "attribution_required": true,
   "added": "2026-09-03"
+<<<<<<< HEAD
 >>>>>>> 684043c (coverage: cycle 4 deepen pytorch,ibmcloud,aws,moby,clickhouse,langchain,elasticsearch,docusaurus,gitea,temporal)
+=======
+ },
+ "argocd": {
+  "name": "Argo CD",
+  "license": "Apache-2.0",
+  "license_url": "",
+  "docs_origin": "P4:git-repo",
+  "attribution_required": true,
+  "added": "2026-09-03"
+>>>>>>> 1da2c01 (coverage: cycle 5 deepen pytorch,ibmcloud,aws,moby,clickhouse,langchain,elasticsearch,docusaurus,gitea,argocd)
  }
 }
