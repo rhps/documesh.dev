@@ -913,7 +913,7 @@ async function handleFetch(request, env, ctx, url, __t0) {
       const hasKeys = docEntries.some(r => r.actionable?.config_keys?.length);
       if (!hasKeys && env.DB) {
         try {
-          const match = cfgQuery.split(/\s+/).filter(w => w.length >= 2).map(w => `"${w.replace(/"/g, "")}"`).join(" ");
+          const match = cfgQuery.split(/\s+/).filter(w => w.length >= 2).map(w => `"${w.replace(/"/g, "")}"`).join(" OR ");
           const { results: deepRows } = await env.DB.prepare(
             `SELECT c.chunk_id, c.vendor, c.title, c.heading_path, c.source_url, c.content
              FROM chunks_fts f JOIN chunks c ON c.id = f.rowid
@@ -1159,7 +1159,7 @@ async function handleFetch(request, env, ctx, url, __t0) {
       const deepEntries = async (q, source, search) => {
         if (search.results?.some(r => r.actionable?.config_keys?.length) || !env.DB) return search.results || [];
         try {
-          const match = q.split(/\s+/).filter(w => w.length >= 2).map(w => `"${w.replace(/"/g, "")}"`).join(" ");
+          const match = q.split(/\s+/).filter(w => w.length >= 2).map(w => `"${w.replace(/"/g, "")}"`).join(" OR ");
           const { results: rows } = await env.DB.prepare(
             `SELECT c.chunk_id, c.vendor, c.title, c.heading_path, c.source_url, c.content
              FROM chunks_fts f JOIN chunks c ON c.id = f.rowid
