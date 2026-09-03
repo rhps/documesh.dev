@@ -1,212 +1,3651 @@
 {
-  "digitalocean": {
-    "name": "DigitalOcean",
-    "llms": "https://docs.digitalocean.com/llms.txt",
-    "license": "llms.txt agent-permitted"
-  },
-  "ibmcloud": {
-    "name": "IBM Cloud",
-    "llms": "https://cloud.ibm.com/docs/llms.txt",
-    "license": "llms.txt agent-permitted"
-  },
-  "opentelemetry": {
-    "name": "OpenTelemetry",
-    "repo": "open-telemetry/opentelemetry.io",
-    "docs_path": "content/en/docs",
-    "license": "CC-BY-4.0"
-  },
-  "pulumi": {
-    "name": "Pulumi",
-    "repo": "pulumi/docs",
-    "branch": "master",
-    "docs_path": "content/docs",
-    "license": "Apache-2.0"
-  },
-  "sentry": {
-    "name": "Sentry",
-    "llms": "https://docs.sentry.io/llms.txt",
-    "license": "llms.txt agent-permitted"
-  },
-  "langchain": {
-    "name": "LangChain",
-    "llms": "https://python.langchain.com/llms.txt",
-    "license": "MIT"
-  },
-  "vercel": {
-    "name": "Vercel",
-    "llms": "https://vercel.com/docs/llms.txt",
-    "license": "llms.txt agent-permitted"
-  },
-  "hugo": {
-    "name": "Hugo",
-    "repo": "gohugoio/hugoDocs",
-    "docs_path": "content/en",
-    "license": "Apache-2.0",
-    "branch": "master"
-  },
-  "docusaurus": {
-    "name": "Docusaurus",
-    "repo": "facebook/docusaurus",
-    "docs_path": "docs",
-    "license": "MIT"
-  },
-  "upstash": {
-    "name": "Upstash",
-    "llms": "https://docs.upstash.com/llms.txt",
-    "license": "llms.txt agent-permitted"
-  },
-  "bun": {
-    "name": "Bun",
-    "llms": "https://bun.com/docs/llms.txt",
-    "license": "MIT"
-  },
-  "tensorflow": {
-    "name": "TensorFlow",
-    "repo": "tensorflow/docs",
-    "docs_path": "site/en",
-    "license": "Apache-2.0",
-    "branch": "master"
-  },
-  "clickhouse": {
-    "name": "ClickHouse",
-    "llms": "https://clickhouse.com/docs/llms.txt",
-    "license": "Apache-2.0"
-  },
-  "nuxt": {
-    "name": "Nuxt",
-    "llms": "https://nuxt.com/llms.txt",
-    "license": "MIT"
-  },
-  "solid": {
-    "name": "SolidJS",
-    "repo": "solidjs/solid-docs",
-    "docs_path": "src",
-    "license": "MIT"
-  },
-  "vue-core-docs": {
-    "name": "Vue (core)",
-    "repo": "vuejs/docs",
-    "docs_path": "src",
-    "license": "MIT"
-  },
-  "gitea": {
-    "name": "Gitea",
-    "repo": "go-gitea/gitea",
-    "docs_path": "docs/content",
-    "license": "MIT"
-  },
-  "terragrunt": {
-    "name": "Terragrunt",
-    "repo": "gruntwork-io/terragrunt",
-    "docs_path": "docs/src",
-    "license": "MIT"
-  },
-  "argocd": {
-    "name": "Argo CD",
-    "repo": "argoproj/argo-cd",
-    "docs_path": "docs",
-    "license": "Apache-2.0",
-    "branch": "master"
-  },
-  "moby": {
-    "name": "Docker (Moby)",
-    "repo": "moby/moby",
-    "docs_path": "docs",
-    "license": "Apache-2.0",
-    "branch": "master"
-  },
-  "helm": {
-    "name": "Helm",
-    "repo": "helm/helm",
-    "docs_path": "docs/content/en/docs",
-    "license": "Apache-2.0"
-  },
-  "flux": {
-    "name": "Flux CD",
-    "repo": "fluxcd/flux2",
-    "docs_path": "docs",
-    "license": "Apache-2.0"
-  },
-  "cilium": {
-    "name": "Cilium",
-    "repo": "cilium/cilium",
-    "docs_path": "Documentation",
-    "license": "Apache-2.0"
-  },
-  "temporal": {
-    "name": "Temporal",
-    "llms": "https://docs.temporal.io/llms.txt",
-    "license": "llms.txt agent-permitted"
-  },
-  "kong": {
-    "name": "Kong",
-    "llms": "https://developer.konghq.com/llms.txt",
-    "license": "llms.txt agent-permitted"
-  },
-  "react": {
-    "name": "React",
-    "llms": "https://react.dev/llms.txt",
-    "license": "MIT"
-  },
-  "neovim": {
-    "name": "Neovim",
-    "repo": "neovim/neovim",
-    "docs_path": "runtime/doc",
-    "license": "Apache-2.0",
-    "branch": "master"
-  },
-  "netlify": {
-    "name": "Netlify",
-    "llms": "https://docs.netlify.com/llms.txt",
-    "license": "llms.txt agent-permitted"
-  },
-  "elasticsearch": {
-    "name": "Elasticsearch",
-    "llms": "https://www.elastic.co/docs/llms.txt",
-    "license": "Elastic License 2.0 / Apache-2.0 components"
-  },
-  "godot": {
-    "name": "Godot",
-    "repo": "godotengine/godot-docs",
-    "docs_path": "",
-    "license": "MIT",
-    "branch": "master"
-  },
-  "electron": {
-    "name": "Electron",
-    "repo": "electron/electron",
-    "docs_path": "docs",
-    "license": "MIT"
-  },
-  "svelte-core": {
-    "name": "Svelte",
-    "llms": "https://svelte.dev/llms.txt",
-    "license": "MIT"
-  },
-  "anthropic": {
-    "name": "Anthropic",
-    "llms": "https://docs.anthropic.com/llms.txt",
-    "license": "llms.txt agent-permitted"
-  },
-  "neon": {
-    "name": "Neon",
-    "llms": "https://neon.com/docs/llms.txt",
-    "license": "llms.txt agent-permitted"
-  },
-  "clerk": {
-    "name": "Clerk",
-    "llms": "https://clerk.com/docs/llms.txt",
-    "license": "llms.txt agent-permitted"
-  },
-  "cloudflare": {
-    "name": "Cloudflare",
-    "llms": "https://developers.cloudflare.com/llms.txt",
-    "license": "CC-BY-4.0"
-  },
-  "nodejs": {
-    "name": "Node.js",
-    "repo": "nodejs/node",
-    "docs_path": "doc/api",
-    "license": "MIT"
-  }
+ "digitalocean": {
+  "name": "DigitalOcean",
+  "llms": "https://docs.digitalocean.com/llms.txt",
+  "license": "llms.txt agent-permitted"
+ },
+ "ibmcloud": {
+  "name": "IBM Cloud",
+  "llms": "https://cloud.ibm.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted"
+ },
+ "opentelemetry": {
+  "name": "OpenTelemetry",
+  "repo": "open-telemetry/opentelemetry.io",
+  "docs_path": "content/en/docs",
+  "license": "CC-BY-4.0"
+ },
+ "pulumi": {
+  "name": "Pulumi",
+  "repo": "pulumi/docs",
+  "branch": "master",
+  "docs_path": "content/docs",
+  "license": "Apache-2.0"
+ },
+ "sentry": {
+  "name": "Sentry",
+  "llms": "https://docs.sentry.io/llms.txt",
+  "license": "llms.txt agent-permitted"
+ },
+ "langchain": {
+  "name": "LangChain",
+  "llms": "https://python.langchain.com/llms.txt",
+  "license": "MIT"
+ },
+ "vercel": {
+  "name": "Vercel",
+  "llms": "https://vercel.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted"
+ },
+ "hugo": {
+  "name": "Hugo",
+  "repo": "gohugoio/hugoDocs",
+  "docs_path": "content/en",
+  "license": "Apache-2.0",
+  "branch": "master"
+ },
+ "docusaurus": {
+  "name": "Docusaurus",
+  "repo": "facebook/docusaurus",
+  "docs_path": "docs",
+  "license": "MIT"
+ },
+ "upstash": {
+  "name": "Upstash",
+  "llms": "https://docs.upstash.com/llms.txt",
+  "license": "llms.txt agent-permitted"
+ },
+ "bun": {
+  "name": "Bun",
+  "llms": "https://bun.com/docs/llms.txt",
+  "license": "MIT"
+ },
+ "tensorflow": {
+  "name": "TensorFlow",
+  "repo": "tensorflow/docs",
+  "docs_path": "site/en",
+  "license": "Apache-2.0",
+  "branch": "master"
+ },
+ "clickhouse": {
+  "name": "ClickHouse",
+  "llms": "https://clickhouse.com/docs/llms.txt",
+  "license": "Apache-2.0"
+ },
+ "nuxt": {
+  "name": "Nuxt",
+  "llms": "https://nuxt.com/llms.txt",
+  "license": "MIT"
+ },
+ "solid": {
+  "name": "SolidJS",
+  "repo": "solidjs/solid-docs",
+  "docs_path": "src",
+  "license": "MIT"
+ },
+ "vue-core-docs": {
+  "name": "Vue (core)",
+  "repo": "vuejs/docs",
+  "docs_path": "src",
+  "license": "MIT"
+ },
+ "gitea": {
+  "name": "Gitea",
+  "repo": "go-gitea/gitea",
+  "docs_path": "docs/content",
+  "license": "MIT"
+ },
+ "terragrunt": {
+  "name": "Terragrunt",
+  "repo": "gruntwork-io/terragrunt",
+  "docs_path": "docs/src",
+  "license": "MIT"
+ },
+ "argocd": {
+  "name": "Argo CD",
+  "repo": "argoproj/argo-cd",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "branch": "master"
+ },
+ "moby": {
+  "name": "Docker (Moby)",
+  "repo": "moby/moby",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "branch": "master"
+ },
+ "helm": {
+  "name": "Helm",
+  "repo": "helm/helm",
+  "docs_path": "docs/content/en/docs",
+  "license": "Apache-2.0"
+ },
+ "flux": {
+  "name": "Flux CD",
+  "repo": "fluxcd/flux2",
+  "docs_path": "docs",
+  "license": "Apache-2.0"
+ },
+ "cilium": {
+  "name": "Cilium",
+  "repo": "cilium/cilium",
+  "docs_path": "Documentation",
+  "license": "Apache-2.0"
+ },
+ "temporal": {
+  "name": "Temporal",
+  "llms": "https://docs.temporal.io/llms.txt",
+  "license": "llms.txt agent-permitted"
+ },
+ "kong": {
+  "name": "Kong",
+  "llms": "https://developer.konghq.com/llms.txt",
+  "license": "llms.txt agent-permitted"
+ },
+ "react": {
+  "name": "React",
+  "llms": "https://react.dev/llms.txt",
+  "license": "MIT"
+ },
+ "neovim": {
+  "name": "Neovim",
+  "repo": "neovim/neovim",
+  "docs_path": "runtime/doc",
+  "license": "Apache-2.0",
+  "branch": "master"
+ },
+ "netlify": {
+  "name": "Netlify",
+  "llms": "https://docs.netlify.com/llms.txt",
+  "license": "llms.txt agent-permitted"
+ },
+ "elasticsearch": {
+  "name": "Elasticsearch",
+  "llms": "https://www.elastic.co/docs/llms.txt",
+  "license": "Elastic License 2.0 / Apache-2.0 components"
+ },
+ "godot": {
+  "name": "Godot",
+  "repo": "godotengine/godot-docs",
+  "docs_path": "",
+  "license": "MIT",
+  "branch": "master"
+ },
+ "electron": {
+  "name": "Electron",
+  "repo": "electron/electron",
+  "docs_path": "docs",
+  "license": "MIT"
+ },
+ "svelte-core": {
+  "name": "Svelte",
+  "llms": "https://svelte.dev/llms.txt",
+  "license": "MIT"
+ },
+ "anthropic": {
+  "name": "Anthropic",
+  "llms": "https://docs.anthropic.com/llms.txt",
+  "license": "llms.txt agent-permitted"
+ },
+ "neon": {
+  "name": "Neon",
+  "llms": "https://neon.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted"
+ },
+ "clerk": {
+  "name": "Clerk",
+  "llms": "https://clerk.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted"
+ },
+ "cloudflare": {
+  "name": "Cloudflare",
+  "llms": "https://developers.cloudflare.com/llms.txt",
+  "license": "CC-BY-4.0"
+ },
+ "nodejs": {
+  "name": "Node.js",
+  "repo": "nodejs/node",
+  "docs_path": "doc/api",
+  "license": "MIT"
+ },
+ "vuejs": {
+  "name": "Vue.js",
+  "llms": "https://vuejs.org/llms.txt",
+  "repo": "vuejs/core",
+  "docs_path": "docs",
+  "license": "MIT (docs CC-BY-NC-SA \u2014 check)",
+  "tier": 0
+ },
+ "angular": {
+  "name": "Angular",
+  "llms": "https://angular.dev/llms.txt",
+  "repo": "angular/angular",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "svelte": {
+  "name": "Svelte",
+  "llms": "https://svelte.dev/llms.txt",
+  "repo": "sveltejs/svelte",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "nextjs": {
+  "name": "Next.js",
+  "llms": "https://nextjs.org/llms.txt",
+  "repo": "vercel/next.js",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "astro": {
+  "name": "Astro",
+  "repo": "withastro/astro",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "sveltekit": {
+  "name": "SvelteKit",
+  "repo": "sveltejs/kit",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "typescript": {
+  "name": "TypeScript",
+  "repo": "microsoft/TypeScript",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "tailwindcss": {
+  "name": "Tailwind CSS",
+  "repo": "tailwindlabs/tailwindcss",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "vite": {
+  "name": "Vite",
+  "llms": "https://vite.dev/llms.txt",
+  "repo": "vitejs/vite",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "webpack": {
+  "name": "webpack",
+  "repo": "webpack/webpack",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "rollupjs": {
+  "name": "Rollup",
+  "llms": "https://rollupjs.org/llms.txt",
+  "repo": "rollup/rollup",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "babeljs": {
+  "name": "Babel",
+  "repo": "babel/babel",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "prettier": {
+  "name": "Prettier",
+  "llms": "https://prettier.io/llms.txt",
+  "repo": "prettier/prettier",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "vitest": {
+  "name": "Vitest",
+  "llms": "https://vitest.dev/llms.txt",
+  "repo": "vitest-dev/vitest",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "jestjs": {
+  "name": "Jest",
+  "repo": "jestjs/jest",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "cypress": {
+  "name": "Cypress",
+  "llms": "https://docs.cypress.io/llms.txt",
+  "repo": "cypress-io/cypress",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "storybook": {
+  "name": "Storybook",
+  "llms": "https://storybook.js.org/llms.txt",
+  "repo": "storybookjs/storybook",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "denoland": {
+  "name": "Deno",
+  "llms": "https://docs.deno.com/llms.txt",
+  "repo": "denoland/deno",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "expressjs": {
+  "name": "Express",
+  "llms": "https://expressjs.com/llms.txt",
+  "repo": "expressjs/express",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "fastify": {
+  "name": "Fastify",
+  "llms": "https://fastify.dev/llms.txt",
+  "repo": "fastify/fastify",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "nestjs": {
+  "name": "NestJS",
+  "llms": "https://docs.nestjs.com/llms.txt",
+  "repo": "nestjs/nest",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "hapi": {
+  "name": "hapi",
+  "repo": "hapijs/hapi",
+  "docs_path": "docs",
+  "license": "BSD-3",
+  "tier": 0
+ },
+ "koa": {
+  "name": "Koa",
+  "repo": "koajs/koa",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "adonisjs": {
+  "name": "AdonisJS",
+  "repo": "adonisjs/core",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "blitzjs": {
+  "name": "Blitz.js",
+  "repo": "blitz-js/blitz",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "trpc": {
+  "name": "tRPC",
+  "llms": "https://trpc.io/llms.txt",
+  "repo": "trpc/trpc",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "graphql": {
+  "name": "GraphQL",
+  "llms": "https://graphql.org/llms.txt",
+  "repo": "graphql/graphql-spec",
+  "docs_path": "docs",
+  "license": "MIT (spec)",
+  "tier": 0
+ },
+ "apollo": {
+  "name": "Apollo GraphQL",
+  "llms": "https://www.apollographql.com/llms.txt",
+  "repo": "apollographql/apollo-client",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "relay": {
+  "name": "Relay",
+  "repo": "facebook/relay",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "prisma": {
+  "name": "Prisma",
+  "llms": "https://www.prisma.io/llms.txt",
+  "repo": "prisma/prisma",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "drizzle": {
+  "name": "Drizzle ORM",
+  "llms": "https://orm.drizzle.team/llms.txt",
+  "repo": "drizzle-team/drizzle-orm",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "sequelize": {
+  "name": "Sequelize",
+  "repo": "sequelize/sequelize",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "typeorm": {
+  "name": "TypeORM",
+  "llms": "https://typeorm.io/llms.txt",
+  "repo": "typeorm/typeorm",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "mongoose": {
+  "name": "Mongoose",
+  "llms": "https://mongoosejs.com/llms.txt",
+  "repo": "Automattic/mongoose",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "mongodb": {
+  "name": "MongoDB",
+  "llms": "https://www.mongodb.com/llms.txt",
+  "repo": "mongodb/mongo",
+  "docs_path": "docs",
+  "license": "SSPL \u2014 docs CC-BY-NC-SA?",
+  "tier": 0
+ },
+ "couchdb": {
+  "name": "CouchDB",
+  "repo": "apache/couchdb",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "ravendb": {
+  "name": "RavenDB",
+  "llms": "https://ravendb.net/llms.txt",
+  "repo": "ravendb/ravendb",
+  "docs_path": "docs",
+  "license": "AGPL \u2014 check docs",
+  "tier": 0
+ },
+ "influxdb": {
+  "name": "InfluxDB",
+  "llms": "https://docs.influxdata.com/llms.txt",
+  "repo": "influxdata/influxdb",
+  "docs_path": "docs",
+  "license": "MIT/Apache",
+  "tier": 0
+ },
+ "supabase": {
+  "name": "Supabase",
+  "llms": "https://supabase.com/llms.txt",
+  "repo": "supabase/supabase",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "appwrite": {
+  "name": "Appwrite",
+  "llms": "https://appwrite.io/llms.txt",
+  "repo": "appwrite/appwrite",
+  "docs_path": "docs",
+  "license": "BSD-3",
+  "tier": 0
+ },
+ "firebase": {
+  "name": "Firebase",
+  "llms": "https://firebase.google.com/docs/llms.txt",
+  "repo": "firebase/firebase-js-sdk",
+  "docs_path": "docs",
+  "license": "Apache-2.0 (SDK)",
+  "tier": 0
+ },
+ "hasura": {
+  "name": "Hasura",
+  "llms": "https://hasura.io/docs/llms.txt",
+  "repo": "hasura/graphql-engine",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "docker": {
+  "name": "Docker",
+  "llms": "https://docs.docker.com/llms.txt",
+  "repo": "moby/moby",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "calico": {
+  "name": "Calico",
+  "llms": "https://docs.tigera.io/llms.txt",
+  "repo": "projectcalico/calico",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "crossplane": {
+  "name": "Crossplane",
+  "llms": "https://docs.crossplane.io/llms.txt",
+  "repo": "crossplane/crossplane",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "loki": {
+  "name": "Grafana Loki",
+  "llms": "https://grafana.com/llms.txt",
+  "repo": "grafana/loki",
+  "docs_path": "docs",
+  "license": "AGPL \u2014 docs? check",
+  "tier": 0
+ },
+ "tempo": {
+  "name": "Grafana Tempo",
+  "llms": "https://grafana.com/llms.txt",
+  "repo": "grafana/tempo",
+  "docs_path": "docs",
+  "license": "AGPL \u2014 check",
+  "tier": 0
+ },
+ "victoriametrics": {
+  "name": "VictoriaMetrics",
+  "llms": "https://docs.victoriametrics.com/llms.txt",
+  "repo": "VictoriaMetrics/VictoriaMetrics",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "elastic": {
+  "name": "Elasticsearch",
+  "llms": "https://www.elastic.co/docs/llms.txt",
+  "repo": "elastic/elasticsearch",
+  "docs_path": "docs",
+  "license": "Apache-2.0 / SSPL dual",
+  "tier": 0
+ },
+ "opensearch": {
+  "name": "OpenSearch",
+  "llms": "https://docs.opensearch.org/llms.txt",
+  "repo": "opensearch-project/OpenSearch",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "nats": {
+  "name": "NATS",
+  "llms": "https://docs.nats.io/llms.txt",
+  "repo": "nats-io/nats-server",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "github": {
+  "name": "GitHub",
+  "llms": "https://docs.github.com/llms.txt",
+  "repo": "cli/cli",
+  "docs_path": "docs",
+  "license": "proprietary, agent-permitted?",
+  "tier": 0
+ },
+ "gitlab": {
+  "name": "GitLab",
+  "llms": "https://docs.gitlab.com/llms.txt",
+  "repo": "gitlabhq/gitlabhq",
+  "docs_path": "docs",
+  "license": "MIT (docs CC-BY-NC-SA?)",
+  "tier": 0
+ },
+ "circleci": {
+  "name": "CircleCI",
+  "llms": "https://circleci.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "artifactory": {
+  "name": "JFrog Artifactory",
+  "llms": "https://jfrog.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "render": {
+  "name": "Render",
+  "llms": "https://render.com/llms.txt",
+  "repo": "render-examples",
+  "docs_path": "docs",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "railway": {
+  "name": "Railway",
+  "llms": "https://docs.railway.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "flyio": {
+  "name": "Fly.io",
+  "llms": "https://fly.io/llms.txt",
+  "repo": "superfly/flyctl",
+  "docs_path": "docs",
+  "license": "Apache-2.0 (CLI)",
+  "tier": 0
+ },
+ "heroku": {
+  "name": "Heroku",
+  "llms": "https://devcenter.heroku.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "scaleway": {
+  "name": "Scaleway",
+  "llms": "https://www.scaleway.com/docs/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "awsdocs": {
+  "name": "AWS",
+  "llms": "https://docs.aws.amazon.com/llms.txt",
+  "repo": "awsdocs (org)",
+  "docs_path": "docs",
+  "license": "CC BY-NC? mostly awsdocs repos per-service",
+  "tier": 0
+ },
+ "alibabacloud": {
+  "name": "Alibaba Cloud",
+  "llms": "https://www.alibabacloud.com/llms.txt",
+  "repo": "aliyun",
+  "docs_path": "docs",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "tencentcloud": {
+  "name": "Tencent Cloud",
+  "llms": "https://www.tencentcloud.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "paypal": {
+  "name": "PayPal",
+  "llms": "https://developer.paypal.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "square": {
+  "name": "Square",
+  "llms": "https://developer.squareup.com/llms.txt",
+  "repo": "square/square-nodejs-sdk",
+  "docs_path": "docs",
+  "license": "Apache-2.0 SDK",
+  "tier": 0
+ },
+ "braintree": {
+  "name": "Braintree",
+  "llms": "https://developer.paypal.com/llms.txt",
+  "repo": "braintree/braintree_node",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "adyen": {
+  "name": "Adyen",
+  "llms": "https://docs.adyen.com/llms.txt",
+  "repo": "Adyen/adyen-node-api-library",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "plaid": {
+  "name": "Plaid",
+  "llms": "https://plaid.com/llms.txt",
+  "repo": "plaid/plaid-node",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "twilio": {
+  "name": "Twilio",
+  "llms": "https://www.twilio.com/llms.txt",
+  "repo": "twilio/twilio-node",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "sendgrid": {
+  "name": "SendGrid",
+  "llms": "https://www.twilio.com/llms.txt",
+  "repo": "sendgrid/sendgrid-nodejs",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "mailgun": {
+  "name": "Mailgun",
+  "llms": "https://documentation.mailgun.com/llms.txt",
+  "repo": "mailgun/mailgun-js",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "postmark": {
+  "name": "Postmark",
+  "llms": "https://postmarkapp.com/llms.txt",
+  "repo": "wildbit/postmark.js",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "sendinblue": {
+  "name": "Brevo",
+  "llms": "https://developers.brevo.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "vonage": {
+  "name": "Vonage",
+  "llms": "https://developer.vonage.com/llms.txt",
+  "repo": "Vonage/vonage-node-sdk",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "slack": {
+  "name": "Slack API",
+  "llms": "https://api.slack.com/llms.txt",
+  "repo": "slackapi/slack-sdk",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "telegram": {
+  "name": "Telegram Bot API",
+  "llms": "https://core.telegram.org/llms.txt",
+  "repo": "tdlib/td",
+  "docs_path": "docs",
+  "license": "BSD",
+  "tier": 0
+ },
+ "whatsapp": {
+  "name": "WhatsApp Business",
+  "llms": "https://developers.facebook.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "notion": {
+  "name": "Notion API",
+  "llms": "https://developers.notion.com/llms.txt",
+  "repo": "makenotion/notion-sdk-js",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "linear": {
+  "name": "Linear API",
+  "llms": "https://developers.linear.app/llms.txt",
+  "repo": "linear/linear",
+  "docs_path": "docs",
+  "license": "proprietary (GraphQL API docs)",
+  "tier": 0
+ },
+ "jira": {
+  "name": "Jira",
+  "llms": "https://developer.atlassian.com/docs/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "confluence": {
+  "name": "Confluence",
+  "llms": "https://developer.atlassian.com/docs/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "asana": {
+  "name": "Asana API",
+  "llms": "https://developers.asana.com/llms.txt",
+  "repo": "Asana/asana",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "trello": {
+  "name": "Trello",
+  "llms": "https://developer.atlassian.com/docs/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "hubspot": {
+  "name": "HubSpot",
+  "llms": "https://developers.hubspot.com/docs/llms.txt",
+  "repo": "HubSpot/hubspot-api-nodejs",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "bigcommerce": {
+  "name": "BigCommerce",
+  "llms": "https://developer.bigcommerce.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "webflow": {
+  "name": "Webflow",
+  "llms": "https://developers.webflow.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "datadog": {
+  "name": "Datadog",
+  "llms": "https://docs.datadoghq.com/llms.txt",
+  "repo": "DataDog/datadog-agent",
+  "docs_path": "docs",
+  "license": "Apache-2.0 agent, docs proprietary",
+  "tier": 0
+ },
+ "dynatrace": {
+  "name": "Dynatrace",
+  "llms": "https://docs.dynatrace.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "honeycomb": {
+  "name": "Honeycomb",
+  "llms": "https://docs.honeycomb.io/llms.txt",
+  "repo": "honeycombio",
+  "docs_path": "docs",
+  "license": "proprietary docs",
+  "tier": 0
+ },
+ "pagerduty": {
+  "name": "PagerDuty",
+  "llms": "https://developer.pagerduty.com/llms.txt",
+  "repo": "PagerDuty/pagerduty-api-nodejs",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "statuspage": {
+  "name": "Statuspage",
+  "llms": "https://doers.statuspage.io/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "fastly": {
+  "name": "Fastly",
+  "llms": "https://www.fastly.com/llms.txt",
+  "repo": "fastly",
+  "docs_path": "docs",
+  "license": "proprietary docs, MIT SDKs",
+  "tier": 0
+ },
+ "akamai": {
+  "name": "Akamai",
+  "llms": "https://techdocs.akamai.com/llms.txt",
+  "repo": "akamai",
+  "docs_path": "docs",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "zerssl": {
+  "name": "Snyk",
+  "llms": "https://docs.snyk.io/llms.txt",
+  "repo": "snyk/cli",
+  "docs_path": "docs",
+  "license": "Apache-2.0 CLI",
+  "tier": 0
+ },
+ "snyk": {
+  "name": "Snyk",
+  "llms": "https://docs.snyk.io/llms.txt",
+  "license": "proprietary docs",
+  "tier": 0
+ },
+ "auth0": {
+  "name": "Auth0",
+  "llms": "https://auth0.com/llms.txt",
+  "repo": "auth0",
+  "docs_path": "docs",
+  "license": "proprietary docs",
+  "tier": 0
+ },
+ "workos": {
+  "name": "WorkOS",
+  "llms": "https://workos.com/llms.txt",
+  "repo": "workos/workos-node",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 0
+ },
+ "supertokens": {
+  "name": "SuperTokens",
+  "llms": "https://supertokens.com/llms.txt",
+  "repo": "supertokens/supertokens-core",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "ory": {
+  "name": "Ory",
+  "llms": "https://www.ory.sh/llms.txt",
+  "repo": "ory/kratos",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 0
+ },
+ "logto": {
+  "name": "Logto",
+  "llms": "https://docs.logto.io/llms.txt",
+  "repo": "logto-io/logto",
+  "docs_path": "docs",
+  "license": "MPL-2.0",
+  "tier": 0
+ },
+ "kinde": {
+  "name": "Kinde",
+  "llms": "https://kinde.com/llms.txt",
+  "license": "proprietary",
+  "tier": 0
+ },
+ "stytch": {
+  "name": "Stytch",
+  "llms": "https://stytch.com/llms.txt",
+  "repo": "stytchinc",
+  "docs_path": "docs",
+  "license": "proprietary docs / MIT SDKs",
+  "tier": 0
+ },
+ "ponytail": {
+  "name": "Makes your AI agent think like the laziest senior dev in the room. The best code",
+  "llms": "https://ponytail.dev/llms.txt",
+  "repo": "DietrichGebert/ponytail",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "hoppscotch": {
+  "name": "Open-Source API Development Ecosystem \u2022 https://hoppscotch.io \u2022 Offline, On-Prem",
+  "llms": "https://hoppscotch.io/llms.txt",
+  "repo": "hoppscotch/hoppscotch",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "awesome-claude-skills": {
+  "name": "A curated list of awesome Claude Skills, resources, and tools for customizing Cl",
+  "llms": "https://github.com/llms.txt",
+  "repo": "ComposioHQ/awesome-claude-skills",
+  "docs_path": "docs",
+  "license": "llms.txt agent-permitted",
+  "tier": 1
+ },
+ "daytona": {
+  "name": "Daytona is a Secure and Elastic Infrastructure for Running AI-Generated Code",
+  "llms": "https://daytona.io/docs/llms.txt",
+  "repo": "daytonaio/daytona",
+  "docs_path": "docs",
+  "license": "llms.txt agent-permitted",
+  "tier": 1
+ },
+ "professional-programming": {
+  "name": "A collection of learning resources for curious software engineers",
+  "llms": "https://github.com/llms.txt",
+  "repo": "charlax/professional-programming",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "agno": {
+  "name": "Build, run, and manage agent platforms.",
+  "llms": "https://docs.agno.com/llms.txt",
+  "repo": "agno-agi/agno",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "cheat-sh": {
+  "name": "the only cheat sheet you need",
+  "llms": "https://cheat.sh/llms.txt",
+  "repo": "chubin/cheat.sh",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "agents": {
+  "name": "Multi-harness agentic plugin marketplace for Claude Code, Codex, Cursor, OpenCod",
+  "llms": "https://sethhobson.com/llms.txt",
+  "repo": "wshobson/agents",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "cli": {
+  "name": "\ud83e\udd67 HTTPie CLI  \u2014 modern, user-friendly command-line HTTP client for the API era. ",
+  "llms": "https://httpie.io/docs/llms.txt",
+  "repo": "httpie/cli",
+  "docs_path": "docs",
+  "license": "BSD-3-Clause",
+  "tier": 1
+ },
+ "wtfpython": {
+  "name": "What the f*ck Python? \ud83d\ude31",
+  "llms": "https://github.com/llms.txt",
+  "repo": "satwikkansal/wtfpython",
+  "docs_path": "docs",
+  "license": "WTFPL",
+  "tier": 1
+ },
+ "herdr": {
+  "name": "the runtime your coding agents live on",
+  "llms": "https://herdr.dev/llms.txt",
+  "repo": "herdrdev/herdr",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "ai-website-cloner-template": {
+  "name": "Clone any website with one command using AI coding agents",
+  "llms": "https://dsc.gg/llms.txt",
+  "repo": "JCodesMore/ai-website-cloner-template",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "gpt-pilot": {
+  "name": "The first real AI developer",
+  "llms": "https://github.com/llms.txt",
+  "repo": "Pythagora-io/gpt-pilot",
+  "docs_path": "docs",
+  "license": "NOASSERTION",
+  "tier": 1
+ },
+ "surrealdb": {
+  "name": "A scalable, distributed, collaborative, document-graph database, for the realtim",
+  "llms": "https://surrealdb.com/llms.txt",
+  "repo": "surrealdb/surrealdb",
+  "docs_path": "docs",
+  "license": "NOASSERTION",
+  "tier": 1
+ },
+ "lighthouse": {
+  "name": "Automated auditing, performance metrics, and best practices for the web.",
+  "llms": "https://developer.chrome.com/docs/llms.txt",
+  "repo": "GoogleChrome/lighthouse",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "composio": {
+  "name": "Composio powers 1000+ toolkits, tool search, context management, authentication,",
+  "llms": "https://docs.composio.dev/llms.txt",
+  "repo": "ComposioHQ/composio",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "reflex": {
+  "name": "\ud83d\udd78\ufe0f Web apps in pure Python \ud83d\udc0d",
+  "llms": "https://reflex.dev/llms.txt",
+  "repo": "reflex-dev/reflex",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "repomix": {
+  "name": "\ud83d\udce6 Repomix is a powerful tool that packs your entire repository into a single, AI",
+  "llms": "https://repomix.com/llms.txt",
+  "repo": "yamadashy/repomix",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "i-have-adhd": {
+  "name": "A skill to stop your coding agent from burying the answer. ADHD-friendly output.",
+  "llms": "https://github.com/llms.txt",
+  "repo": "ayghri/i-have-adhd",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "docz": {
+  "name": "\u270d It has never been so easy to document your things!",
+  "llms": "https://github.com/llms.txt",
+  "repo": "pedronauck/docz",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "archon": {
+  "name": "The first open-source harness builder for AI coding. Make AI coding deterministi",
+  "llms": "https://archon.diy/llms.txt",
+  "repo": "coleam00/Archon",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "chinese-programmer-wrong-pronunciation": {
+  "name": "\u4e2d\u56fd\u7a0b\u5e8f\u5458\u5bb9\u6613\u53d1\u97f3\u9519\u8bef\u7684\u5355\u8bcd",
+  "llms": "https://github.com/llms.txt",
+  "repo": "shimohq/chinese-programmer-wrong-pronunciation",
+  "docs_path": "docs",
+  "license": "llms.txt agent-permitted",
+  "tier": 1
+ },
+ "marimo": {
+  "name": "A reactive notebook for Python \u2014 run reproducible experiments, query with SQL, e",
+  "llms": "https://marimo.io/llms.txt",
+  "repo": "marimo-team/marimo",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "nnn": {
+  "name": "n\u00b3 The unorthodox terminal file manager",
+  "llms": "https://github.com/llms.txt",
+  "repo": "jarun/nnn",
+  "docs_path": "docs",
+  "license": "BSD-2-Clause",
+  "tier": 1
+ },
+ "khazix-skills": {
+  "name": "\u6570\u5b57\u751f\u547d\u5361\u5179\u514b\u5f00\u6e90\u7684 AI Skills \u5408\u96c6 | Agent Skills: leader\uff08\u5e2e\u4f60\u5b9a\u4e49\u76ee\u6807\uff09, neat-freak \u6d01\u7656, hv-analys",
+  "llms": "https://github.com/llms.txt",
+  "repo": "KKKKhazix/khazix-skills",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "iii": {
+  "name": "Effortlessly compose, extend, and observe every service in real-time for the fir",
+  "llms": "https://iii.dev/llms.txt",
+  "repo": "iii-hq/iii",
+  "docs_path": "docs",
+  "license": "llms.txt agent-permitted",
+  "tier": 1
+ },
+ "scalar": {
+  "name": "Scalar is an open-source API platform:\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\ud83c\udf10 M",
+  "llms": "https://scalar.com/llms.txt",
+  "repo": "scalar/scalar",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "dvc": {
+  "name": "\ud83e\udd89 Data Versioning and ML Experiments",
+  "llms": "https://dvc.org/llms.txt",
+  "repo": "treeverse/dvc",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "paseo": {
+  "name": "Orchestrate multiple coding agents from desktop and mobile",
+  "llms": "https://paseo.sh/llms.txt",
+  "repo": "getpaseo/paseo",
+  "docs_path": "docs",
+  "license": "NOASSERTION",
+  "tier": 1
+ },
+ "kaniko": {
+  "name": "Build Container Images In Kubernetes",
+  "llms": "https://github.com/llms.txt",
+  "repo": "GoogleContainerTools/kaniko",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "jsdoc": {
+  "name": "An API documentation generator for JavaScript.",
+  "llms": "https://jsdoc.app/llms.txt",
+  "repo": "jsdoc/jsdoc",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "superset": {
+  "name": "Superset is an agentic IDE to orchestrate 100+ coding agents in parallel. Run an",
+  "llms": "https://superset.sh/llms.txt",
+  "repo": "superset-sh/superset",
+  "docs_path": "docs",
+  "license": "NOASSERTION",
+  "tier": 1
+ },
+ "cheat": {
+  "name": "cheat allows you to create and view interactive cheatsheets on the command-line.",
+  "llms": "https://github.com/llms.txt",
+  "repo": "cheat/cheat",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "ccstatusline": {
+  "name": "\ud83d\ude80 Beautiful highly customizable statusline for Claude Code CLI with powerline su",
+  "llms": "https://github.com/llms.txt",
+  "repo": "sirmalloc/ccstatusline",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "posting": {
+  "name": "The modern API client that lives in your terminal.",
+  "llms": "https://github.com/llms.txt",
+  "repo": "darrenburns/posting",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "illa-builder": {
+  "name": "Low-code platform allows you to build business apps, enables you to quickly crea",
+  "llms": "https://github.com/llms.txt",
+  "repo": "illacloud/illa-builder",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "react-dev": {
+  "name": "The React documentation website",
+  "llms": "https://react.dev/llms.txt",
+  "repo": "reactjs/react.dev",
+  "docs_path": "docs",
+  "license": "CC-BY-4.0",
+  "tier": 1
+ },
+ "fiftyone": {
+  "name": "Refine high-quality datasets and visual AI models",
+  "llms": "https://fiftyone.ai/llms.txt",
+  "repo": "voxel51/fiftyone",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "codeburn": {
+  "name": "Free, local tool to track AI coding token usage and cost across 37 tools and age",
+  "llms": "https://codeburn.app/llms.txt",
+  "repo": "getagentseal/codeburn",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "omni-tools": {
+  "name": "Self-hosted collection of powerful web-based tools for everyday tasks. No ads, n",
+  "llms": "https://omnitools.app/llms.txt",
+  "repo": "iib0011/omni-tools",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "claude-code-tips": {
+  "name": "45+ tips for getting the most out of Claude Code, from basics to advanced - incl",
+  "llms": "https://github.com/llms.txt",
+  "repo": "ykdojo/claude-code-tips",
+  "docs_path": "docs",
+  "license": "NOASSERTION",
+  "tier": 1
+ },
+ "beautiful-docs": {
+  "name": "Pointers to useful, well-written, and otherwise beautiful documentation.",
+  "llms": "https://github.com/llms.txt",
+  "repo": "matheusfelipeog/beautiful-docs",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "modelcontextprotocol": {
+  "name": "Specification and\u00a0documentation for the Model Context Protocol",
+  "llms": "https://modelcontextprotocol.io/llms.txt",
+  "repo": "modelcontextprotocol/modelcontextprotocol",
+  "docs_path": "docs",
+  "license": "NOASSERTION",
+  "tier": 1
+ },
+ "standard-readme": {
+  "name": "A standard style for README files",
+  "llms": "https://github.com/llms.txt",
+  "repo": "RichardLitt/standard-readme",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "the-documentation-compendium": {
+  "name": "\ud83d\udce2 Various README templates & tips on writing high-quality documentation that peo",
+  "llms": "https://github.com/llms.txt",
+  "repo": "race2infinity/The-Documentation-Compendium",
+  "docs_path": "docs",
+  "license": "llms.txt agent-permitted",
+  "tier": 1
+ },
+ "expressjs-com": {
+  "name": "The Express.js Website",
+  "llms": "https://expressjs.com/llms.txt",
+  "repo": "expressjs/expressjs.com",
+  "docs_path": "docs",
+  "license": "CC-BY-4.0",
+  "tier": 1
+ },
+ "cloudflare-docs": {
+  "name": "Cloudflare\u2019s documentation",
+  "llms": "https://developers.cloudflare.com/llms.txt",
+  "repo": "cloudflare/cloudflare-docs",
+  "docs_path": "docs",
+  "license": "CC-BY-4.0",
+  "tier": 1
+ },
+ "liam": {
+  "name": "Automatically generates beautiful and easy-to-read ER diagrams from your databas",
+  "llms": "https://liambx.com/docs/llms.txt",
+  "repo": "liam-hq/liam",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "typescript-handbook": {
+  "name": "Deprecated, please use the TypeScript-Website repo instead",
+  "llms": "https://github.com/llms.txt",
+  "repo": "microsoft/TypeScript-Handbook",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "go-recipes": {
+  "name": "\ud83e\udda9 Tools for Go projects",
+  "llms": "https://github.com/llms.txt",
+  "repo": "nikolaydubina/go-recipes",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "utoipa": {
+  "name": "Simple, Fast, Code first and Compile time generated OpenAPI documentation for Ru",
+  "llms": "https://github.com/llms.txt",
+  "repo": "juhaku/utoipa",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "mm-wiki": {
+  "name": "MM-Wiki \u4e00\u4e2a\u8f7b\u91cf\u7ea7\u7684\u4f01\u4e1a\u77e5\u8bc6\u5206\u4eab\u4e0e\u56e2\u961f\u534f\u540c\u8f6f\u4ef6\uff0c\u53ef\u7528\u4e8e\u5feb\u901f\u6784\u5efa\u4f01\u4e1a Wiki \u548c\u56e2\u961f\u77e5\u8bc6\u5206\u4eab\u5e73\u53f0\u3002\u90e8\u7f72\u65b9\u4fbf\uff0c\u4f7f\u7528\u7b80\u5355\uff0c\u5e2e\u52a9\u56e2\u961f\u6784\u5efa\u4e00\u4e2a\u4fe1\u606f\u5171\u4eab\u3001\u6587\u6863\u7ba1\u7406",
+  "llms": "https://github.com/llms.txt",
+  "repo": "phachon/mm-wiki",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "express-typescript-boilerplate": {
+  "name": "A delightful way to building a RESTful API with NodeJs & TypeScript by @w3tecch",
+  "llms": "https://github.com/llms.txt",
+  "repo": "w3tecch/express-typescript-boilerplate",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "kin-openapi": {
+  "name": "OpenAPI 3.0 and 3.1 and 3.2 (and Swagger v2) implementation for Go (parsing, con",
+  "llms": "https://github.com/llms.txt",
+  "repo": "getkin/kin-openapi",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "try": {
+  "name": "Try .NET provides developers and content authors with tools to create interactiv",
+  "llms": "https://github.com/llms.txt",
+  "repo": "dotnet/try",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "express-example": {
+  "name": "A proposal for the usage of Sequelize within an Express.JS application.",
+  "llms": "https://github.com/llms.txt",
+  "repo": "sequelize/express-example",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "docmd": {
+  "name": "Documentation compiler for humans and machines. One Markdown source, one command",
+  "llms": "https://docmd.io/llms.txt",
+  "repo": "docmd-io/docmd",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "oh-my-mermaid": {
+  "name": "Turn complex codebases into clear, navigable architecture diagrams with Claude C",
+  "llms": "https://github.com/llms.txt",
+  "repo": "oh-my-mermaid/oh-my-mermaid",
+  "docs_path": "docs",
+  "license": "MIT",
+  "tier": 1
+ },
+ "xrpl-dev-portal": {
+  "name": "Source code for xrpl.org including developer documentation",
+  "llms": "https://xrpl.org/llms.txt",
+  "repo": "XRPLF/xrpl-dev-portal",
+  "docs_path": "docs",
+  "license": "NOASSERTION",
+  "tier": 1
+ },
+ "devdocs": {
+  "name": "Completely free, private, UI based Tech Documentation MCP server. Designed for c",
+  "llms": "https://www.cyberagi.ai/llms.txt",
+  "repo": "cyberagiinc/DevDocs",
+  "docs_path": "docs",
+  "license": "Apache-2.0",
+  "tier": 1
+ },
+ "cloudflare-r2": {
+  "name": "Cloudflare R2",
+  "llms": "https://developers.cloudflare.com/llms.txt",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "cloudflare-workers": {
+  "name": "Cloudflare Workers",
+  "llms": "https://developers.cloudflare.com/llms.txt",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "aws-lambda": {
+  "name": "AWS Lambda",
+  "llms": "https://docs.aws.amazon.com/llms.txt",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "aws-s3": {
+  "name": "Amazon S3",
+  "llms": "https://docs.aws.amazon.com/llms.txt",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "aws-ec2": {
+  "name": "Amazon EC2",
+  "llms": "https://docs.aws.amazon.com/llms.txt",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "aws-cdk": {
+  "name": "AWS CDK",
+  "llms": "https://docs.aws.amazon.com/llms.txt",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "kotlin": {
+  "name": "Kotlin",
+  "llms": "https://kotlinlang.org/llms.txt",
+  "repo": "JetBrains/kotlin",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "ruby": {
+  "name": "Ruby",
+  "llms": "https://www.ruby-lang.org/llms.txt",
+  "repo": "ruby/ruby",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "perl": {
+  "name": "Perl",
+  "llms": "https://www.perl.org/docs/llms.txt",
+  "repo": "Perl/perl5",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "crystal": {
+  "name": "Crystal",
+  "llms": "https://crystal-lang.org/docs/llms.txt",
+  "repo": "crystal-lang/crystal",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "nim": {
+  "name": "Nim",
+  "llms": "https://nim-lang.org/docs/llms.txt",
+  "repo": "nim-lang/Nim",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "zustand": {
+  "name": "Zustand",
+  "llms": "https://zustand.docs.pmnd.rs/llms.txt",
+  "repo": "pmndrs/zustand",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "tanstack": {
+  "name": "TanStack",
+  "llms": "https://tanstack.com/llms.txt",
+  "repo": "TanStack/table",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "solidjs": {
+  "name": "SolidJS",
+  "llms": "https://www.solidjs.com/llms.txt",
+  "repo": "solidjs/solid",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "alpinejs": {
+  "name": "Alpine.js",
+  "llms": "https://alpinejs.dev/llms.txt",
+  "repo": "alpinejs/alpine",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "nativescript": {
+  "name": "NativeScript",
+  "llms": "https://docs.nativescript.org/llms.txt",
+  "repo": "NativeScript/NativeScript",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "expo": {
+  "name": "Expo",
+  "llms": "https://docs.expo.dev/llms.txt",
+  "repo": "expo/expo",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "reactnative": {
+  "name": "React Native",
+  "llms": "https://reactnative.dev/llms.txt",
+  "repo": "facebook/react-native",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "tauri": {
+  "name": "Tauri",
+  "llms": "https://tauri.app/llms.txt",
+  "repo": "tauri-apps/tauri",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "flutter": {
+  "name": "Flutter",
+  "llms": "https://docs.flutter.dev/llms.txt",
+  "repo": "flutter/flutter",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "styledcomponents": {
+  "name": "styled-components",
+  "llms": "https://styled-components.com/llms.txt",
+  "repo": "styled-components/styled-components",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "antdesign": {
+  "name": "Ant Design",
+  "llms": "https://ant.design/llms.txt",
+  "repo": "ant-design/ant-design",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "chakra": {
+  "name": "Chakra UI",
+  "llms": "https://chakra-ui.com/llms.txt",
+  "repo": "chakra-ui/chakra-ui",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "shadcn": {
+  "name": "shadcn/ui",
+  "llms": "https://ui.shadcn.com/llms.txt",
+  "repo": "shadcn-ui/ui",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "daisyui": {
+  "name": "daisyUI",
+  "llms": "https://daisyui.com/llms.txt",
+  "repo": "saadeghi/daisyui",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "threejs": {
+  "name": "Three.js",
+  "llms": "https://threejs.org/docs/llms.txt",
+  "repo": "mrdoob/three.js",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "apexcharts": {
+  "name": "ApexCharts",
+  "llms": "https://apexcharts.com/llms.txt",
+  "repo": "apexcharts/apexcharts.js",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "framer": {
+  "name": "Framer Motion",
+  "llms": "https://motion.dev/llms.txt",
+  "repo": "motiondivision/motion",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "storybook-test": {
+  "name": "Storybook test",
+  "llms": "https://storybook.js.org/llms.txt",
+  "repo": "storybookjs/storybook",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "ava": {
+  "name": "AVA",
+  "llms": "https://github.com/llms.txt",
+  "repo": "avajs/ava",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "k6": {
+  "name": "k6",
+  "llms": "https://grafana.com/llms.txt",
+  "repo": "grafana/k6",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "sqlalchemy": {
+  "name": "SQLAlchemy",
+  "llms": "https://docs.sqlalchemy.org/llms.txt",
+  "repo": "sqlalchemy/sqlalchemy",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "django": {
+  "name": "Django",
+  "llms": "https://docs.djangoproject.com/llms.txt",
+  "repo": "django/django",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "pytorch-lightning": {
+  "name": "PyTorch Lightning",
+  "llms": "https://lightning.ai/llms.txt",
+  "repo": "Lightning-AI/pytorch-lightning",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "llamaindex": {
+  "name": "LlamaIndex",
+  "llms": "https://docs.llamaindex.ai/llms.txt",
+  "repo": "run-llama/llama_index",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "crewai": {
+  "name": "CrewAI",
+  "llms": "https://docs.crewai.com/llms.txt",
+  "repo": "crewAIInc/crewAI",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "pydantic": {
+  "name": "Pydantic",
+  "llms": "https://docs.pydantic.dev/llms.txt",
+  "repo": "pydantic/pydantic",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "githubactions": {
+  "name": "GitHub Actions",
+  "llms": "https://docs.github.com/llms.txt",
+  "repo": "actions/runner",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "semgrep": {
+  "name": "Semgrep",
+  "llms": "https://semgrep.dev/llms.txt",
+  "repo": "semgrep/semgrep",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "sonarqube": {
+  "name": "SonarQube",
+  "llms": "https://docs.sonarsource.com/llms.txt",
+  "repo": "SonarSource/sonarqube",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "checkmarx": {
+  "name": "Checkmarx",
+  "llms": "https://checkmarx.com/llms.txt",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "metabase": {
+  "name": "Metabase",
+  "llms": "https://www.metabase.com/llms.txt",
+  "repo": "metabase/metabase",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "dbt": {
+  "name": "dbt",
+  "llms": "https://docs.getdbt.com/llms.txt",
+  "repo": "dbt-labs/dbt-core",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "spark": {
+  "name": "Apache Spark",
+  "llms": "https://spark.apache.org/docs/llms.txt",
+  "repo": "apache/spark",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "duckdb": {
+  "name": "DuckDB",
+  "llms": "https://duckdb.org/llms.txt",
+  "repo": "duckdb/duckdb",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "weaviate": {
+  "name": "Weaviate",
+  "llms": "https://weaviate.io/llms.txt",
+  "repo": "weaviate/weaviate",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "qdrant": {
+  "name": "Qdrant",
+  "llms": "https://qdrant.tech/llms.txt",
+  "repo": "qdrant/qdrant",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "milvus": {
+  "name": "Milvus",
+  "llms": "https://milvus.io/llms.txt",
+  "repo": "milvus-io/milvus",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "chroma": {
+  "name": "Chroma",
+  "llms": "https://docs.trychroma.com/llms.txt",
+  "repo": "chroma-core/chroma",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "pgvector": {
+  "name": "pgvector",
+  "llms": "https://github.com/llms.txt",
+  "repo": "pgvector/pgvector",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "pinecone": {
+  "name": "Pinecone",
+  "llms": "https://docs.pinecone.io/llms.txt",
+  "repo": "pinecone-io",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "typesense": {
+  "name": "Typesense",
+  "llms": "https://typesense.org/llms.txt",
+  "repo": "typesense/typesense",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "meilisearch": {
+  "name": "Meilisearch",
+  "llms": "https://www.meilisearch.com/llms.txt",
+  "repo": "meilisearch/meilisearch",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "algolia": {
+  "name": "Algolia",
+  "llms": "https://www.algolia.com/llms.txt",
+  "repo": "algolia/algoliasearch-client-javascript",
+  "docs_path": "docs",
+  "license": "TBD-verify",
+  "tier": 1
+ },
+ "genkit": {
+  "name": "genkit.dev",
+  "llms": "https://genkit.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "mastra": {
+  "name": "mastra.ai",
+  "llms": "https://mastra.ai/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "mikroorm": {
+  "name": "mikro-orm.io",
+  "llms": "https://mikro-orm.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "modulefederation": {
+  "name": "module-federation.io",
+  "llms": "https://module-federation.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "argosci": {
+  "name": "argos-ci.com",
+  "llms": "https://argos-ci.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "orchidorm": {
+  "name": "orchid-orm.netlify.app",
+  "llms": "https://orchid-orm.netlify.app/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "sanity": {
+  "name": "sanity.io",
+  "llms": "https://sanity.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "sst": {
+  "name": "sst.dev",
+  "llms": "https://sst.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "vitejs": {
+  "name": "vitejs.dev",
+  "llms": "https://vitejs.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "betterauth": {
+  "name": "better-auth.com",
+  "llms": "https://better-auth.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "commandkit": {
+  "name": "commandkit.dev",
+  "llms": "https://commandkit.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "graphqlmarkdown": {
+  "name": "graphql-markdown.dev",
+  "llms": "https://graphql-markdown.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "modernjs": {
+  "name": "modernjs.dev",
+  "llms": "https://modernjs.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "bullmq": {
+  "name": "bullmq.io",
+  "llms": "https://bullmq.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "debridge": {
+  "name": "debridge.finance",
+  "llms": "https://debridge.finance/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "betterdrizzle": {
+  "name": "better-drizzle.vercel.app",
+  "llms": "https://better-drizzle.vercel.app/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "atlasgo": {
+  "name": "atlasgo.io",
+  "llms": "https://atlasgo.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "fedify": {
+  "name": "fedify.dev",
+  "llms": "https://fedify.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "hono": {
+  "name": "hono.dev",
+  "llms": "https://hono.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "reglejs": {
+  "name": "reglejs.dev",
+  "llms": "https://reglejs.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "rspack": {
+  "name": "rspack.rs",
+  "llms": "https://rspack.rs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "telerik": {
+  "name": "telerik.com",
+  "llms": "https://telerik.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "aisdk": {
+  "name": "ai-sdk.dev",
+  "llms": "https://ai-sdk.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "middy": {
+  "name": "middy.js.org",
+  "llms": "https://middy.js.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "oxc": {
+  "name": "oxc.rs",
+  "llms": "https://oxc.rs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "outstatic": {
+  "name": "outstatic.com",
+  "llms": "https://outstatic.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "featurevisor": {
+  "name": "featurevisor.com",
+  "llms": "https://featurevisor.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "prove": {
+  "name": "prove.com",
+  "llms": "https://prove.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "payloadcms": {
+  "name": "payloadcms.com",
+  "llms": "https://payloadcms.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "stonejs": {
+  "name": "stonejs.dev",
+  "llms": "https://stonejs.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "vendure": {
+  "name": "vendure.io",
+  "llms": "https://vendure.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "coreui": {
+  "name": "coreui.io",
+  "llms": "https://coreui.io/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "chromatic": {
+  "name": "chromatic.com",
+  "llms": "https://chromatic.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "gethinode": {
+  "name": "gethinode.com",
+  "llms": "https://gethinode.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "vitepress": {
+  "name": "vitepress.dev",
+  "llms": "https://vitepress.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "revealjs": {
+  "name": "revealjs.com",
+  "llms": "https://revealjs.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "dynamic": {
+  "name": "dynamic.xyz",
+  "llms": "https://dynamic.xyz/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "betterauthui": {
+  "name": "better-auth-ui.com",
+  "llms": "https://better-auth-ui.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "capawesome": {
+  "name": "capawesome.io",
+  "llms": "https://capawesome.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "athena": {
+  "name": "athena.xbp.app",
+  "llms": "https://athena.xbp.app/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "developer": {
+  "name": "developer.shopware.com",
+  "llms": "https://developer.shopware.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "bitmovin": {
+  "name": "bitmovin.com",
+  "llms": "https://bitmovin.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "turborepo": {
+  "name": "turborepo.dev",
+  "llms": "https://turborepo.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "logtape": {
+  "name": "logtape.org",
+  "llms": "https://logtape.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "api": {
+  "name": "api.readme.dev",
+  "llms": "https://api.readme.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "ckeditor": {
+  "name": "ckeditor.com",
+  "llms": "https://ckeditor.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "nimbusdocs": {
+  "name": "nimbus-docs.com",
+  "llms": "https://nimbus-docs.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "novence": {
+  "name": "novence.ai",
+  "llms": "https://novence.ai/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "honojs": {
+  "name": "honojs.dev",
+  "llms": "https://honojs.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "silkhq": {
+  "name": "silkhq.com",
+  "llms": "https://silkhq.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "bunup": {
+  "name": "bunup.dev",
+  "llms": "https://bunup.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "quasar": {
+  "name": "quasar.dev",
+  "llms": "https://quasar.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "capgo": {
+  "name": "capgo.app",
+  "llms": "https://capgo.app/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "hazeljs": {
+  "name": "hazeljs.ai",
+  "llms": "https://hazeljs.ai/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "turbineorm": {
+  "name": "turbineorm.dev",
+  "llms": "https://turbineorm.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "keryxjs": {
+  "name": "keryxjs.com",
+  "llms": "https://keryxjs.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "preactjs": {
+  "name": "preactjs.com",
+  "llms": "https://preactjs.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "labex": {
+  "name": "labex.io",
+  "llms": "https://labex.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "reactnavigation": {
+  "name": "reactnavigation.org",
+  "llms": "https://reactnavigation.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "objectstack": {
+  "name": "objectstack.ai",
+  "llms": "https://objectstack.ai/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "addfox": {
+  "name": "addfox.dev",
+  "llms": "https://addfox.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "wildix": {
+  "name": "wildix.com",
+  "llms": "https://wildix.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "lowdefy": {
+  "name": "lowdefy.com",
+  "llms": "https://lowdefy.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "tldraw": {
+  "name": "tldraw.dev",
+  "llms": "https://tldraw.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "napi": {
+  "name": "napi.rs",
+  "llms": "https://napi.rs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "amplitude": {
+  "name": "amplitude.com",
+  "llms": "https://amplitude.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "rsbuild": {
+  "name": "rsbuild.rs",
+  "llms": "https://rsbuild.rs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "orm": {
+  "name": "orm.drizzle.team",
+  "llms": "https://orm.drizzle.team/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "kura": {
+  "name": "kura.build",
+  "llms": "https://kura.build/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "simpleengine": {
+  "name": "simpleengine.com",
+  "llms": "https://simpleengine.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "xmcp": {
+  "name": "xmcp.dev",
+  "llms": "https://xmcp.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "lingui": {
+  "name": "lingui.dev",
+  "llms": "https://lingui.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "heyapi": {
+  "name": "heyapi.dev",
+  "llms": "https://heyapi.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "fraci": {
+  "name": "fraci.roundtrip.dev",
+  "llms": "https://fraci.roundtrip.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "arcjet": {
+  "name": "arcjet.com",
+  "llms": "https://arcjet.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "unocss": {
+  "name": "unocss.dev",
+  "llms": "https://unocss.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "taskfile": {
+  "name": "taskfile.dev",
+  "llms": "https://taskfile.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "openwaters": {
+  "name": "openwaters.io",
+  "llms": "https://openwaters.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "gitee": {
+  "name": "gitee.com",
+  "llms": "https://gitee.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "glama": {
+  "name": "glama.ai",
+  "llms": "https://glama.ai/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "c15t": {
+  "name": "c15t.com",
+  "llms": "https://c15t.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "reposdk": {
+  "name": "repo-sdk.dev",
+  "llms": "https://repo-sdk.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "metaplex": {
+  "name": "metaplex.com",
+  "llms": "https://metaplex.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "sigx": {
+  "name": "sigx.dev",
+  "llms": "https://sigx.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "wxt": {
+  "name": "wxt.dev",
+  "llms": "https://wxt.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "webdriver": {
+  "name": "webdriver.io",
+  "llms": "https://webdriver.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "alchemy": {
+  "name": "alchemy.run",
+  "llms": "https://alchemy.run/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "fontawesome": {
+  "name": "fontawesome.com",
+  "llms": "https://fontawesome.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "applitools": {
+  "name": "applitools.com",
+  "llms": "https://applitools.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "vibecontrols": {
+  "name": "vibecontrols.com",
+  "llms": "https://vibecontrols.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "civic": {
+  "name": "civic.com",
+  "llms": "https://civic.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "cap": {
+  "name": "cap.cloud.sap",
+  "llms": "https://cap.cloud.sap/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "serverjs": {
+  "name": "serverjs.io",
+  "llms": "https://serverjs.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "gqloom": {
+  "name": "gqloom.dev",
+  "llms": "https://gqloom.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "primereact": {
+  "name": "primereact.dev",
+  "llms": "https://primereact.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "backstage": {
+  "name": "backstage.spotify.com",
+  "llms": "https://backstage.spotify.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "promptfoo": {
+  "name": "promptfoo.dev",
+  "llms": "https://promptfoo.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "delmaredigital": {
+  "name": "delmaredigital.com",
+  "llms": "https://delmaredigital.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "reatom": {
+  "name": "reatom.dev",
+  "llms": "https://reatom.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "teleporthq": {
+  "name": "teleporthq.io",
+  "llms": "https://teleporthq.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "stripe": {
+  "name": "stripe.com",
+  "llms": "https://stripe.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "retejs": {
+  "name": "retejs.org",
+  "llms": "https://retejs.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "vuetifyjs": {
+  "name": "vuetifyjs.com",
+  "llms": "https://vuetifyjs.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "logux": {
+  "name": "logux.org",
+  "llms": "https://logux.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "doc": {
+  "name": "doc.sitecore.com",
+  "llms": "https://doc.sitecore.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "e2b": {
+  "name": "e2b.dev",
+  "llms": "https://e2b.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "chakraui": {
+  "name": "chakra-ui.com",
+  "llms": "https://chakra-ui.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "gqltada": {
+  "name": "gql-tada.0no.co",
+  "llms": "https://gql-tada.0no.co/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "n8n": {
+  "name": "n8n.io",
+  "llms": "https://n8n.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "devcycle": {
+  "name": "devcycle.com",
+  "llms": "https://devcycle.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "sematext": {
+  "name": "sematext.com",
+  "llms": "https://sematext.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "next2d": {
+  "name": "next2d.app",
+  "llms": "https://next2d.app/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "poui": {
+  "name": "po-ui.io",
+  "llms": "https://po-ui.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "kbve": {
+  "name": "kbve.com",
+  "llms": "https://kbve.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "rxdb": {
+  "name": "rxdb.info",
+  "llms": "https://rxdb.info/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "usevoltra": {
+  "name": "use-voltra.dev",
+  "llms": "https://use-voltra.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "plugins": {
+  "name": "plugins.pinelab.studio",
+  "llms": "https://plugins.pinelab.studio/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "fivesobes": {
+  "name": "fivesobes.gitbook.io",
+  "llms": "https://fivesobes.gitbook.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "solana": {
+  "name": "solana.com",
+  "llms": "https://solana.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "zod": {
+  "name": "zod.dev",
+  "llms": "https://zod.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "devopsshield": {
+  "name": "devopsshield.com",
+  "llms": "https://devopsshield.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "srvx": {
+  "name": "srvx.h3.dev",
+  "llms": "https://srvx.h3.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "dbml": {
+  "name": "dbml.dbdiagram.io",
+  "llms": "https://dbml.dbdiagram.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "fastcheck": {
+  "name": "fast-check.dev",
+  "llms": "https://fast-check.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "arkui": {
+  "name": "ark-ui.com",
+  "llms": "https://ark-ui.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "flagsmith": {
+  "name": "flagsmith.com",
+  "llms": "https://flagsmith.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "adaptabletools": {
+  "name": "adaptabletools.com",
+  "llms": "https://adaptabletools.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "rednose": {
+  "name": "rednose.nl",
+  "llms": "https://rednose.nl/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "tiagodanin": {
+  "name": "tiagodanin.github.io",
+  "llms": "https://tiagodanin.github.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "agentback": {
+  "name": "agentback.dev",
+  "llms": "https://agentback.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "agimon": {
+  "name": "agimon.ai",
+  "llms": "https://agimon.ai/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "aikido": {
+  "name": "aikido.dev",
+  "llms": "https://aikido.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "allurereport": {
+  "name": "allurereport.org",
+  "llms": "https://allurereport.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "apartejs": {
+  "name": "apartejs.dev",
+  "llms": "https://apartejs.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "astmetrics": {
+  "name": "ast-metrics.dev",
+  "llms": "https://ast-metrics.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "atomcp": {
+  "name": "ato-mcp.com.au",
+  "llms": "https://ato-mcp.com.au/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "beejs": {
+  "name": "beejs.org",
+  "llms": "https://beejs.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "blazediff": {
+  "name": "blazediff.dev",
+  "llms": "https://blazediff.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "botpress": {
+  "name": "botpress.com",
+  "llms": "https://botpress.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "bpmnkit": {
+  "name": "bpmnkit.com",
+  "llms": "https://bpmnkit.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "brightdata": {
+  "name": "brightdata.com",
+  "llms": "https://brightdata.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "bryntum": {
+  "name": "bryntum.com",
+  "llms": "https://bryntum.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "buildkite": {
+  "name": "buildkite.com",
+  "llms": "https://buildkite.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "burnerform": {
+  "name": "burnerform.com",
+  "llms": "https://burnerform.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "certifaction": {
+  "name": "certifaction.com",
+  "llms": "https://certifaction.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "chatsdk": {
+  "name": "chat-sdk.dev",
+  "llms": "https://chat-sdk.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "comark": {
+  "name": "comark.dev",
+  "llms": "https://comark.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "conciv": {
+  "name": "conciv.dev",
+  "llms": "https://conciv.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "cortexjs": {
+  "name": "cortexjs.io",
+  "llms": "https://cortexjs.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "crawlee": {
+  "name": "crawlee.dev",
+  "llms": "https://crawlee.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "cronalive": {
+  "name": "cronalive.com",
+  "llms": "https://cronalive.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "crossws": {
+  "name": "crossws.h3.dev",
+  "llms": "https://crossws.h3.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "danubedata": {
+  "name": "danubedata.ro",
+  "llms": "https://danubedata.ro/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "dialtone": {
+  "name": "dialtone.dialpad.com",
+  "llms": "https://dialtone.dialpad.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "drtammedspaclinic": {
+  "name": "drtam-medspa-clinic.com",
+  "llms": "https://drtam-medspa-clinic.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "edge": {
+  "name": "edge.app",
+  "llms": "https://edge.app/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "engini": {
+  "name": "engini.io",
+  "llms": "https://engini.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "envio": {
+  "name": "envio.dev",
+  "llms": "https://envio.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "eslint": {
+  "name": "eslint.interlace.tools",
+  "llms": "https://eslint.interlace.tools/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "evlog": {
+  "name": "evlog.dev",
+  "llms": "https://evlog.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "exstreamjs": {
+  "name": "exstream-js.github.io",
+  "llms": "https://exstream-js.github.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "extension": {
+  "name": "extension.js.org",
+  "llms": "https://extension.js.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "floggy": {
+  "name": "floggy.xyz",
+  "llms": "https://floggy.xyz/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "flow": {
+  "name": "flow.foblex.com",
+  "llms": "https://flow.foblex.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "foxglove": {
+  "name": "foxglove.dev",
+  "llms": "https://foxglove.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "frontside": {
+  "name": "frontside.com",
+  "llms": "https://frontside.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "fullcalendar": {
+  "name": "fullcalendar.io",
+  "llms": "https://fullcalendar.io/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "geodesics": {
+  "name": "geodesics.ai",
+  "llms": "https://geodesics.ai/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "gorules": {
+  "name": "gorules.io",
+  "llms": "https://gorules.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "heroui": {
+  "name": "heroui.com",
+  "llms": "https://heroui.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "heymantle": {
+  "name": "heymantle.com",
+  "llms": "https://heymantle.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "homespun": {
+  "name": "homespun.dev",
+  "llms": "https://homespun.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "hubui": {
+  "name": "hubui.dev",
+  "llms": "https://hubui.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "importok": {
+  "name": "importok.io",
+  "llms": "https://importok.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "imqueue": {
+  "name": "imqueue.org",
+  "llms": "https://imqueue.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "imtakt": {
+  "name": "imtakt.dev",
+  "llms": "https://imtakt.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "interfere": {
+  "name": "interfere.com",
+  "llms": "https://interfere.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "internetcomputer": {
+  "name": "internetcomputer.org",
+  "llms": "https://internetcomputer.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "jalalijs": {
+  "name": "jalali-js.yanovian.com",
+  "llms": "https://jalali-js.yanovian.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "juno": {
+  "name": "juno.build",
+  "llms": "https://juno.build/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "kubb": {
+  "name": "kubb.dev",
+  "llms": "https://kubb.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "lacspace": {
+  "name": "lacspace.com",
+  "llms": "https://lacspace.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "liveblocks": {
+  "name": "liveblocks.io",
+  "llms": "https://liveblocks.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "loomweaver": {
+  "name": "loomweaver.dev",
+  "llms": "https://loomweaver.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "loro": {
+  "name": "loro.dev",
+  "llms": "https://loro.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "mantine": {
+  "name": "mantine.dev",
+  "llms": "https://mantine.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "markdy": {
+  "name": "markdy.com",
+  "llms": "https://markdy.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "meep": {
+  "name": "meep.company-named.com",
+  "llms": "https://meep.company-named.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "microlink": {
+  "name": "microlink.io",
+  "llms": "https://microlink.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "morsehq": {
+  "name": "morsehq.dev",
+  "llms": "https://morsehq.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "motionary": {
+  "name": "motionary.dev",
+  "llms": "https://motionary.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "moviie": {
+  "name": "moviie.ai",
+  "llms": "https://moviie.ai/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "neo4j": {
+  "name": "neo4j.com",
+  "llms": "https://neo4j.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "nestjsredisx": {
+  "name": "nestjs-redisx.dev",
+  "llms": "https://nestjs-redisx.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "nexus": {
+  "name": "nexus.mkiteg.com",
+  "llms": "https://nexus.mkiteg.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "nodecron": {
+  "name": "nodecron.com",
+  "llms": "https://nodecron.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "nova": {
+  "name": "nova.laravel.com",
+  "llms": "https://nova.laravel.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "nutjs": {
+  "name": "nutjs.dev",
+  "llms": "https://nutjs.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "paraglidejs": {
+  "name": "paraglidejs.com",
+  "llms": "https://paraglidejs.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "particles": {
+  "name": "particles.js.org",
+  "llms": "https://particles.js.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "pdfsmaller": {
+  "name": "pdfsmaller.com",
+  "llms": "https://pdfsmaller.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "pipedream": {
+  "name": "pipedream.com",
+  "llms": "https://pipedream.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "platform": {
+  "name": "platform.moonshot.cn",
+  "llms": "https://platform.moonshot.cn/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "proto": {
+  "name": "proto.cat",
+  "llms": "https://proto.cat/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "proxlane": {
+  "name": "proxlane.dev",
+  "llms": "https://proxlane.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "radar": {
+  "name": "radar.com",
+  "llms": "https://radar.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "raisindb": {
+  "name": "raisindb.com",
+  "llms": "https://raisindb.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "reactdriftkit": {
+  "name": "react-driftkit.saktichourasia.dev",
+  "llms": "https://react-driftkit.saktichourasia.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "rebilder": {
+  "name": "rebilder.com",
+  "llms": "https://rebilder.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "replicas": {
+  "name": "replicas.dev",
+  "llms": "https://replicas.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "scalebrowser": {
+  "name": "scalebrowser.net",
+  "llms": "https://scalebrowser.net/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "scribe": {
+  "name": "scribe.genlook.app",
+  "llms": "https://scribe.genlook.app/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "serpapi": {
+  "name": "serpapi.com",
+  "llms": "https://serpapi.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "serverlessstack": {
+  "name": "serverless-stack.com",
+  "llms": "https://serverless-stack.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "shipyard": {
+  "name": "shipyard.levinkeller.de",
+  "llms": "https://shipyard.levinkeller.de/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "siebly": {
+  "name": "siebly.io",
+  "llms": "https://siebly.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "simplejwtlogin": {
+  "name": "simplejwtlogin.com",
+  "llms": "https://simplejwtlogin.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "snapdom": {
+  "name": "snapdom.dev",
+  "llms": "https://snapdom.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "snaptrade": {
+  "name": "snaptrade.com",
+  "llms": "https://snaptrade.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "soat": {
+  "name": "soat.ttoss.dev",
+  "llms": "https://soat.ttoss.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "sometic": {
+  "name": "sometic.dev",
+  "llms": "https://sometic.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "stalux": {
+  "name": "stalux.needhelp.icu",
+  "llms": "https://stalux.needhelp.icu/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "stenciljs": {
+  "name": "stenciljs.com",
+  "llms": "https://stenciljs.com/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "stillosdigitalholdings": {
+  "name": "stillosdigitalholdings.com",
+  "llms": "https://stillosdigitalholdings.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "stumason": {
+  "name": "stumason.dev",
+  "llms": "https://stumason.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "surveyjs": {
+  "name": "surveyjs.io",
+  "llms": "https://surveyjs.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "sveltiacms": {
+  "name": "sveltiacms.app",
+  "llms": "https://sveltiacms.app/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "tenjin": {
+  "name": "tenjin.com",
+  "llms": "https://tenjin.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "tgbotsdk": {
+  "name": "tg-bot-sdk.website",
+  "llms": "https://tg-bot-sdk.website/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "thebridge": {
+  "name": "thebridge.dev",
+  "llms": "https://thebridge.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "tickbird": {
+  "name": "tickbird.io",
+  "llms": "https://tickbird.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "toren": {
+  "name": "toren.run",
+  "llms": "https://toren.run/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "typespec": {
+  "name": "typespec.io",
+  "llms": "https://typespec.io/docs/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "uploadcare": {
+  "name": "uploadcare.com",
+  "llms": "https://uploadcare.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "uppy": {
+  "name": "uppy.io",
+  "llms": "https://uppy.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "upyo": {
+  "name": "upyo.org",
+  "llms": "https://upyo.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "valibot": {
+  "name": "valibot.dev",
+  "llms": "https://valibot.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "vgpu": {
+  "name": "vgpu.sh",
+  "llms": "https://vgpu.sh/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "visioncamera": {
+  "name": "visioncamera.margelo.com",
+  "llms": "https://visioncamera.margelo.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "visulima": {
+  "name": "visulima.com",
+  "llms": "https://visulima.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "wcstack": {
+  "name": "wcstack.github.io",
+  "llms": "https://wcstack.github.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "webjs": {
+  "name": "webjs.dev",
+  "llms": "https://webjs.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "wildflowerjs": {
+  "name": "wildflowerjs.com",
+  "llms": "https://wildflowerjs.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "wreq": {
+  "name": "wreq.sqdsh.win",
+  "llms": "https://wreq.sqdsh.win/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "botium": {
+  "name": "botium.ai",
+  "llms": "https://botium.ai/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "cloudbees": {
+  "name": "cloudbees.com",
+  "llms": "https://cloudbees.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "computesdk": {
+  "name": "computesdk.com",
+  "llms": "https://computesdk.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "diffusion": {
+  "name": "diffusion.studio",
+  "llms": "https://diffusion.studio/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "featbit": {
+  "name": "featbit.co",
+  "llms": "https://featbit.co/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "ip2location": {
+  "name": "ip2location.com",
+  "llms": "https://ip2location.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "logisticinfotech": {
+  "name": "logisticinfotech.com",
+  "llms": "https://logisticinfotech.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "multilocale": {
+  "name": "multilocale.com",
+  "llms": "https://multilocale.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "ngdiagram": {
+  "name": "ngdiagram.dev",
+  "llms": "https://ngdiagram.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "oneschema": {
+  "name": "oneschema.co",
+  "llms": "https://oneschema.co/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "siere": {
+  "name": "siere.ai",
+  "llms": "https://siere.ai/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "stackone": {
+  "name": "stackone.com",
+  "llms": "https://stackone.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "superdoc": {
+  "name": "superdoc.dev",
+  "llms": "https://superdoc.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "testdino": {
+  "name": "testdino.com",
+  "llms": "https://testdino.com/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "workflowbuilder": {
+  "name": "workflowbuilder.io",
+  "llms": "https://workflowbuilder.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "xsai": {
+  "name": "xsai.js.org",
+  "llms": "https://xsai.js.org/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "yamblog": {
+  "name": "yamblog.dev",
+  "llms": "https://yamblog.dev/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "urllib3": {
+  "name": "urllib3",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://urllib3.readthedocs.io/sitemap.xml"
+ },
+ "charset-normalizer": {
+  "name": "charset-normalizer",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://charset-normalizer.readthedocs.io/sitemap.xml"
+ },
+ "cryptography": {
+  "name": "cryptography",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://cryptography.readthedocs.io/sitemap.xml"
+ },
+ "attrs": {
+  "name": "attrs",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://attrs.readthedocs.io/sitemap.xml"
+ },
+ "pyjwt": {
+  "name": "pyjwt",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://pyjwt.readthedocs.io/sitemap.xml"
+ },
+ "aiohttp": {
+  "name": "aiohttp",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://aiohttp.readthedocs.io/sitemap.xml"
+ },
+ "websockets": {
+  "name": "websockets",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://websockets.readthedocs.io/sitemap.xml"
+ },
+ "virtualenv": {
+  "name": "virtualenv",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://virtualenv.readthedocs.io/sitemap.xml"
+ },
+ "hatchling": {
+  "name": "hatchling",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://hatchling.readthedocs.io/sitemap.xml"
+ },
+ "more-itertools": {
+  "name": "more-itertools",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://more-itertools.readthedocs.io/sitemap.xml"
+ },
+ "distlib": {
+  "name": "distlib",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://distlib.readthedocs.io/sitemap.xml"
+ },
+ "pytest-asyncio": {
+  "name": "pytest-asyncio",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://pytest-asyncio.readthedocs.io/sitemap.xml"
+ },
+ "pyopenssl": {
+  "name": "pyopenssl",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://pyopenssl.readthedocs.io/sitemap.xml"
+ },
+ "networkx": {
+  "name": "networkx",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://networkx.readthedocs.io/sitemap.xml"
+ },
+ "redis": {
+  "name": "redis",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://redis.readthedocs.io/sitemap.xml"
+ },
+ "gitpython": {
+  "name": "gitpython",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://gitpython.readthedocs.io/sitemap.xml"
+ },
+ "chardet": {
+  "name": "chardet",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://chardet.readthedocs.io/sitemap.xml"
+ },
+ "gitdb": {
+  "name": "gitdb",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://gitdb.readthedocs.io/sitemap.xml"
+ },
+ "gunicorn": {
+  "name": "gunicorn",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://docs.gunicorn.org/sitemap.xml"
+ },
+ "astor": {
+  "name": "astor",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://docs.astor.org/sitemap.xml"
+ },
+ "arxiv": {
+  "name": "arxiv",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://docs.arxiv.org/sitemap.xml"
+ },
+ "robotframework": {
+  "name": "robotframework",
+  "license": "docs interface verified (sitemap/llms)",
+  "tier": 2,
+  "sitemap": "https://docs.robotframework.org/sitemap.xml"
+ },
+ "awesome-react-native": {
+  "name": "awesome-react-native",
+  "repo": "jondot/awesome-react-native",
+  "llms": "https://jondot.github.io/awesome-react-native/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "awesome-ebpf": {
+  "name": "awesome-ebpf",
+  "repo": "zoidbergwill/awesome-ebpf",
+  "llms": "https://awesome-ebpf.github.io/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "awesome-python": {
+  "name": "awesome-python",
+  "repo": "vinta/awesome-python",
+  "llms": "https://vinta.github.io/awesome-python/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "awesome-vehicle-security": {
+  "name": "awesome-vehicle-security",
+  "repo": "jaredthecoder/awesome-vehicle-security",
+  "llms": "https://jaredthecoder.github.io/awesome-vehicle-security/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "empathy-in-engineering": {
+  "name": "empathy-in-engineering",
+  "repo": "KimberlyMunoz/empathy-in-engineering",
+  "llms": "https://KimberlyMunoz.github.io/empathy-in-engineering/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "bots": {
+  "name": "bots",
+  "repo": "hackerkid/bots",
+  "llms": "https://hackerkid.github.io/bots/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "awesome-dtrace": {
+  "name": "awesome-dtrace",
+  "repo": "xen0l/awesome-dtrace",
+  "llms": "https://xen0l.github.io/awesome-dtrace/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "diff2html-cli": {
+  "name": "diff2html-cli",
+  "repo": "rtfpessoa/diff2html-cli",
+  "llms": "https://rtfpessoa.github.io/diff2html-cli/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "mikro-orm": {
+  "name": "mikro-orm",
+  "repo": "mikro-orm/mikro-orm",
+  "llms": "https://mikro-orm.github.io/mikro-orm/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "sinon": {
+  "name": "sinon",
+  "repo": "sinonjs/sinon",
+  "llms": "https://sinonjs.github.io/sinon/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ },
+ "worker": {
+  "name": "worker",
+  "repo": "graphile/worker",
+  "llms": "https://graphile.github.io/worker/llms.txt",
+  "license": "llms.txt agent-permitted",
+  "tier": 2
+ }
 }
