@@ -11,15 +11,20 @@
 
 const LOG_SAMPLE_RATE = 1.0;          // 1.0 = log everything
 const R2_FLUSH_INTERVAL_MS = 15 * 60 * 1000;  // one R2 object per 15-minute window
+// Key prefix inside the R2 bucket (per-environment isolation in one bucket).
+// Set LOG_PREFIX per env in wrangler vars; defaults to the worker name.
+function r2Prefix(env) {
+    return env.LOG_PREFIX || "documesh-request-logs";
+}
 
 const r2Buffer = [];
 let r2Key = null;   // "dt=2026-09-03/hour=14/part-<minute-block>.jsonl"
 
-function windowKey(now = new Date()) {
+function windowKey(now = new Date(), prefix = "") {
   const blockMin = Math.floor(now.getUTCMinutes() / 15) * 15;
   const dt = now.toISOString().slice(0, 10);
   const hour = String(now.getUTCHours()).padStart(2, "0");
-  return `dt=${dt}/hour=${hour}/part-${String(blockMin).padStart(2, "0")}.jsonl`;
+  return (prefix ? prefix + "/" : "") + `dt=${dt}/hour=${hour}/part-${String(blockMin).padStart(2, "0")}.jsonl`;
 }
 
 /**
@@ -67,7 +72,7 @@ export function logRequest(ctx, env, ev, extra = {}) {
   if (env.LOGS) {
     try {
       const now = new Date();
-      r2Key = r2Key || windowKey(now);
+      r2Key = r2Key || windowKey(now, r2Prefix(env));
       r2Buffer.push(JSON.stringify({
         ts: now.toISOString(),
         method: ev.method,
@@ -93,7 +98,7 @@ function flushR2(ctx, env) {
   if (!r2Buffer.length) return;
 
   const now = new Date();
-  const currentKey = windowKey(now);
+  const currentKey = windowKey(now, r2Prefix(env));
   if (currentKey !== r2Key) {
     // window rolled over — flush under the old key immediately
     const key = r2Key;

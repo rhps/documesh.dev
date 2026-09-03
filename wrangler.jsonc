@@ -38,7 +38,7 @@
     { "binding": "AE" }
   ],
   "r2_buckets": [
-    { "binding": "LOGS", "bucket_name": "documesh-request-logs" }
+    { "binding": "LOGS", "bucket_name": "selatan-org", "prefix": "documesh-request-logs/production" }
   ],
   "vars": {
     "SEARCH_BACKEND": "d1"
@@ -62,10 +62,11 @@
         { "binding": "AE" }
       ],
       "r2_buckets": [
-        { "binding": "LOGS", "bucket_name": "documesh-request-logs-staging" }
+        { "binding": "LOGS", "bucket_name": "selatan-org", "prefix": "documesh-request-logs/staging" }
       ],
       "vars": {
-        "SEARCH_BACKEND": "d1"
+        "SEARCH_BACKEND": "d1",
+        "LOG_PREFIX": "documesh-request-logs/staging"
       },
       "routes": [
         { "pattern": "documesh.selatan.org", "custom_domain": true }
@@ -89,10 +90,11 @@
         { "binding": "AE" }
       ],
       "r2_buckets": [
-        { "binding": "LOGS", "bucket_name": "documesh-request-logs" }
+        { "binding": "LOGS", "bucket_name": "selatan-org", "prefix": "documesh-request-logs/production" }
       ],
       "vars": {
-        "SEARCH_BACKEND": "d1"
+        "SEARCH_BACKEND": "d1",
+        "LOG_PREFIX": "documesh-request-logs/production"
       },
       "routes": [
         { "pattern": "documesh.dev", "custom_domain": true },
