@@ -4,8 +4,9 @@
   "basis": "crawler estimate"
  },
  "aws": {
-  "catalog": 2242,
-  "basis": "llms.txt pages"
+  "catalog": 45000,
+  "basis": "crawler estimate",
+  "note": "per-service llms.txt slices; ~45k pages total"
  },
  "moby": {
   "catalog": 39,
@@ -44,8 +45,9 @@
   "basis": "llms.txt pages"
  },
  "cloudflare": {
-  "catalog": 106,
-  "basis": "llms.txt pages"
+  "catalog": 40000,
+  "basis": "crawler estimate",
+  "note": "2-stage llms.txt; 40+ products, ~40k pages"
  },
  "terragrunt": {
   "catalog": 450,
@@ -96,8 +98,9 @@
   "basis": "crawler estimate"
  },
  "clerk": {
-  "catalog": 2490,
-  "basis": "llms.txt pages"
+  "catalog": 900,
+  "basis": "crawler estimate",
+  "note": "llms.txt index page-level ~900"
  },
  "sentry": {
   "catalog": 126,
@@ -108,8 +111,9 @@
   "basis": "llms.txt pages"
  },
  "vue-core-docs": {
-  "catalog": 94,
-  "basis": "llms.txt pages"
+  "catalog": 1500,
+  "basis": "crawler estimate",
+  "note": "vuejs.org llms.txt partial; ~1.5k pages"
  },
  "godot": {
   "catalog": 3000,
@@ -133,15 +137,17 @@
  },
  "svelte-core": {
   "catalog": 1700,
-  "basis": "legacy audit"
+  "basis": "crawler estimate",
+  "note": "llms.txt undercounts; svelte+kit ~1.7k pages"
  },
  "playwright": {
   "catalog": 900,
   "basis": "crawler estimate"
  },
  "nodejs": {
-  "catalog": 68,
-  "basis": "llms.txt pages"
+  "catalog": 5000,
+  "basis": "crawler estimate",
+  "note": "root llms.txt partial; API reference ~5k pages"
  },
  "hono": {
   "catalog": 161,
@@ -168,12 +174,14 @@
   "basis": "llms.txt pages"
  },
  "ollama": {
-  "catalog": 10,
-  "basis": "llms.txt pages"
+  "catalog": 80,
+  "basis": "crawler estimate",
+  "note": "llms.txt minimal; full docs ~80 pages"
  },
  "opentelemetry": {
-  "catalog": 29,
-  "basis": "llms.txt pages"
+  "catalog": 2000,
+  "basis": "crawler estimate",
+  "note": "root llms.txt is per-language index; real docs corpus ~2k pages"
  },
  "pulumi": {
   "catalog": 2000,
