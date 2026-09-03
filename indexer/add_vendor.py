@@ -82,6 +82,11 @@ def detect_pattern(llms_url=None, repo=None, docs_path=None, branch="main"):
         sm = re.findall(r'\((https?://[^\s)]+sitemap\.md)\)', txt)
         if sm:
             return {"type": "P3", "sitemap_url": sm[0]}, "P3:sitemap.md"
+        # links that serve markdown via query param (e.g. IBM: ?format=markdown)
+        fmt_md = [l for l in links if "format=markdown" in l["url"]]
+        if fmt_md:
+            return {"type": "P1", "links": links, "llms_url": llms_url,
+                    "base": llms_url.rsplit("/llms.txt", 1)[0]}, "P1b:llms.txt→?format=markdown"
         return None, "llms.txt exists but no usable links"
 
     if repo and docs_path:
@@ -110,15 +115,26 @@ def crawl_p1(vendor, pattern, lic, cap=60):
         if not url.startswith("http"):
             url = default_base + (url if url.startswith("/") else "/" + url)
         if ".md" not in url.split("/")[-1]:
-            # try appending .md
-            md_url = url.rstrip("/") + ".md"
+            # try appending .md; for ?format=markdown URLs the URL itself
+            # already serves markdown, so try it as-is first
+            if "format=markdown" in url:
+                md_url = url
+            else:
+                md_url = url.rstrip("/") + ".md"
         else:
             md_url = url
         md = fetch(md_url)
+        if (not md or len(md) < 200) and md_url != url:
+            # fallback: try the bare URL too (some CMSs ignore .md suffix)
+            md = fetch(url)
+            md_url_used = url if md and len(md) >= 200 else md_url
+        else:
+            md_url_used = md_url
         if not md or len(md) < 200:
             time.sleep(0.08)
             continue
-        page = md_url[:-3] if md_url.endswith(".md") else md_url
+        page = md_url_used[:-3] if md_url_used.endswith(".md") else md_url_used
+        page = page.split("?")[0]  # strip ?format=markdown from canonical URL
         rel = re.sub(r"^https?://[^/]+/", "", page).strip("/")
         rel = re.sub(r"\.md$", "", rel) or "index"
         for c in chunk_markdown(md, rel):

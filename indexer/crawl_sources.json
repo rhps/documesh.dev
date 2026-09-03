@@ -29,10 +29,8 @@
   },
   "langchain": {
     "name": "LangChain",
-    "repo": "langchain-ai/langchain",
-    "docs_path": "docs",
-    "license": "MIT",
-    "branch": "master"
+    "llms": "https://python.langchain.com/llms.txt",
+    "license": "MIT"
   },
   "vercel": {
     "name": "Vercel",
@@ -71,8 +69,7 @@
   },
   "clickhouse": {
     "name": "ClickHouse",
-    "repo": "ClickHouse/clickhouse-docs",
-    "docs_path": "docs/en",
+    "llms": "https://clickhouse.com/docs/llms.txt",
     "license": "Apache-2.0"
   },
   "nuxt": {
