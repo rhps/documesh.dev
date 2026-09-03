@@ -67,6 +67,33 @@
   "docs_origin": "P4:git-repo",
   "attribution_required": true,
   "added": "2026-09-03"
+<<<<<<< HEAD
 >>>>>>> 2eb7ef3 (coverage: cycle 1 deepen pytorch,ibmcloud,aws,opentelemetry,moby,nuxt,clickhouse,langchain,digitalocean,hugo)
+=======
+ },
+ "vue-core-docs": {
+  "name": "Vue (core)",
+  "license": "MIT",
+  "license_url": "",
+  "docs_origin": "P4:git-repo",
+  "attribution_required": true,
+  "added": "2026-09-03"
+ },
+ "sentry": {
+  "name": "Sentry",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "P1:llms.txt\u2192per-page.md",
+  "attribution_required": true,
+  "added": "2026-09-03"
+ },
+ "upstash": {
+  "name": "Upstash",
+  "license": "llms.txt agent-permitted",
+  "license_url": "",
+  "docs_origin": "P1:llms.txt\u2192per-page.md",
+  "attribution_required": true,
+  "added": "2026-09-03"
+>>>>>>> a5292c6 (coverage: cycle 2 deepen pytorch,ibmcloud,aws,moby,clickhouse,langchain,vue-core-docs,sentry,upstash,elasticsearch)
  }
 }
