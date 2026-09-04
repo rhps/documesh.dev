@@ -173,7 +173,7 @@
 <!-- ============ STATS STRIP ============ -->
 <section class="border-y border-slate-100 bg-slate-50/50">
   <div class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-    <div><div class="text-3xl font-bold">47</div><div class="text-sm text-slate-500 mt-1">sources federated</div></div>
+    <div><div id="stat-sources" class="text-3xl font-bold">555</div><div class="text-sm text-slate-500 mt-1">sources registered <span id="stat-synced" class="text-slate-400">(47 synced)</span></div></div>
     <div><div id="stat-chunks" class="text-3xl font-bold">36,290</div><div class="text-sm text-slate-500 mt-1">indexed doc sections</div></div>
     <div><div class="text-3xl font-bold">9</div><div class="text-sm text-slate-500 mt-1">WebMCP + MCP tools</div></div>
     <div><div class="text-3xl font-bold">100%</div><div class="text-sm text-slate-500 mt-1">answers with license + source</div></div>
@@ -405,5 +405,22 @@ try {
 }
 </script>
 <script src="webmcp-register.js"></script>
+<script>
+// Live hero stats — keep the numbers honest with what this deployment actually serves.
+(async () => {
+  try {
+    const [stats, vendors] = await Promise.all([
+      fetch("/stats").then(r => r.json()),
+      fetch("/vendors").then(r => r.json()),
+    ]);
+    const synced = vendors.synced ?? 47;
+    const total = vendors.total ?? 555;
+    const chunks = stats.total_chunks ?? 36290;
+    document.getElementById("stat-sources").textContent = String(total);
+    document.getElementById("stat-synced").textContent = `(${synced} synced)`;
+    document.getElementById("stat-chunks").textContent = chunks.toLocaleString();
+  } catch {}
+})();
+</script>
 </body>
 </html>
